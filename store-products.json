@@ -13,4 +13,11 @@
         "image": "https://kb2.img-bcg.eu/kuldne-image/ad/675/506/c6ac41b8abc3a2250ee987e0d2b164f8.jpg?crop=0&watermark=1&format=jpeg",
         "category": "consoles"
     }
+    {
+        "name": "Xbox One",
+        "price": "124.99€",
+        "description": "Osta seda meie Kuldse börsi lehelt",
+        "image": "https://kb2.img-bcg.eu/kuldne-image/ad/675/506/a0eafd0f12cdc261108c4f72acad94fa.jpg?crop=0&watermark=1&format=jpeg",
+        "category": "consoles"
+    }
 ]
