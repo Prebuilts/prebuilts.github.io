@@ -20,7 +20,7 @@ function displayProducts(products) {
                 <h3>${product.name}</h3>
                 <h3>${product.price}</h3>
                 <p>${product.description}</p>
-                <button onclick="open("https://www.kuldnebors.ee/search/search.mec?search_evt=onsearch&pob_action=search&search_O_bcustomer_id=104816")">Osta kohe</button>
+                <button onclick="openproductlink();">Osta kohe</button>
             </div>
         `;
         productContainer.innerHTML += productHTML;
@@ -37,3 +37,6 @@ categorySelect.addEventListener('change', () => {
         displayProducts(filtered);
     }
 });
+function openproductlink() {
+   open("https://www.vinted.ee/member/306198255")
+}
