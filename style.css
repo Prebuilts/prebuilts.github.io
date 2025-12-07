@@ -1,7 +1,7 @@
 /* === GLOBAL BODY === */
 body {
   font-family: Arial, sans-serif;
-  background-color: #ABD2FA;
+  background-color: #E5F1FF; /* Soft light blue */
   color: #333;
   margin: 0;
   padding: 0;
@@ -11,13 +11,13 @@ section, .textsection {
   max-width: 1000px;
   margin: 40px auto;
   padding: 30px;
-  background-color: #7692FF;
+  background-color: #A6C8FF; /* Softer light blue */
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 h1, h2 {
-  color: #000;
+  color: #1C1F2B; /* Darker, rich charcoal */
   margin: 0;
 }
 
@@ -32,8 +32,8 @@ p {
   justify-content: space-between;
   flex-wrap: wrap;
   padding: 15px 30px;
-  background-color: #091540;
-  border-bottom: 5px solid #0f172a;
+  background-color: #253B56; /* Deep blue-gray */
+  border-bottom: 5px solid #1D2A40;
 }
 
 #HIcon {
@@ -44,7 +44,7 @@ p {
 
 #HH1 {
   display: inline-block;
-  color: #93c5fd;
+  color: #B4D9FF; /* Light pastel blue */
   font-size: 1.6rem;
   margin: 0;
 }
@@ -63,7 +63,7 @@ nav ul {
 }
 
 nav li a {
-  color: #f1f5f9;
+  color: #F1F6FC; /* Soft white */
   text-decoration: none;
   font-weight: bold;
   border-radius: 5px;
@@ -73,20 +73,20 @@ nav li a {
 
 nav li a:hover,
 nav li a.active {
-  background-color: #0f172a;
+  background-color: #1D2A40; /* Dark blue-gray */
 }
 
 #darkModeToggle {
   background: transparent;
   border: none;
-  color: #93c5fd;
+  color: #A9C9F4; /* Soft pastel blue */
   font-size: 1.5rem;
   cursor: pointer;
   margin-left: 15px;
 }
 
 #darkModeToggle:hover {
-  color: #60a5fa;
+  color: #6C9CFF; /* Bright pastel blue */
 }
 
 /* === HEADER FLEX FIX === */
@@ -121,8 +121,8 @@ nav li a.active {
 }
 
 .product-box {
-  background: #ffffff;
-  border: 1px solid #ddd;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F4; /* Light soft gray border */
   border-radius: 10px;
   padding: 20px;
   text-align: center;
@@ -141,15 +141,15 @@ nav li a.active {
 }
 
 .see-more-btn {
-  background-color: #3b82f6;
-  color: #fff;
+  background-color: #4D89F7; /* Soft sky blue */
+  color: #FFF;
   text-decoration: none;
   padding: 10px 20px;
   border-radius: 5px;
 }
 
 .see-more-btn:hover {
-  background-color: #2563eb;
+  background-color: #357BEE; /* Slightly deeper blue */
 }
 
 /* === STORE PAGE === */
@@ -166,8 +166,8 @@ nav li a.active {
 
 /* Make sure product boxes fit nicely */
 .productbox {
-  background: #fff;
-  border: 1px solid #ddd;
+  background: #FFF;
+  border: 1px solid #E2E8F4; /* Light soft gray border */
   border-radius: 10px;
   padding: 15px;
   text-align: center;
@@ -184,7 +184,7 @@ nav li a.active {
 
 .productbox a {
   display: inline-block;
-  background-color: #3b82f6;
+  background-color: #4D89F7; /* Soft sky blue */
   color: white;
   text-decoration: none;
   padding: 10px 15px;
@@ -195,22 +195,22 @@ nav li a.active {
 }
 
 .productbox a:hover {
-  background-color: #2563eb;
+  background-color: #357BEE; /* Slightly deeper blue */
 }
 
 
 /* === FOOTER === */
 #footer {
   text-align: center;
-  background-color: #091540;
-  color: #93c5fd;
+  background-color: #253B56; /* Deep blue-gray */
+  color: #B4D9FF; /* Light pastel blue */
   padding: 20px;
   margin: 40px 20px 20px;
   border-radius: 10px;
 }
 
 #footer a {
-  color: #60a5fa;
+  color: #6C9CFF; /* Bright pastel blue */
   text-decoration: underline;
   margin: 0 10px;
 }
@@ -221,38 +221,38 @@ nav li a.active {
 
 /* === DARK MODE === */
 body.dark-mode {
-  background-color: #0f172a;
-  color: #e2e8f0;
+  background-color: #1D2A40; /* Dark blue-gray */
+  color: #D1D8F4; /* Light lavender */
 }
 
 body.dark-mode section,
 body.dark-mode .textsection,
 body.dark-mode .product-box,
 body.dark-mode .store-item {
-  background-color: #1e293b;
+  background-color: #2A3B55; /* Darker blue-gray */
 }
 
 body.dark-mode nav li a {
-  color: #f1f5f9;
+  color: #F1F6FC; /* Soft white */
 }
 
 body.dark-mode nav li a:hover,
 body.dark-mode nav li a.active {
-  background-color: #334155;
+  background-color: #37496D; /* Darker slate blue */
 }
 
 body.dark-mode #footer {
-  background-color: #0f172a;
+  background-color: #1D2A40; /* Dark blue-gray */
 }
 
 body.dark-mode .see-more-btn,
 body.dark-mode .add-to-cart {
-  background-color: #3b82f6;
+  background-color: #4D89F7; /* Soft sky blue */
 }
 
 body.dark-mode .see-more-btn:hover,
 body.dark-mode .add-to-cart:hover {
-  background-color: #2563eb;
+  background-color: #357BEE; /* Slightly deeper blue */
 }
 
 /* === RESPONSIVE === */
@@ -261,7 +261,8 @@ body.dark-mode .add-to-cart:hover {
     flex-direction: column;
     gap: 10px;
   }
-  }
+}
+
 /* Product Grid (JSON Loaded) */
 .recommended-grid {
   display: flex;
@@ -270,8 +271,8 @@ body.dark-mode .add-to-cart:hover {
 }
 
 .product-box {
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: #FFF;
+  border: 1px solid #E2E8F4;
   padding: 10px;
   text-align: center;
   width: 200px;
@@ -302,7 +303,7 @@ body.dark-mode .add-to-cart:hover {
 #navMenu button {
   background: none;
   border: none;
-  color: rgb(124, 176, 243);
+  color: #7C9EF3; /* Soft sky blue */
   font-size: 1rem;
   cursor: pointer;
   padding: 8px 12px;
@@ -310,16 +311,16 @@ body.dark-mode .add-to-cart:hover {
 }
 
 #navMenu button:hover {
-  color: #60a5fa;
+  color: #6C9CFF; /* Bright pastel blue */
 }
 
 #userStatus a {
-  color: rgb(124, 176, 243);
+  color: #7C9EF3; /* Soft sky blue */
   text-decoration: none;
   padding: 8px 12px;
   transition: color 0.3s ease;
 }
 
 #userStatus a:hover {
-  color: #60a5fa;
+  color: #6C9CFF; /* Bright pastel blue */
 }
