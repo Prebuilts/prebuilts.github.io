@@ -20,7 +20,7 @@ function displayProducts(products) {
                 <h3>${product.name}</h3>
                 <h3>${product.price}</h3>
                 <p>${product.description}</p>
-                <button onclick="openProductLink('${product.link}')">Osta kohe</button>
+                <button onclick="openProductLink('${product.link}')">Vaata lisaks</button>
             </div>
         `;
         productContainer.innerHTML += productHTML;
