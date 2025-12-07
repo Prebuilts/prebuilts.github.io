@@ -17,32 +17,39 @@ const db = getFirestore(app);
 
 const productContainer = document.getElementById('store-product-list');
 const categorySelect = document.getElementById('categorySelect');
+
 let allProducts = [];
 
 /* ==========================
    LOAD PRODUCTS FROM FIRESTORE
    ========================== */
-async function loadProductsFromFirestore() {
+async function loadProducts() {
     try {
         const snapshot = await getDocs(collection(db, "products"));
-        allProducts = snapshot.docs.map(doc => doc.data());
+
+        allProducts = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
         displayProducts(allProducts);
     } catch (error) {
-        console.error("Error loading products:", error);
+        console.error("Firestore load error:", error);
     }
 }
 
-// Call the loader
-loadProductsFromFirestore();
+loadProducts();
 
 /* ==========================
    DISPLAY PRODUCTS
    ========================== */
 function displayProducts(products) {
-    productContainer.innerHTML = '';
+    productContainer.innerHTML = "";
+
+    if (products.length === 0) {
+        productContainer.innerHTML = "<p>Tooteid ei leitud.</p>";
+        return;
+    }
 
     products.forEach(product => {
-        const productHTML = `
+        const html = `
             <div class="product-box">
                 <img src="${product.image}" alt="${product.name}">
                 <h3>${product.name}</h3>
@@ -51,28 +58,27 @@ function displayProducts(products) {
                 <button onclick="openProductLink('${product.link}')">Vaata lisaks</button>
             </div>
         `;
-        productContainer.innerHTML += productHTML;
+        productContainer.innerHTML += html;
     });
 }
 
 /* ==========================
    CATEGORY FILTER
    ========================== */
-categorySelect.addEventListener('change', () => {
-    const selectedCategory = categorySelect.value;
+categorySelect.addEventListener("change", () => {
+    const category = categorySelect.value;
 
-    if (selectedCategory === 'all') {
+    if (category === "all") {
         displayProducts(allProducts);
     } else {
-        const filtered = allProducts.filter(p => p.category === selectedCategory);
+        const filtered = allProducts.filter(p => p.category === category);
         displayProducts(filtered);
     }
 });
 
 /* ==========================
-   OPEN PRODUCT LINK
+   OPEN LINK
    ========================== */
-window.openProductLink = function (url) {
+window.openProductLink = (url) => {
     window.open(url, "_blank");
-}
-
+};
