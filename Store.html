@@ -25,7 +25,6 @@
 <section class="store-section">
     <h2>Meie pood</h2>
     
-    <!-- Category Dropdown -->
     <div class="category-filter">
         <label for="categorySelect">Filtreeri kategooria järgi:</label>
         <select id="categorySelect">
@@ -48,10 +47,7 @@
         </select>
     </div>
 
-    <!-- Product Grid -->
-    <div class="recommended-grid" id="store-product-list">
-        <!-- Products will load here from JSON -->
-    </div>
+    <div class="recommended-grid" id="store-product-list"></div>
 </section>
 
 <footer id="footer">
@@ -60,6 +56,6 @@
     <a href="https://www.example.com/tos">Kasutustingimused</a>
 </footer>
 
-<script src="store.js"></script>
+<script type="module" src="store.js"></script>
 </body>
 </html>
