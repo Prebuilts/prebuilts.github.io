@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin Dashboard | Prebuiltid</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<header class="admin-header">
+  <h1>Admin Dashboard</h1>
+  <p>Manage store products</p>
+</header>
+
+<div id="status" class="status-box">Checking admin permissions...</div>
+
+<!-- Add Product -->
+<section class="admin-box">
+  <h2>Add Product</h2>
+
+  <input id="name" placeholder="Product Name">
+  <input id="price" placeholder="Price (ex: 199€)">
+  <input id="description" placeholder="Description">
+  <input id="image" placeholder="Image URL">
+  <input id="category" placeholder="Category">
+  <input id="link" placeholder="Product Link">
+
+  <button id="addProduct">Add Product</button>
+</section>
+
+<!-- Product List -->
+<section class="admin-box">
+  <h2>Existing Products</h2>
+  <div id="productList">Loading products...</div>
+</section>
+
+<!-- Firebase Script -->
+<script type="module">
+  /* === Firebase Setup === */
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+  import { getFirestore, collection, getDocs, addDoc, deleteDoc, updateDoc, doc } 
+  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+  import { getAuth, onAuthStateChanged } 
+  from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+  const firebaseConfig = { 
+      apiKey: "AIzaSyCXufE4ch7mmOdxxIZ641lTrzDgaDyfGgg",
+      authDomain: "komisjonikaubamaja-website.firebaseapp.com",
+      projectId: "komisjonikaubamaja-website",
+      storageBucket: "komisjonikaubamaja-website.firebasestorage.app",
+      messagingSenderId: "422777959258",
+      appId: "1:422777959258:web:b3b4d1f1a858fd74caf963",
+      measurementId: "G-L2BLBFLT9C"
+  };
+
+  const ADMIN_EMAILS = [
+    "prebuiltid@gmail.com",
+    "info@komisjonikaubamaja.ee"
+  ];
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+
+  const statusDiv = document.getElementById("status");
+  const productList = document.getElementById("productList");
+
+  /* === CHECK ADMIN LOGGED IN === */
+  onAuthStateChanged(auth, user => {
+    if (!user) {
+      statusDiv.innerHTML = "You must log in.";
+      window.location.href = "login.html";
+      return;
+    }
+
+    if (!ADMIN_EMAILS.includes(user.email)) {
+      statusDiv.innerHTML = "Not an admin.";
+      window.location.href = "index.html";
+      return;
+    }
+
+    statusDiv.innerHTML = "Logged in as admin: " + user.email;
+    loadProducts();
+  });
+
+
+  /* === LOAD PRODUCTS === */
+  async function loadProducts() {
+    productList.innerHTML = "";
+
+    const snapshot = await getDocs(collection(db, "products"));
+    snapshot.forEach(item => {
+      const p = item.data();
+
+      const div = document.createElement("div");
+      div.classList.add("product-item");
+      div.innerHTML = `
+        <h3>${p.name}</h3>
+        <img src="${p.image}" width="150">
+        
+        <label>Price</label>
+        <input class="edit-price" value="${p.price}">
+        
+        <label>Image</label>
+        <input class="edit-image" value="${p.image}">
+        
+        <label>Description</label>
+        <input class="edit-description" value="${p.description}">
+
+        <label>Category</label>
+        <input class="edit-category" value="${p.category}">
+
+        <label>Link</label>
+        <input class="edit-link" value="${p.link}">
+
+        <button class="update-btn">Update</button>
+        <button class="delete-btn">Delete</button>
+        <hr>
+      `;
+
+      /* UPDATE PRODUCT */
+      div.querySelector(".update-btn").onclick = async () => {
+        await updateDoc(doc(db, "products", item.id), {
+          price: div.querySelector(".edit-price").value,
+          image: div.querySelector(".edit-image").value,
+          description: div.querySelector(".edit-description").value,
+          category: div.querySelector(".edit-category").value,
+          link: div.querySelector(".edit-link").value
+        });
+
+        alert("Product updated!");
+      };
+
+      /* DELETE PRODUCT */
+      div.querySelector(".delete-btn").onclick = async () => {
+        if (confirm("Delete product?")) {
+          await deleteDoc(doc(db, "products", item.id));
+          loadProducts();
+        }
+      };
+
+      productList.appendChild(div);
+    });
+  }
+
+  /* === ADD PRODUCT === */
+  document.getElementById("addProduct").onclick = async () => {
+    const newProduct = {
+      name: document.getElementById("name").value,
+      price: document.getElementById("price").value,
+      description: document.getElementById("description").value,
+      image: document.getElementById("image").value,
+      category: document.getElementById("category").value,
+      link: document.getElementById("link").value
+    };
+
+    await addDoc(collection(db, "products"), newProduct);
+    alert("Product added!");
+    loadProducts();
+  };
+</script>
+
+</body>
+</html>
