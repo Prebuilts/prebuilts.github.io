@@ -64,7 +64,7 @@ function updateCartCount() {
 function renderCart() {
   basketItemsEl.innerHTML = "";
   if (cart.length === 0) {
-    basketItemsEl.innerHTML = "<p>Korb on tühi.</p>";
+    basketItemsEl.innerHTML = "<p>Korv on tühi.</p>";
     basketTotalEl.innerText = "0€";
     updateCartCount();
     return;
