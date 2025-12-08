@@ -1,7 +1,66 @@
-body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f4f6fb; color:#222; }
-.admin-header { background:#2C3E50; color:#D1D8E0; padding:18px 22px; }
-.admin-box { max-width:1000px; margin:20px auto; background:#fff; padding:16px; border-radius:8px; box-shadow:0 6px 20px rgba(0,0,0,0.06); }
-.product-item, .order-item { margin-bottom:12px; padding:8px 0; }
-input { display:block; margin:6px 0 10px 0; padding:8px; width:100%; max-width:420px; }
-button { background:#FF6F61; color:#fff; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; }
-button:hover { opacity:0.95; }
+body {
+  background: #F4F4F9;
+  font-family: Arial, sans-serif;
+  margin: 0;
+}
+
+/* HEADER */
+#header {
+  display: flex;
+  align-items: center;
+  padding: 15px 30px;
+  justify-content: space-between;
+  background: #2C3E50;
+  border-bottom: 5px solid #34495E;
+}
+
+#HIcon {
+  max-width: 60px;
+}
+
+#HH1 {
+  color: #D1D8E0;
+  font-size: 1.5rem;
+}
+
+/* ADMIN BOX */
+.admin-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  background: #F1F3F5;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* ORDER BOX */
+.order-box {
+  background: white;
+  border: 1px solid #E2E8F4;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+}
+
+.order-box button {
+  margin-top: 10px;
+  background: #FF6F61;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+}
+
+.order-box button:hover {
+  background: #FF5733;
+}
+
+/* FOOTER */
+#footer {
+  text-align: center;
+  padding: 20px;
+  margin: 40px 20px;
+  background: #2C3E50;
+  color: #D1D8E0;
+  border-radius: 10px;
+}
