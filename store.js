@@ -59,7 +59,7 @@ function updateCartCount(){ cartCountEl.innerText = cart.reduce((s,i)=> s + (i.q
 /* Render cart */
 function renderCart(){
   basketItemsEl.innerHTML = "";
-  if (cart.length === 0){ basketItemsEl.innerHTML = "<p>Korb on tühi.</p>"; basketTotalEl.innerText = "0€"; updateCartCount(); return; }
+  if (cart.length === 0){ basketItemsEl.innerHTML = "<p>Korv on tühi.</p>"; basketTotalEl.innerText = "0€"; updateCartCount(); return; }
   cart.forEach(item=>{
     const row = document.createElement("div");
     row.className = "basket-item";
@@ -175,7 +175,7 @@ confirmCheckoutBtn.addEventListener("click", async () => {
     alert("Tellimuse salvestamisel tekkis viga. Palun proovi hiljem.");
   } finally {
     confirmCheckoutBtn.disabled = false;
-    confirmCheckoutBtn.innerText = "Kinnita ostu";
+    confirmCheckoutBtn.innerText = "Kinnita ost";
   }
 });
 
