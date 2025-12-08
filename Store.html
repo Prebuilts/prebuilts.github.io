@@ -16,8 +16,8 @@
         <ul>
             <li><a href="https://prebuilts.github.io/Prebuiltid">Kodu</a></li>
             <li><a href="https://prebuilts.github.io/Prebuiltid/Store" class="active">Pood</a></li>
-            <li><a href="https://www.example.com/Socials">Sotsiaalmeediad</a></li>
-            <li><a href="https://www.example.com/about">Meist</a></li>
+            <li><a href="#">Sotsiaalmeediad</a></li>
+            <li><a href="#">Meist</a></li>
         </ul>
     </nav>
 </header>
@@ -51,10 +51,27 @@
     <div class="recommended-grid" id="store-product-list"></div>
 </section>
 
+<!-- Floating Cart Button -->
+<div id="cart-icon">
+    🛒 <span id="cart-count">0</span>
+</div>
+
+<!-- Slide-out Basket Panel -->
+<div id="basket-panel">
+    <div id="basket-header">
+        <h2>Ostukorv</h2>
+        <button id="close-basket">✖</button>
+    </div>
+
+    <div id="basket-items"></div>
+
+    <div id="basket-footer">
+        <h3>Kokku: <span id="basket-total">0€</span></h3>
+    </div>
+</div>
+
 <footer id="footer">
     <p>Kõik õigused kaitstud &copy; Prebuiltid 2025</p>
-    <a href="https://www.example.com/privacypolicy">Privaatsus</a>
-    <a href="https://www.example.com/tos">Kasutustingimused</a>
 </footer>
 
 <script type="module" src="store.js"></script>
