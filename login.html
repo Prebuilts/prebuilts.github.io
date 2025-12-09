@@ -49,19 +49,19 @@ const auth = getAuth(app);
 
 document.getElementById("googleSign").addEventListener('click', async ()=>{
   const provider = new GoogleAuthProvider();
-  try { await signInWithPopup(auth, provider); window.location.href='store.html'; } catch(e){ console.error(e); alert('Login failed'); }
+  try { await signInWithPopup(auth, provider); window.location.href='index.html'; } catch(e){ console.error(e); alert('Login failed'); }
 });
 
 document.getElementById("loginBtn").addEventListener('click', async ()=>{
   const email = document.getElementById("email").value;
   const pw = document.getElementById("password").value;
-  try { await signInWithEmailAndPassword(auth, email, pw); window.location.href='store.html'; } catch(e){ console.error(e); alert('Login failed'); }
+  try { await signInWithEmailAndPassword(auth, email, pw); window.location.href='index.html'; } catch(e){ console.error(e); alert('Login failed'); }
 });
 
 document.getElementById("signupBtn").addEventListener('click', async ()=>{
   const email = document.getElementById("email").value;
   const pw = document.getElementById("password").value;
-  try { await createUserWithEmailAndPassword(auth, email, pw); window.location.href='store.html'; } catch(e){ console.error(e); alert('Signup failed'); }
+  try { await createUserWithEmailAndPassword(auth, email, pw); window.location.href='index.html'; } catch(e){ console.error(e); alert('Signup failed'); }
 });
 </script>
 </body>
