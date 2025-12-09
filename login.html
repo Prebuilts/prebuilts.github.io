@@ -3,64 +3,66 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Konto| Prebuiltid</title>
-  <style>
-    body { font-family: Arial, sans-serif; display:flex; align-items:center; justify-content:center; height:100vh; background:#f4f6fb; }
-    .card { background:#fff; padding:22px; border-radius:10px; box-shadow:0 8px 30px rgba(0,0,0,0.08); width:90%; max-width:420px; }
-    input{ width:100%; padding:8px; margin:8px 0; }
-    button{ background:#FF6F61; color:#fff; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; }
-    a { color:#2C3E50; display:inline-block; margin-top:8px; }
-  </style>
+  <title>Login | Prebuiltid</title>
+  <link rel="stylesheet" href="login.css">
 </head>
 <body>
-  <div class="card">
-    <h2>Logi sisse</h2>
-    <button id="googleSign">Logi sisse Google Kontoga</button>
-    <hr />
-    <input id="email" placeholder="Email" />
-    <input id="password" placeholder="Parool" type="password" />
-    <div style="display:flex; gap:8px;">
-      <button id="loginBtn">Logi sisse</button>
-      <button id="signupBtn">Loo konto</button>
-    </div>
-    <div style="margin-top:12px;">
-      <a href="index.html">Tagasi Pealehele</a>
-    </div>
+
+<header id="header">
+  <img src="Images/Prebuiltid.png" id="HIcon">
+  <h1 id="HH1">Prebuiltid</h1>
+</header>
+
+<section class="login-container">
+  <h2>Logi sisse</h2>
+  <button id="googleSign">Sign in with Google</button>
+  <hr style="margin:12px 0;">
+  <label for="email">Email</label>
+  <input id="email" type="email">
+  <label for="password">Parool</label>
+  <input id="password" type="password">
+  <div style="display:flex; gap:8px;">
+    <button id="loginBtn">Logi sisse</button>
+    <button id="signupBtn">Loo konto</button>
   </div>
+  <div style="margin-top:12px;">
+    <a href="index.html">Return to store</a>
+  </div>
+</section>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-    import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-    const firebaseConfig = { 
-      apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
-      authDomain: "prebuiltid-website.firebaseapp.com",
-      projectId: "prebuiltid-website",
-      storageBucket: "prebuiltid-website.firebasestorage.app",
-      messagingSenderId: "854871585546",
-      appId: "1:854871585546:web:568400979292a0c31740f3",
-      measurementId: "G-YS1Q1904H6"
-    };
+const firebaseConfig = {
+  apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
+  authDomain: "prebuiltid-website.firebaseapp.com",
+  projectId: "prebuiltid-website",
+  storageBucket: "prebuiltid-website.firebasestorage.app",
+  messagingSenderId: "854871585546",
+  appId: "1:854871585546:web:568400979292a0c31740f3",
+  measurementId: "G-YS1Q1904H6"
+};
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
-    document.getElementById("googleSign").onclick = async () => {
-      const provider = new GoogleAuthProvider();
-      try { await signInWithPopup(auth, provider); window.location.href = "Store.html"; } catch (e) { console.error(e); alert("Login failed"); }
-    };
+document.getElementById("googleSign").addEventListener('click', async ()=>{
+  const provider = new GoogleAuthProvider();
+  try { await signInWithPopup(auth, provider); window.location.href='store.html'; } catch(e){ console.error(e); alert('Login failed'); }
+});
 
-    document.getElementById("loginBtn").onclick = async () => {
-      const email = document.getElementById("email").value;
-      const pw = document.getElementById("password").value;
-      try { await signInWithEmailAndPassword(auth, email, pw); window.location.href = "Store.html"; } catch(e){ console.error(e); alert("Login failed"); }
-    };
+document.getElementById("loginBtn").addEventListener('click', async ()=>{
+  const email = document.getElementById("email").value;
+  const pw = document.getElementById("password").value;
+  try { await signInWithEmailAndPassword(auth, email, pw); window.location.href='store.html'; } catch(e){ console.error(e); alert('Login failed'); }
+});
 
-    document.getElementById("signupBtn").onclick = async () => {
-      const email = document.getElementById("email").value;
-      const pw = document.getElementById("password").value;
-      try { await createUserWithEmailAndPassword(auth, email, pw); window.location.href = "Store.html"; } catch(e){ console.error(e); alert("Signup failed"); }
-    };
-  </script>
+document.getElementById("signupBtn").addEventListener('click', async ()=>{
+  const email = document.getElementById("email").value;
+  const pw = document.getElementById("password").value;
+  try { await createUserWithEmailAndPassword(auth, email, pw); window.location.href='store.html'; } catch(e){ console.error(e); alert('Signup failed'); }
+});
+</script>
 </body>
 </html>
