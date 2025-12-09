@@ -4,254 +4,92 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Prebuiltid | Admin</title>
-
   <link rel="stylesheet" href="admin.css">
-
-  <!-- Firebase SDK (MODULAR v10) -->
-  <script type="module">
-
-    /* ---------------- FIREBASE IMPORTS ---------------- */
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { 
-      getAuth, onAuthStateChanged, signOut 
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { 
-      getFirestore, collection, addDoc, onSnapshot, doc, deleteDoc, updateDoc, serverTimestamp 
-    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-    /* ---------------- CONFIG ---------------- */
-    const firebaseConfig = { 
-      apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
-      authDomain: "prebuiltid-website.firebaseapp.com",
-      projectId: "prebuiltid-website",
-      storageBucket: "prebuiltid-website.firebasestorage.app",
-      messagingSenderId: "854871585546",
-      appId: "1:854871585546:web:568400979292a0c31740f3",
-      measurementId: "G-YS1Q1904H6"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth();
-    const db = getFirestore();
-
-    const ADMIN_EMAILS = ["prebuiltid@gmail.com"];
-
-    /* ---------------- AUTH CHECK ---------------- */
-    onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        location.href = "login.html";
-        return;
-      }
-      if (!ADMIN_EMAILS.includes(user.email.toLowerCase())) {
-        location.href = "index.html";
-      }
-    });
-
-    /* ---------------- LOGOUT ---------------- */
-    window.logout = () => signOut(auth);
-
-
-    /* ---------------- FIRESTORE REFS ---------------- */
-    const productsRef = collection(db, "products");
-    const ordersRef = collection(db, "orders");
-
-
-    /* ---------------- ADD PRODUCT ---------------- */
-    window.addProduct = async () => {
-      const name = document.getElementById("pName").value.trim();
-      const price = parseFloat(document.getElementById("pPrice").value);
-      const image = document.getElementById("pImage").value.trim();
-      const category = document.getElementById("pCategory").value.trim();
-      const description = document.getElementById("pDescription").value.trim();
-      const quantity = parseInt(document.getElementById("pQuantity").value);
-
-      if (!name || !price || !image || !category || !description || isNaN(quantity)) {
-        alert("Täida kõik väljad!");
-        return;
-      }
-
-      await addDoc(productsRef, {
-        name,
-        price,
-        image,
-        category,
-        description,
-        quantity,
-        createdAt: serverTimestamp()
-      });
-
-      alert("Toode lisatud!");
-
-      document.getElementById("pName").value = "";
-      document.getElementById("pPrice").value = "";
-      document.getElementById("pImage").value = "";
-      document.getElementById("pCategory").value = "";
-      document.getElementById("pDescription").value = "";
-      document.getElementById("pQuantity").value = "";
-    };
-
-
-    /* ---------------- UPDATE PRODUCT ---------------- */
-    window.updateProduct = async (id) => {
-      const name = document.getElementById(`name-${id}`).value;
-      const price = parseFloat(document.getElementById(`price-${id}`).value);
-      const image = document.getElementById(`image-${id}`).value;
-      const category = document.getElementById(`category-${id}`).value;
-      const description = document.getElementById(`description-${id}`).value;
-      const quantity = parseInt(document.getElementById(`quantity-${id}`).value);
-
-      if (!name || !price || !image || !category || !description || isNaN(quantity)) {
-        alert("Täida kõik väljad!");
-        return;
-      }
-
-      await updateDoc(doc(db, "products", id), {
-        name,
-        price,
-        image,
-        category,
-        description,
-        quantity
-      });
-
-      alert("Toode uuendatud!");
-    };
-
-
-    /* ---------------- DELETE PRODUCT ---------------- */
-    window.deleteProduct = async (id) => {
-      if (!confirm("Kustuta toode?")) return;
-      await deleteDoc(doc(db, "products", id));
-    };
-
-
-    /* ---------------- LOAD PRODUCTS + IMAGES + EDITING ---------------- */
-    onSnapshot(productsRef, (snapshot) => {
-      const list = document.getElementById("productList");
-      list.innerHTML = "";
-
-      snapshot.forEach((docSnap) => {
-        const p = docSnap.data();
-        const id = docSnap.id;
-
-        const div = document.createElement("div");
-        div.className = "product-item";
-
-        div.innerHTML = `
-          <img src="${p.image}" style="width:120px; border-radius:6px; margin-bottom:10px;"><br>
-
-          <label>Nimi:</label>
-          <input id="name-${id}" value="${p.name}">
-
-          <label>Hind (€):</label>
-          <input id="price-${id}" type="number" step="0.01" value="${p.price}">
-
-          <label>Pildi URL:</label>
-          <input id="image-${id}" value="${p.image}">
-
-          <label>Kategooria:</label>
-          <input id="category-${id}" value="${p.category}">
-
-          <label>Kirjeldus:</label>
-          <textarea id="description-${id}">${p.description}</textarea>
-
-          <label>Kogus:</label>
-          <input id="quantity-${id}" type="number" value="${p.quantity}">
-
-          <button onclick="updateProduct('${id}')">Uuenda</button>
-          <button onclick="deleteProduct('${id}')">Kustuta</button>
-        `;
-
-        list.appendChild(div);
-      });
-    });
-
-
-    /* ---------------- LOAD ORDERS ---------------- */
-    onSnapshot(ordersRef, (snapshot) => {
-      const list = document.getElementById("orderList");
-      list.innerHTML = "";
-
-      snapshot.forEach((docSnap) => {
-        const o = docSnap.data();
-        const id = docSnap.id;
-
-        const div = document.createElement("div");
-        div.className = "order-item";
-
-        div.innerHTML = `
-          <strong>${o.email}</strong><br>
-          Staatus:
-          <select onchange="updateDoc(doc(db, 'orders', '${id}'), { status: this.value })">
-            <option value="processing" ${o.status === "processing" ? "selected" : ""}>processing</option>
-            <option value="completed" ${o.status === "completed" ? "selected" : ""}>completed</option>
-            <option value="cancelled" ${o.status === "cancelled" ? "selected" : ""}>cancelled</option>
-          </select>
-          <br><br>
-          <strong>Tooted:</strong><br>
-          ${o.products.map(p => `${p.name} x ${p.qty}`).join("<br>")}
-        `;
-
-        list.appendChild(div);
-      });
-    });
-
-  </script>
 </head>
-
 <body>
 
 <header id="header">
-  <img src="Images/Prebuiltid.png" id="HIcon">
+  <img src="Images/Prebuiltid.png" id="HIcon" alt="Logo">
   <h1 id="HH1">Prebuiltid Admin</h1>
 
   <nav>
     <ul>
       <li><a href="index.html">Kodu</a></li>
       <li><a href="#" class="active">Admin</a></li>
-      <li><a href="#" onclick="logout()">Logi välja</a></li>
+      <li><a href="#" id="logoutBtn">Logi välja</a></li>
     </ul>
   </nav>
 </header>
 
-
-<section>
-  <h2>Toodete haldamine</h2>
-
+<section class="admin-container">
   <div class="admin-box">
-    <h3>Lisa uus toode</h3>
+    <h2>Lisa uus toode</h2>
 
-    <label>Nimi:</label>
-    <input type="text" id="pName">
+    <label for="pName">Nimi</label>
+    <input id="pName" type="text">
 
-    <label>Hind (€):</label>
-    <input type="number" id="pPrice" step="0.01">
+    <label for="pPrice">Hind</label>
+    <input id="pPrice" type="number" step="0.01">
 
-    <label>Pilt (URL):</label>
-    <input type="text" id="pImage">
+    <label for="pImage">Pildi URL</label>
+    <input id="pImage" type="text">
 
-    <label>Kategooria:</label>
-    <input type="text" id="pCategory">
+    <label for="pCategory">Kategooria</label>
+    <input id="pCategory" type="text">
 
-    <label>Kirjeldus:</label>
+    <label for="pDescription">Kirjeldus</label>
     <textarea id="pDescription"></textarea>
 
-    <label>Kogus:</label>
-    <input type="number" id="pQuantity" min="0">
+    <label for="pQuantity">Kogus</label>
+    <input id="pQuantity" type="number" min="0">
 
-    <button onclick="addProduct()">Lisa toode</button>
+    <button id="addProduct">Lisa toode</button>
   </div>
 
-  <h3>Olemasolevad tooted</h3>
-  <div id="productList"></div>
+  <div class="admin-box">
+    <h2>Toodete filter & sort</h2>
+    <div class="row">
+      <select id="adminFilterCategory">
+        <option value="all">Kõik kategooriad</option>
+      </select>
+
+      <select id="adminSort">
+        <option value="name-asc">Nimi A→Z</option>
+        <option value="name-desc">Nimi Z→A</option>
+        <option value="price-asc">Hind ↑</option>
+        <option value="price-desc">Hind ↓</option>
+        <option value="qty-asc">Kogus ↑</option>
+        <option value="qty-desc">Kogus ↓</option>
+        <option value="category">Kategooria</option>
+        <option value="newest">Uued ees</option>
+        <option value="oldest">Vanimad ees</option>
+      </select>
+
+      <input id="adminSearch" placeholder="Otsi nime või kirjeldust" style="flex:1;padding:8px;border-radius:6px;border:1px solid #d0d7df;">
+    </div>
+  </div>
+
+  <div class="admin-box">
+    <h2>Olemasolevad tooted</h2>
+    <div id="productList"></div>
+  </div>
+
+  <div class="admin-box">
+    <h2>Tellimused</h2>
+
+    <div class="row" style="align-items:center;margin-bottom:12px;">
+      <select id="orderSort">
+        <option value="created-desc">Aeg (uus → vana)</option>
+        <option value="created-asc">Aeg (vana → uus)</option>
+        <option value="status">Staatus</option>
+      </select>
+      <input id="orderSearch" placeholder="Otsi tellimuse ID või email" style="flex:1;padding:8px;border-radius:6px;border:1px solid #d0d7df;">
+    </div>
+
+    <div id="orderList"></div>
+  </div>
 </section>
 
-
-<section>
-  <h2>Tellimused</h2>
-  <div id="orderList"></div>
-</section>
-
-
+<script type="module" src="admin.js"></script>
 </body>
 </html>
