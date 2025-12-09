@@ -1,10 +1,10 @@
-// admin.js
+// admin.js (FULL)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
   getAuth, onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 import {
-  getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, serverTimestamp, query, orderBy, getDocs
+  getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, serverTimestamp, query, getDocs, orderBy
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -21,18 +21,23 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const ADMIN_EMAILS = ["prebuiltid@gmail.com","info@komisjonikaubamaja.ee"];
+/* ---------------- ADMIN UID (REPLACE with actual admin uid) ---------------- */
+const ADMIN_UID = "PUT_ADMIN_UID_HERE"; // <-- REPLACE with your admin user's UID
 
-/* Auth check */
-onAuthStateChanged(auth,user=>{
-  if (!user) location.href = "login.html";
-  if (!ADMIN_EMAILS.includes(user.email.toLowerCase())) location.href = "index.html";
+/* ---------------- AUTH CHECK ---------------- */
+onAuthStateChanged(auth, user => {
+  if (!user) {
+    location.href = "login.html";
+    return;
+  }
+  if (user.uid !== ADMIN_UID) {
+    // Not allowed
+    location.href = "index.html";
+    return;
+  }
 });
 
-/* refs */
-const productsRef = collection(db,"products");
-const ordersRef = collection(db,"orders");
-
+/* ---------------- DOM ---------------- */
 const pName = document.getElementById("pName");
 const pPrice = document.getElementById("pPrice");
 const pImage = document.getElementById("pImage");
@@ -52,10 +57,13 @@ const orderSort = document.getElementById("orderSort");
 const orderSearch = document.getElementById("orderSearch");
 
 const logoutBtn = document.getElementById("logoutBtn");
-logoutBtn && (logoutBtn.onclick = ()=> signOut(auth));
+logoutBtn && (logoutBtn.onclick = () => signOut(auth));
 
-/* add product */
-addProductBtn.addEventListener('click', async ()=>{
+const productsRef = collection(db, "products");
+const ordersRef = collection(db, "orders");
+
+/* ---------------- ADD PRODUCT ---------------- */
+addProductBtn.addEventListener('click', async () => {
   const name = pName.value.trim();
   const price = parseFloat(pPrice.value);
   const image = pImage.value.trim();
@@ -63,52 +71,54 @@ addProductBtn.addEventListener('click', async ()=>{
   const description = pDescription.value.trim();
   const quantity = parseInt(pQuantity.value);
 
-  if (!name || isNaN(price) || !image || !category || !description || isNaN(quantity)) return alert("Täida kõik väljad!");
+  if (!name || isNaN(price) || !image || !category || !description || isNaN(quantity)) {
+    alert("Täida kõik väljad!");
+    return;
+  }
 
   await addDoc(productsRef, { name, price, image, category, description, quantity, createdAt: serverTimestamp() });
+
   pName.value=''; pPrice.value=''; pImage.value=''; pCategory.value=''; pDescription.value=''; pQuantity.value='';
 });
 
-/* real-time products load */
+/* ---------------- REAL-TIME PRODUCTS ---------------- */
 let productsCache = [];
-onSnapshot(productsRef, snap=>{
-  productsCache = snap.docs.map(d=>({ id:d.id, ...d.data() }));
+onSnapshot(productsRef, snap => {
+  productsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   populateCategoryFilter();
   renderProducts();
 });
 
-/* populate admin category filter (unique categories) */
 function populateCategoryFilter(){
-  const cats = Array.from(new Set(productsCache.map(p=>p.category).filter(Boolean)));
-  adminFilterCategory.innerHTML = '<option value="all">Kõik kategooriad</option>' + cats.map(c=>`<option value="${c}">${c}</option>`).join('');
+  const cats = Array.from(new Set(productsCache.map(p => p.category).filter(Boolean)));
+  adminFilterCategory.innerHTML = '<option value="all">Kõik kategooriad</option>' + cats.map(c => `<option value="${c}">${c}</option>`).join('');
 }
 
-/* renderProducts with admin sorting & filtering & editing */
 function renderProducts(){
   const cat = adminFilterCategory.value || 'all';
   let list = productsCache.slice();
 
   const q = adminSearch.value && adminSearch.value.trim().toLowerCase();
-  if (cat !== 'all') list = list.filter(p=>p.category === cat);
+  if (cat !== 'all') list = list.filter(p => p.category === cat);
   if (q) list = list.filter(p => (p.name||'').toLowerCase().includes(q) || (p.description||'').toLowerCase().includes(q));
 
   const s = adminSort.value;
-  if (s==='name-asc') list.sort((a,b)=> (a.name||'').localeCompare(b.name||''));
-  else if (s==='name-desc') list.sort((a,b)=> (b.name||'').localeCompare(a.name||''));
-  else if (s==='price-asc') list.sort((a,b)=> (Number(a.price||0)-Number(b.price||0)));
-  else if (s==='price-desc') list.sort((a,b)=> (Number(b.price||0)-Number(a.price||0)));
-  else if (s==='qty-asc') list.sort((a,b)=> (Number(a.quantity||0)-Number(b.quantity||0)));
-  else if (s==='qty-desc') list.sort((a,b)=> (Number(b.quantity||0)-Number(a.quantity||0)));
-  else if (s==='category') list.sort((a,b)=> (a.category||'').localeCompare(b.category||''));
-  else if (s==='newest') list.sort((a,b)=> (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
-  else if (s==='oldest') list.sort((a,b)=> (a.createdAt?.seconds||0) - (b.createdAt?.seconds||0));
+  if (s === 'name-asc') list.sort((a,b)=> (a.name||'').localeCompare(b.name||''));
+  else if (s === 'name-desc') list.sort((a,b)=> (b.name||'').localeCompare(a.name||''));
+  else if (s === 'price-asc') list.sort((a,b)=> (Number(a.price||0)-Number(b.price||0)));
+  else if (s === 'price-desc') list.sort((a,b)=> (Number(b.price||0)-Number(a.price||0)));
+  else if (s === 'qty-asc') list.sort((a,b)=> (Number(a.quantity||0)-Number(b.quantity||0)));
+  else if (s === 'qty-desc') list.sort((a,b)=> (Number(b.quantity||0)-Number(a.quantity||0)));
+  else if (s === 'category') list.sort((a,b)=> (a.category||'').localeCompare(b.category||''));
+  else if (s === 'newest') list.sort((a,b)=> (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
+  else if (s === 'oldest') list.sort((a,b)=> (a.createdAt?.seconds||0) - (b.createdAt?.seconds||0));
 
   productList.innerHTML = '';
   list.forEach(p => {
     const node = document.createElement('div');
     node.className = 'product-item';
     node.innerHTML = `
-      <img src="${p.image||''}" alt="${p.name||''}">
+      <img src="${escapeHtmlAttr(p.image||'')}" alt="${escapeHtml(p.name||'')}">
       <div class="fields">
         <input id="name-${p.id}" value="${escapeHtml(p.name||'')}">
         <div style="display:flex;gap:8px;">
@@ -128,12 +138,12 @@ function renderProducts(){
   });
 }
 
-/* admin controls */
+/* controls */
 adminFilterCategory.addEventListener('change', renderProducts);
 adminSort.addEventListener('change', renderProducts);
 adminSearch.addEventListener('input', ()=> setTimeout(renderProducts,150));
 
-/* update / delete product functions (exposed) */
+/* update / delete product functions */
 window.updateProduct = async (id) => {
   const name = document.getElementById(`name-${id}`).value.trim();
   const price = parseFloat(document.getElementById(`price-${id}`).value);
@@ -152,10 +162,10 @@ window.deleteProduct = async (id) => {
   await deleteDoc(doc(db,"products",id));
 };
 
-/* ORDERS: load, filter, sort, confirm status */
+/* ---------------- ORDERS ---------------- */
 let ordersCache = [];
-onSnapshot(ordersRef, snap=>{
-  ordersCache = snap.docs.map(d=>({ id:d.id, ...d.data() }));
+onSnapshot(ordersRef, snap => {
+  ordersCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   renderOrders();
 });
 
@@ -168,7 +178,7 @@ function renderOrders(){
   else if (s === 'created-asc') list.sort((a,b)=> (a.createdAt?.seconds||0) - (b.createdAt?.seconds||0));
   else if (s === 'status') list.sort((a,b)=> (a.status||'').localeCompare(b.status||''));
 
-  if (q) list = list.filter(o => (o.email||'').toLowerCase().includes(q) || o.id && o.id.includes(q));
+  if (q) list = list.filter(o => (o.email||'').toLowerCase().includes(q) || (o.id && o.id.includes(q)));
 
   orderList.innerHTML = '';
   list.forEach(o => {
@@ -177,7 +187,7 @@ function renderOrders(){
     const when = o.createdAt && o.createdAt.toDate ? o.createdAt.toDate().toLocaleString() : '';
     node.innerHTML = `
       <div class="order-header">
-        <div><strong>${o.email||'—'}</strong><div class="muted" style="font-size:12px;">${when}</div></div>
+        <div><strong>${escapeHtml(o.email||'—')}</strong><div class="muted" style="font-size:12px;">${escapeHtml(when)}</div></div>
         <div style="display:flex;align-items:center;gap:8px;">
           <select id="order-status-${o.id}" class="status-select">
             <option value="pending"${o.status==='pending'?' selected':''}>Pending</option>
@@ -188,7 +198,7 @@ function renderOrders(){
           <button class="confirm-btn" onclick="confirmStatus('${o.id}')">Kinnita</button>
         </div>
       </div>
-      <div class="order-products"><strong>Products:</strong><br>${(o.products||[]).map(p=>`${p.name} x ${p.qty}`).join('<br>')}</div>
+      <div class="order-products"><strong>Products:</strong><br>${(o.products||[]).map(p=>`${escapeHtml(p.name)} x ${p.qty}`).join('<br>')}</div>
     `;
     orderList.appendChild(node);
   });
@@ -204,5 +214,6 @@ window.confirmStatus = async (id) => {
   alert("Status updated.");
 };
 
-/* helper */
+/* helpers */
 function escapeHtml(s=''){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escapeHtmlAttr(s=''){ return String(s).replace(/"/g, '&quot;'); }
