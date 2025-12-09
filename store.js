@@ -1,5 +1,5 @@
-// store.js (REPLACE your current file with this)
-// Uses product field: `qty` (as you confirmed)
+// store.js (FULL — replace current file)
+// Uses product field: `quantity` in Firestore documents.
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
@@ -32,7 +32,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-/* ---------------- DOM REFERENCES ---------------- */
+/* ---------------- DOM REFS ---------------- */
 const productContainer = document.getElementById('shopgrid');
 const categorySelect = document.getElementById('categorySelect');
 const sortSelect = document.getElementById('sortSelect');
@@ -115,7 +115,7 @@ function renderCart(){
 function changeQty(id, delta){
   const it = cart.find(c=>c.id===id); if(!it) return;
   const product = allProducts.find(p=>p.id===id);
-  const stock = product ? Number(product.qty || 0) : Infinity;
+  const stock = product ? Number(product.quantity || 0) : Infinity;
   const newQty = it.qty + delta;
   if (newQty <= 0) {
     cart = cart.filter(c=>c.id!==id);
@@ -130,9 +130,9 @@ function changeQty(id, delta){
 
 function removeItem(id){ cart = cart.filter(c=>c.id!==id); saveCart(); renderCart(); }
 
-/* Expose addToCart for external calls (keeps backwards compatibility) */
+/* Expose addToCart (cart item qty is separate from product.quantity) */
 window.addToCart = function(product){
-  const stock = Number(product.qty || 0);
+  const stock = Number(product.quantity || 0);
   const existing = cart.find(c=>c.id===product.id);
   const currentQty = existing ? existing.qty : 0;
   if (stock > 0 && currentQty + 1 > stock) { alert(`Laos ainult ${stock} ühikut.`); return; }
@@ -183,7 +183,7 @@ confirmCheckoutBtn && confirmCheckoutBtn.addEventListener('click', async () => {
     if (snaps.size >= 3) { alert("Sul on juba 3 aktiivset tellimust. Palun oota nende täitmist."); return; }
   } catch (err) {
     console.error("Active order check failed:", err);
-    // continue — let server enforce if needed
+    // continue — server should also enforce if needed
   }
 
   const payload = {
@@ -206,7 +206,7 @@ confirmCheckoutBtn && confirmCheckoutBtn.addEventListener('click', async () => {
   }
 });
 
-/* ---------------- MY ORDERS (user can cancel their own pending/processing orders) ---------------- */
+/* ---------------- MY ORDERS (user can cancel ONLY their own pending/processing orders) ---------------- */
 myOrdersBtn && myOrdersBtn.addEventListener('click', ()=> {
   if (!auth.currentUser) { alert("Palun logi sisse."); window.location.href = 'login.html'; return; }
   loadMyOrders();
@@ -241,7 +241,7 @@ async function loadMyOrders(){
       });
       div.appendChild(ul);
 
-      // Cancel button allowed only for user's pending/processing orders
+      // Cancel allowed only for user's pending/processing orders
       if (od.status === "pending" || od.status === "processing") {
         const cancelBtn = document.createElement('button');
         cancelBtn.innerText = "Tühista tellimus";
@@ -298,19 +298,19 @@ function applyFiltersAndRender(){
   else if (s === 'name-asc') list.sort((a,b)=> (String(a.name||'').localeCompare(String(b.name||''))));
   else if (s === 'name-desc') list.sort((a,b)=> (String(b.name||'').localeCompare(String(a.name||''))));
   else if (s === 'newest') list.sort((a,b)=> (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
-  else if (s === 'stock-desc') list.sort((a,b)=> (Number(b.qty||0) - Number(a.qty||0)));
-  else if (s === 'stock-asc') list.sort((a,b)=> (Number(a.qty||0) - Number(b.qty||0)));
+  else if (s === 'stock-desc') list.sort((a,b)=> (Number(b.quantity||0) - Number(a.quantity||0)));
+  else if (s === 'stock-asc') list.sort((a,b)=> (Number(a.quantity||0) - Number(b.quantity||0)));
 
   filteredProducts = list;
   renderProducts(list);
 }
 
-/* ---------------- RENDER PRODUCTS (safe, no inline onclick) ---------------- */
+/* ---------------- RENDER PRODUCTS ---------------- */
 function renderProducts(products){
   if (!productContainer) return;
   productContainer.innerHTML = '';
   products.forEach(product => {
-    const qty = Number(product.qty || 0);
+    const qty = Number(product.quantity || 0);
     const disabled = qty <= 0;
 
     const card = document.createElement('div');
@@ -336,9 +336,8 @@ function renderProducts(products){
     const addBtn = document.createElement('button'); addBtn.className='btn'; addBtn.innerText = qty <= 0 ? 'Lõppenud' : 'Lisa korvi';
     addBtn.disabled = disabled;
     addBtn.onclick = () => {
-      // use the product current snapshot values (avoid stale inline JSON)
       const p = allProducts.find(x => x.id === product.id) || product;
-      window.addToCart({ id: p.id, name: p.name, price: p.price, qty: p.qty, image: p.image || '' });
+      window.addToCart({ id: p.id, name: p.name, price: p.price, image: p.image || '', quantity: p.quantity });
     };
 
     actions.append(viewBtn, addBtn);
@@ -365,10 +364,10 @@ function escapeHtml(s=''){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp
 function escapeHtmlAttr(s=''){ return String(s).replace(/"/g, '&quot;'); }
 function safeUrl(u){ try { return u ? String(u) : ''; } catch { return ''; } }
 
-/* ---------------- INITIALIZE UI ---------------- */
+/* ---------------- INIT ---------------- */
 renderCart(); updateCartCount();
 
-/* ---------------- AUTH UI (toggle login/logout links) ---------------- */
+/* ---------------- AUTH UI ---------------- */
 onAuthStateChanged(auth, user => {
   if (!user) {
     if (accountLink) accountLink.style.display = 'inline-block';
