@@ -13,7 +13,7 @@
   <h1 id="HH1">Prebuiltid</h1>
   <nav>
     <ul>
-      <li><a href="https://prebuilts.github.io/Prebuiltid">Kodu</a></li>
+      <li><a href="index.html">Kodu</a></li>
       <li><a href="#" class="active">Pood</a></li>
       <li><a href="login.html" id="accountLink">Logi sisse</a></li>
       <li><a href="#" id="logoutBtn" style="display:none">Logi välja</a></li>
@@ -24,7 +24,7 @@
 <section class="store-section">
   <h2>Meie pood</h2>
 
-  <div class="category-filter">
+  <div class="category-filter" style="align-items:center;">
     <label for="categorySelect">Filtreeri kategooria järgi:</label>
     <select id="categorySelect">
       <option value="all">Kõik</option>
@@ -45,9 +45,24 @@
       <option value="routers">Ruuterid</option>
       <option value="network-switches">Network Switchid</option>
     </select>
+
+    <label for="sortSelect" style="margin-left:14px;">Sorteeri:</label>
+    <select id="sortSelect">
+      <option value="none">Default</option>
+      <option value="price-asc">Hind: odavam → kallim</option>
+      <option value="price-desc">Hind: kallim → odavam</option>
+      <option value="name-asc">Nimi: A → Z</option>
+      <option value="name-desc">Nimi: Z → A</option>
+      <option value="newest">Uuemad ees</option>
+      <option value="stock-desc">Laos: palju → vähe</option>
+      <option value="stock-asc">Laos: vähe → palju</option>
+    </select>
+
+    <label for="searchInput" style="margin-left:14px;">Otsi:</label>
+    <input id="searchInput" placeholder="Otsi toote nime järgi" style="padding:8px;border-radius:6px;border:1px solid #d0d7df;">
   </div>
 
-  <div class="recommended-grid" id="store-product-list"></div>
+  <div id="shopgrid" class="recommended-grid"></div>
 </section>
 
 <!-- Floating Cart Button -->
