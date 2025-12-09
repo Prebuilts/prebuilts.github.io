@@ -75,7 +75,7 @@ function renderCart(){
   basketItemsEl.innerHTML = "";
 
   if (!cart.length) {
-    basketItemsEl.innerHTML = "<p>Korb on tühi.</p>";
+    basketItemsEl.innerHTML = "<p>Korv on tühi.</p>";
     basketTotalEl && (basketTotalEl.innerText = "0€");
     updateCartCount();
     return;
