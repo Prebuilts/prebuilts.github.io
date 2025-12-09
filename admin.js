@@ -22,7 +22,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 /* ---------------- ADMIN UID (REPLACE with actual admin uid) ---------------- */
-const ADMIN_UID = "PUT_ADMIN_UID_HERE"; // <-- REPLACE with your admin user's UID
+const ADMIN_UID = "zL2LJWPAiFWFpcdFFh3E7KfDrxi2"; // <-- REPLACE with your admin user's UID
 
 /* ---------------- AUTH CHECK ---------------- */
 onAuthStateChanged(auth, user => {
