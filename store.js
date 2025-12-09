@@ -1,10 +1,23 @@
-// store.js
+// store.js (REPLACE your current file with this)
+// Uses product field: `qty` (as you confirmed)
+
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
-  getFirestore, collection, getDocs, onSnapshot, addDoc, serverTimestamp, query, where, orderBy
+  getFirestore,
+  collection,
+  getDocs,
+  onSnapshot,
+  addDoc,
+  serverTimestamp,
+  query,
+  where,
+  orderBy,
+  deleteDoc,
+  doc
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
+/* ---------------- FIREBASE CONFIG ---------------- */
 const firebaseConfig = {
   apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
   authDomain: "prebuiltid-website.firebaseapp.com",
@@ -19,7 +32,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-/* DOM */
+/* ---------------- DOM REFERENCES ---------------- */
 const productContainer = document.getElementById('shopgrid');
 const categorySelect = document.getElementById('categorySelect');
 const sortSelect = document.getElementById('sortSelect');
@@ -46,18 +59,21 @@ const closeMyOrdersBtn = document.getElementById("close-my-orders");
 const accountLink = document.getElementById("accountLink");
 const logoutEl = document.getElementById("logoutBtn");
 
+/* ---------------- STATE ---------------- */
 let allProducts = [];
 let filteredProducts = [];
-
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+/* ---------------- CART HELPERS ---------------- */
 function saveCart(){ localStorage.setItem("cart", JSON.stringify(cart)); }
 function updateCartCount(){ cartCountEl && (cartCountEl.innerText = cart.reduce((s,i)=> s + (i.qty||0),0)); }
 function cartTotal(){ return cart.reduce((s,i)=> s + (Number(i.price||0) * (i.qty||0)),0); }
 
-/* Render cart */
+/* ---------------- RENDER CART ---------------- */
 function renderCart(){
   if (!basketItemsEl) return;
   basketItemsEl.innerHTML = "";
+
   if (!cart.length) {
     basketItemsEl.innerHTML = "<p>Korb on tühi.</p>";
     basketTotalEl && (basketTotalEl.innerText = "0€");
@@ -68,18 +84,24 @@ function renderCart(){
   cart.forEach(item => {
     const row = document.createElement('div');
     row.className = 'basket-item';
-    const left = document.createElement('div'); left.className='left';
-    const img = document.createElement('img'); img.src = item.image || '';
-    const info = document.createElement('div'); info.innerHTML = `<div style="font-weight:700">${item.name}</div><div style="font-size:13px;color:#666">${Number(item.price).toFixed(2)}€</div>`;
+
+    const left = document.createElement('div'); left.className = 'left';
+    const img = document.createElement('img'); img.src = safeUrl(item.image) || '';
+    img.alt = item.name || '';
+    const info = document.createElement('div');
+    info.innerHTML = `<div style="font-weight:700">${escapeHtml(item.name)}</div><div style="font-size:13px;color:#666">${Number(item.price).toFixed(2)}€</div>`;
     left.append(img, info);
 
     const qtyWrap = document.createElement('div');
-    const minus = document.createElement('button'); minus.className='qty-btn'; minus.innerText='-'; minus.onclick=()=>changeQty(item.id,-1);
-    const qty = document.createElement('span'); qty.innerText = item.qty; qty.style.margin='0 8px';
-    const plus = document.createElement('button'); plus.className='qty-btn'; plus.innerText='+'; plus.onclick=()=>changeQty(item.id,1);
-    qtyWrap.append(minus, qty, plus);
+    const minus = document.createElement('button'); minus.className='qty-btn'; minus.innerText='-';
+    minus.onclick = () => changeQty(item.id, -1);
+    const qtySpan = document.createElement('span'); qtySpan.innerText = item.qty; qtySpan.style.margin = '0 8px';
+    const plus = document.createElement('button'); plus.className='qty-btn'; plus.innerText='+';
+    plus.onclick = () => changeQty(item.id, +1);
+    qtyWrap.append(minus, qtySpan, plus);
 
-    const remove = document.createElement('button'); remove.innerText='Eemalda'; remove.onclick=()=>removeItem(item.id);
+    const remove = document.createElement('button'); remove.innerText = 'Eemalda';
+    remove.onclick = () => removeItem(item.id);
 
     row.append(left, qtyWrap, remove);
     basketItemsEl.appendChild(row);
@@ -89,140 +111,181 @@ function renderCart(){
   updateCartCount();
 }
 
-/* Cart ops */
+/* ---------------- CART OPERATIONS ---------------- */
 function changeQty(id, delta){
   const it = cart.find(c=>c.id===id); if(!it) return;
   const product = allProducts.find(p=>p.id===id);
-  const stock = product ? Number(product.quantity||0) : Infinity;
+  const stock = product ? Number(product.qty || 0) : Infinity;
   const newQty = it.qty + delta;
-  if (newQty <= 0) { cart = cart.filter(c=>c.id!==id); }
-  else if (newQty > stock) { alert(`Laos ainult ${stock} ühikut.`); return; }
-  else it.qty = newQty;
+  if (newQty <= 0) {
+    cart = cart.filter(c=>c.id!==id);
+  } else if (newQty > stock) {
+    alert(`Laos ainult ${stock} ühikut.`);
+    return;
+  } else {
+    it.qty = newQty;
+  }
   saveCart(); renderCart();
 }
 
 function removeItem(id){ cart = cart.filter(c=>c.id!==id); saveCart(); renderCart(); }
 
+/* Expose addToCart for external calls (keeps backwards compatibility) */
 window.addToCart = function(product){
-  const stock = Number(product.quantity||0);
+  const stock = Number(product.qty || 0);
   const existing = cart.find(c=>c.id===product.id);
   const currentQty = existing ? existing.qty : 0;
   if (stock > 0 && currentQty + 1 > stock) { alert(`Laos ainult ${stock} ühikut.`); return; }
-  if (existing) existing.qty++;
+  if (existing) existing.qty += 1;
   else cart.push({ id: product.id, name: product.name, price: Number(product.price||0), qty:1, image: product.image||'' });
   saveCart(); renderCart();
 };
 
-clearCartBtn && clearCartBtn.addEventListener('click', ()=>{ if(confirm("Tühjendada ostukorv?")){ cart=[]; saveCart(); renderCart(); }});
-
-cartIcon && cartIcon.addEventListener('click', ()=>{ basketPanel.classList.add('open'); basketPanel.setAttribute('aria-hidden','false'); });
-closeBasket && closeBasket.addEventListener('click', ()=>{ basketPanel.classList.remove('open'); basketPanel.setAttribute('aria-hidden','true'); });
-
-buyAllBtn && buyAllBtn.addEventListener('click', ()=> {
-  if (!auth.currentUser) { alert("Palun logi sisse, et teha tellimus."); window.location.href='login.html'; return; }
-  if (!cart.length) { alert("Ostukorv on tühi."); return; }
-  checkoutModal.classList.add('show');
+/* ---------------- UI: clear / open basket ---------------- */
+clearCartBtn && clearCartBtn.addEventListener('click', ()=> {
+  if (!confirm("Tühjendada ostukorv?")) return;
+  cart = []; saveCart(); renderCart();
 });
 
-/* confirm checkout */
-confirmCheckoutBtn && confirmCheckoutBtn.addEventListener('click', async ()=>{
+cartIcon && cartIcon.addEventListener('click', ()=> {
+  if (!basketPanel) return;
+  basketPanel.classList.add('open');
+  basketPanel.setAttribute('aria-hidden','false');
+});
+
+closeBasket && closeBasket.addEventListener('click', ()=> {
+  basketPanel && basketPanel.classList.remove('open');
+  basketPanel && basketPanel.setAttribute('aria-hidden','true');
+});
+
+/* ---------------- CHECKOUT FLOW ---------------- */
+buyAllBtn && buyAllBtn.addEventListener('click', ()=> {
+  if (!auth.currentUser) { alert("Palun logi sisse, et teha tellimus."); window.location.href = 'login.html'; return; }
+  if (!cart.length) { alert("Ostukorv on tühi."); return; }
+  checkoutModal && checkoutModal.classList.add('show');
+});
+
+cancelCheckoutBtn && cancelCheckoutBtn.addEventListener('click', ()=> {
+  checkoutModal && checkoutModal.classList.remove('show');
+});
+
+/* Confirm checkout: create order, enforce max 3 active */
+confirmCheckoutBtn && confirmCheckoutBtn.addEventListener('click', async () => {
   const user = auth.currentUser;
   if (!user) { alert("Palun logi sisse."); return; }
+  if (!cart.length) { alert("Ostukorv on tühi."); return; }
 
-  // check 3 active orders
   try {
+    // check active orders (pending or processing)
     const ordersRef = collection(db, "orders");
-    const q = query(ordersRef, where("uid","==",user.uid), where("status","in",["pending","processing"]));
+    const q = query(ordersRef, where("uid", "==", user.uid), where("status", "in", ["pending","processing"]));
     const snaps = await getDocs(q);
-    if (snaps.size >= 3) { alert("Sul on juba 3 aktiivset tellimust."); return; }
-  } catch(err){ console.error(err); }
+    if (snaps.size >= 3) { alert("Sul on juba 3 aktiivset tellimust. Palun oota nende täitmist."); return; }
+  } catch (err) {
+    console.error("Active order check failed:", err);
+    // continue — let server enforce if needed
+  }
 
   const payload = {
     uid: user.uid,
     email: user.email || null,
-    products: cart.map(c=>({ id:c.id, name:c.name, price:c.price, qty:c.qty })),
-    status: "pending",
+    products: cart.map(c=>({ id: c.id, name: c.name, price: c.price, qty: c.qty })),
+    status: 'pending',
     createdAt: serverTimestamp()
   };
 
   try {
-    await addDoc(collection(db,"orders"), payload);
+    await addDoc(collection(db, "orders"), payload);
     cart = []; saveCart(); renderCart();
-    checkoutModal.classList.remove('show');
-    basketPanel.classList.remove('open');
+    checkoutModal && checkoutModal.classList.remove('show');
+    basketPanel && basketPanel.classList.remove('open');
     alert("Tellimus saadetud! Me võtame teiega ühendust 1-5 tööpäeva jooksul.");
-  } catch(err){
+  } catch (err) {
     console.error("Order save error:", err);
     alert("Tellimuse salvestamisel tekkis viga. Palun proovi hiljem.");
   }
 });
 
-/* cancel checkout */
-cancelCheckoutBtn && cancelCheckoutBtn.addEventListener('click', ()=> checkoutModal.classList.remove('show'));
-
-/* My orders modal */
+/* ---------------- MY ORDERS (user can cancel their own pending/processing orders) ---------------- */
 myOrdersBtn && myOrdersBtn.addEventListener('click', ()=> {
-  if (!auth.currentUser) { alert("Palun logi sisse."); window.location.href='login.html'; return; }
+  if (!auth.currentUser) { alert("Palun logi sisse."); window.location.href = 'login.html'; return; }
   loadMyOrders();
-  myOrdersModal.classList.add('show');
+  myOrdersModal && myOrdersModal.classList.add('show');
 });
-closeMyOrdersBtn && closeMyOrdersBtn.addEventListener('click', ()=> myOrdersModal.classList.remove('show'));
 
-/* load my orders */
-import { getDocs } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+closeMyOrdersBtn && closeMyOrdersBtn.addEventListener('click', ()=> {
+  myOrdersModal && myOrdersModal.classList.remove('show');
+});
+
 async function loadMyOrders(){
+  if (!myOrdersList) return;
   myOrdersList.innerHTML = "<p>Laadin...</p>";
   try {
-    const ordersRef = collection(db,"orders");
-    const q = query(ordersRef, where("uid","==", auth.currentUser.uid), orderBy("createdAt","desc"));
+    const ordersRef = collection(db, "orders");
+    const q = query(ordersRef, where("uid", "==", auth.currentUser.uid), orderBy("createdAt", "desc"));
     const snap = await getDocs(q);
     if (snap.empty) { myOrdersList.innerHTML = "<p>Tellimusi ei ole.</p>"; return; }
     myOrdersList.innerHTML = "";
-    snap.forEach(docSnap=>{
-      const od = docSnap.data(); const id = docSnap.id;
+    snap.forEach(docSnap => {
+      const od = docSnap.data();
+      const id = docSnap.id;
       const div = document.createElement('div');
-      div.style.borderBottom="1px solid #eee"; div.style.padding="8px 0";
+      div.style.borderBottom = "1px solid #eee"; div.style.padding = "8px 0";
       const when = od.createdAt && od.createdAt.toDate ? od.createdAt.toDate().toLocaleString() : "—";
-      div.innerHTML = `<p><strong>${when}</strong> — ${od.status || '—'}</p>`;
+      div.innerHTML = `<p><strong>${escapeHtml(when)}</strong> — ${escapeHtml(od.status || '—')}</p>`;
       const ul = document.createElement('div');
-      od.products.forEach(p=>{ const pEl = document.createElement('div'); pEl.innerText = `${p.name} — ${Number(p.price).toFixed(2)}€ x ${p.qty}`; ul.appendChild(pEl); });
+      (od.products || []).forEach(p => {
+        const pEl = document.createElement('div');
+        pEl.innerText = `${p.name} — ${Number(p.price).toFixed(2)}€ x ${p.qty}`;
+        ul.appendChild(pEl);
+      });
       div.appendChild(ul);
+
+      // Cancel button allowed only for user's pending/processing orders
       if (od.status === "pending" || od.status === "processing") {
-        const cancelBtn = document.createElement('button'); cancelBtn.innerText="Tühista tellimus";
-        cancelBtn.onclick = async ()=>{
+        const cancelBtn = document.createElement('button');
+        cancelBtn.innerText = "Tühista tellimus";
+        cancelBtn.onclick = async () => {
           if (!confirm("Kas oled kindel?")) return;
           try {
-            // delete
-            const { deleteDoc, doc } = await import("https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js");
-            await deleteDoc(doc(db,"orders",id));
+            await deleteDoc(doc(db, "orders", id));
             alert("Tellimus tühistatud.");
             loadMyOrders();
-          } catch(err){ console.error(err); alert("Tühistamisel viga."); }
+          } catch (err) {
+            console.error("Cancel order error:", err);
+            alert("Tühistamisel tekkis viga.");
+          }
         };
         div.appendChild(cancelBtn);
       } else {
-        const note = document.createElement('div'); note.className='muted'; note.innerText='Seda tellimust ei saa enam tühistada.'; div.appendChild(note);
+        const note = document.createElement('div');
+        note.className = 'muted';
+        note.innerText = 'Seda tellimust ei saa enam tühistada.';
+        div.appendChild(note);
       }
+
       myOrdersList.appendChild(div);
     });
-  } catch(err){ console.error(err); myOrdersList.innerHTML="<p>Tellimuste laadimisel tekkis viga.</p>"; }
+  } catch (err) {
+    console.error(err);
+    myOrdersList.innerHTML = "<p>Tellimuste laadimisel tekkis viga.</p>";
+  }
 }
 
-/* PRODUCTS: real-time load and store in allProducts */
-import { onSnapshot as onSn, getDocs as getDocs2 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-const productsRef = collection(db,"products");
-onSn(productsRef, (snap)=>{
-  allProducts = snap.docs.map(d=>({ id: d.id, ...d.data() }));
+/* ---------------- PRODUCTS: real-time load ---------------- */
+const productsRef = collection(db, "products");
+onSnapshot(productsRef, snap => {
+  allProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   applyFiltersAndRender();
 });
 
-/* Filtering & Sorting helpers */
+/* ---------------- FILTER / SORT / SEARCH ---------------- */
 function applyFiltersAndRender(){
   const cat = categorySelect ? categorySelect.value : 'all';
   let list = allProducts.slice();
 
   // filter by category
-  if (cat && cat !== 'all') list = list.filter(p=>p.category === cat);
+  if (cat && cat !== 'all') list = list.filter(p => p.category === cat);
 
   // search
   const q = searchInput ? searchInput.value.trim().toLowerCase() : '';
@@ -235,57 +298,86 @@ function applyFiltersAndRender(){
   else if (s === 'name-asc') list.sort((a,b)=> (String(a.name||'').localeCompare(String(b.name||''))));
   else if (s === 'name-desc') list.sort((a,b)=> (String(b.name||'').localeCompare(String(a.name||''))));
   else if (s === 'newest') list.sort((a,b)=> (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0));
-  else if (s === 'stock-desc') list.sort((a,b)=> (Number(b.quantity||0) - Number(a.quantity||0)));
-  else if (s === 'stock-asc') list.sort((a,b)=> (Number(a.quantity||0) - Number(b.quantity||0)));
+  else if (s === 'stock-desc') list.sort((a,b)=> (Number(b.qty||0) - Number(a.qty||0)));
+  else if (s === 'stock-asc') list.sort((a,b)=> (Number(a.qty||0) - Number(b.qty||0)));
 
   filteredProducts = list;
   renderProducts(list);
 }
 
-/* renderProducts for 3x3 grid */
+/* ---------------- RENDER PRODUCTS (safe, no inline onclick) ---------------- */
 function renderProducts(products){
   if (!productContainer) return;
   productContainer.innerHTML = '';
-  products.forEach(product=>{
-    const qty = Number(product.quantity||0);
-    const disabled = qty <= 0 ? 'disabled' : '';
-    const div = document.createElement('div');
-    div.className = 'productbox';
-    div.innerHTML = `
-      <div>
-        <img src="${product.image || ''}" alt="${escapeHtml(product.name||'')}">
-        <h3>${escapeHtml(product.name||'')}</h3>
-        <div style="font-weight:700">${Number(product.price||0).toFixed(2)}€</div>
-        <p>${escapeHtml(product.description||'')}</p>
-        <div class="stock">Laos: ${qty}</div>
-      </div>
-      <div style="margin-top:10px; display:flex; gap:8px;">
-        <button class="btn" onclick="openProductLink('${product.link || '#'}')">Vaata lisaks</button>
-        <button class="btn" ${disabled} onclick='addToCart(${JSON.stringify({ id:product.id, name:product.name, price:product.price, image:product.image, quantity:product.quantity })})'>${qty<=0 ? 'Lõppenud' : 'Lisa korvi'}</button>
-      </div>
+  products.forEach(product => {
+    const qty = Number(product.qty || 0);
+    const disabled = qty <= 0;
+
+    const card = document.createElement('div');
+    card.className = 'productbox';
+
+    const content = document.createElement('div');
+    content.innerHTML = `
+      <img src="${escapeHtmlAttr(product.image || '')}" alt="${escapeHtml(product.name || '')}">
+      <h3>${escapeHtml(product.name || '')}</h3>
+      <div style="font-weight:700">${Number(product.price || 0).toFixed(2)}€</div>
+      <p>${escapeHtml(product.description || '')}</p>
+      <div class="stock">Laos: ${qty}</div>
     `;
-    productContainer.appendChild(div);
+
+    const actions = document.createElement('div');
+    actions.style.marginTop = '10px';
+    actions.style.display = 'flex';
+    actions.style.gap = '8px';
+
+    const viewBtn = document.createElement('button'); viewBtn.className='btn'; viewBtn.innerText = 'Vaata lisaks';
+    viewBtn.onclick = () => openProductLink(product.link || '#');
+
+    const addBtn = document.createElement('button'); addBtn.className='btn'; addBtn.innerText = qty <= 0 ? 'Lõppenud' : 'Lisa korvi';
+    addBtn.disabled = disabled;
+    addBtn.onclick = () => {
+      // use the product current snapshot values (avoid stale inline JSON)
+      const p = allProducts.find(x => x.id === product.id) || product;
+      window.addToCart({ id: p.id, name: p.name, price: p.price, qty: p.qty, image: p.image || '' });
+    };
+
+    actions.append(viewBtn, addBtn);
+
+    card.appendChild(content);
+    card.appendChild(actions);
+    productContainer.appendChild(card);
   });
 }
 
-window.openProductLink = url => window.open(url, '_blank');
+/* ---------------- OPEN PRODUCT LINK ---------------- */
+window.openProductLink = (url) => {
+  window.open(url, "_blank");
+};
 
-/* UI events */
+/* ---------------- UI EVENTS ---------------- */
 if (categorySelect) categorySelect.addEventListener('change', applyFiltersAndRender);
 if (sortSelect) sortSelect.addEventListener('change', applyFiltersAndRender);
-if (searchInput) { searchInput.addEventListener('input', debounce(()=> applyFiltersAndRender(), 180)); }
+if (searchInput) searchInput.addEventListener('input', debounce(()=> applyFiltersAndRender(), 180));
 
-/* debounce helper */
-function debounce(fn, ms=200){ let t; return function(...a){ clearTimeout(t); t=setTimeout(()=>fn.apply(this,a), ms); }; }
+/* ---------------- HELPERS ---------------- */
+function debounce(fn, ms = 200){ let t; return function(...a){ clearTimeout(t); t = setTimeout(()=>fn.apply(this,a), ms); }; }
+function escapeHtml(s=''){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escapeHtmlAttr(s=''){ return String(s).replace(/"/g, '&quot;'); }
+function safeUrl(u){ try { return u ? String(u) : ''; } catch { return ''; } }
 
-/* small helper */
-function escapeHtml(s=''){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-
-/* init cart rendering */
+/* ---------------- INITIALIZE UI ---------------- */
 renderCart(); updateCartCount();
 
-/* Auth UI (show logout if logged in) */
-onAuthStateChanged(auth, user=>{
-  if (!user) { accountLink && (accountLink.style.display='inline-block'); logoutEl && (logoutEl.style.display='none'); }
-  else { accountLink && (accountLink.style.display='none'); logoutEl && (logoutEl.style.display='inline-block'); logoutEl && (logoutEl.onclick = ()=> signOut(auth)); }
+/* ---------------- AUTH UI (toggle login/logout links) ---------------- */
+onAuthStateChanged(auth, user => {
+  if (!user) {
+    if (accountLink) accountLink.style.display = 'inline-block';
+    if (logoutEl) logoutEl.style.display = 'none';
+  } else {
+    if (accountLink) accountLink.style.display = 'none';
+    if (logoutEl) {
+      logoutEl.style.display = 'inline-block';
+      logoutEl.onclick = () => signOut(auth);
+    }
+  }
 });
