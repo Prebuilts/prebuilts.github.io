@@ -1,6 +1,5 @@
-// store.js (FULL) - includes crypto modal with QR, CoinGecko price +3%
-// Uses firebase v12.2.1 as before. Uses product field: `quantity`.
-
+// store.js (FULL) - Products, cart, orders, crypto popup (XMR + USDC on Polygon)
+// Firebase v12.2.1 modular imports
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
   getFirestore,
@@ -50,6 +49,8 @@ const buyAllBtn = document.getElementById("buy-all-btn");
 const checkoutModal = document.getElementById("checkout-modal");
 const cancelCheckoutBtn = document.getElementById("cancel-checkout");
 const confirmCheckoutBtn = document.getElementById("confirm-checkout");
+const payCryptoOpenBtn = document.getElementById("pay-crypto-open-btn");
+const payLocalBtn = document.getElementById("pay-local-btn");
 
 const myOrdersBtn = document.getElementById("my-orders-btn");
 const myOrdersModal = document.getElementById("my-orders-modal");
@@ -59,16 +60,17 @@ const closeMyOrdersBtn = document.getElementById("close-my-orders");
 const accountLink = document.getElementById("accountLink");
 const logoutEl = document.getElementById("logoutBtn");
 
-/* ---------------- CRYPTO DOM ---------------- */
+/* crypto modal elements */
 const cryptoModal = document.getElementById("crypto-modal");
-const cryptoSelect = document.getElementById("crypto-select");
-const cryptoAmountEl = document.getElementById("crypto-amount");
+const selectXmrBtn = document.getElementById("select-xmr");
+const selectUsdcBtn = document.getElementById("select-usdc");
+const cryptoDetails = document.getElementById("crypto-details");
 const cryptoEurAmountEl = document.getElementById("crypto-eur-amount");
+const cryptoAmountEl = document.getElementById("crypto-amount");
 const cryptoAddressEl = document.getElementById("crypto-address");
 const cryptoQrImg = document.getElementById("crypto-qr");
-const confirmPaidBtn = document.getElementById("confirm-paid-btn");
+const cryptoPaidBtn = document.getElementById("crypto-paid-btn");
 const closeCryptoBtn = document.getElementById("close-crypto-btn");
-const openCryptoBtn = document.getElementById("pay-crypto-open-btn");
 
 /* ---------------- STATE ---------------- */
 let allProducts = [];
@@ -78,10 +80,13 @@ function saveCart(){ localStorage.setItem("cart", JSON.stringify(cart)); }
 function updateCartCount(){ cartCountEl && (cartCountEl.innerText = cart.reduce((s,i)=> s + (i.qty||0),0)); }
 function cartTotal(){ return cart.reduce((s,i)=> s + (Number(i.price||0) * (i.qty||0)),0); }
 
-/* ---------------- PLACEHOLDER WALLETS (REPLACE WITH YOURS) ---------------- */
+/* ---------------- WALLET PLACEHOLDERS - REPLACE before going live ----------------
+   - Replace WALLET.xmr with your Monero address
+   - Replace WALLET.usdc_polygon with your USDC (Polygon) address
+*/
 const WALLET = {
-  xmr: "YOUR_XMR_ADDRESS_HERE",
-  usdc: "YOUR_USDC_ERC20_ADDRESS_HERE"
+  xmr: "XMR_ADDRESS_PLACEHOLDER",
+  usdc_polygon: "USDC_POLYGON_ADDRESS_PLACEHOLDER"
 };
 
 /* ---------------- RENDER CART ---------------- */
@@ -145,7 +150,7 @@ function changeQty(id, delta){
 
 function removeItem(id){ cart = cart.filter(c=>c.id!==id); saveCart(); renderCart(); }
 
-/* Expose addToCart */
+/* expose addToCart */
 window.addToCart = function(product){
   const stock = Number(product.quantity || 0);
   const existing = cart.find(c=>c.id===product.id);
@@ -184,38 +189,35 @@ cancelCheckoutBtn && cancelCheckoutBtn.addEventListener('click', ()=> {
   checkoutModal && checkoutModal.classList.remove('show');
 });
 
-/* Confirm checkout (regular non-crypto) */
-confirmCheckoutBtn && confirmCheckoutBtn.addEventListener('click', async () => {
+/* Local (offline) payment from checkout modal */
+payLocalBtn && payLocalBtn.addEventListener('click', async ()=> {
+  checkoutModal && checkoutModal.classList.remove('show');
+
   const user = auth.currentUser;
   if (!user) { alert("Palun logi sisse."); return; }
   if (!cart.length) { alert("Ostukorv on tühi."); return; }
 
   try {
-    // check active orders (pending or processing)
     const ordersRef = collection(db, "orders");
-    const q = query(ordersRef, where("uid", "==", user.uid), where("status", "in", ["pending","processing"]));
+    const q = query(ordersRef, where("uid","==",user.uid), where("status","in",["pending","processing"]));
     const snaps = await getDocs(q);
-    if (snaps.size >= 3) { alert("Sul on juba 3 aktiivset tellimust. Palun oota nende täitmist."); return; }
-  } catch (err) {
-    console.error("Active order check failed:", err);
-  }
+    if (snaps.size >= 3) { alert("Sul on juba 3 aktiivset tellimust."); return; }
+  } catch(err){ console.error(err); }
 
   const payload = {
     uid: user.uid,
     email: user.email || null,
-    products: cart.map(c=>({ id: c.id, name: c.name, price: c.price, qty: c.qty })),
-    status: 'pending',
-    paymentMethod: 'offline',
+    products: cart.map(c=>({ id:c.id, name:c.name, price:c.price, qty:c.qty })),
+    status: "pending",
+    paymentMethod: "offline",
     createdAt: serverTimestamp()
   };
 
   try {
-    await addDoc(collection(db, "orders"), payload);
+    await addDoc(collection(db,"orders"), payload);
     cart = []; saveCart(); renderCart();
-    checkoutModal && checkoutModal.classList.remove('show');
-    basketPanel && basketPanel.classList.remove('open');
-    alert("Tellimus saadetud! Me võtame teiega ühendust 1-5 tööpäeva jooksul.");
-  } catch (err) {
+    alert("Tellimus salvestatud! Me võtame teiega ühendust 1-5 tööpäeva jooksul.");
+  } catch(err){
     console.error("Order save error:", err);
     alert("Tellimuse salvestamisel tekkis viga. Palun proovi hiljem.");
   }
@@ -258,7 +260,7 @@ async function loadMyOrders(){
       if (od.paymentMethod === 'crypto' && od.paymentDetails) {
         const pd = od.paymentDetails;
         const pdEl = document.createElement('div');
-        pdEl.innerHTML = `<small>Paid: ${escapeHtml(pd.currency||'')} &nbsp; Amount: ${escapeHtml(pd.amountCrypto||'')} &nbsp; Address: ${escapeHtml(pd.address||'')}</small>`;
+        pdEl.innerHTML = `<small>Paid: ${escapeHtml(pd.currency||'')} · Amount: ${escapeHtml(pd.amountCrypto||'')} · Address: ${escapeHtml(pd.address||'')}</small>`;
         div.appendChild(pdEl);
       }
 
@@ -304,14 +306,11 @@ function applyFiltersAndRender(){
   const cat = categorySelect ? categorySelect.value : 'all';
   let list = allProducts.slice();
 
-  // filter by category
   if (cat && cat !== 'all') list = list.filter(p => p.category === cat);
 
-  // search
   const q = searchInput ? searchInput.value.trim().toLowerCase() : '';
   if (q) list = list.filter(p => (p.name||'').toLowerCase().includes(q) || (p.description||'').toLowerCase().includes(q));
 
-  // sorting
   const s = sortSelect ? sortSelect.value : 'none';
   if (s === 'price-asc') list.sort((a,b)=> (Number(a.price||0) - Number(b.price||0)));
   else if (s === 'price-desc') list.sort((a,b)=> (Number(b.price||0) - Number(a.price||0)));
@@ -404,48 +403,59 @@ onAuthStateChanged(auth, user => {
 /* ===================== CRYPTO FLOW ===================== */
 
 /*
-  Flow:
-  - user clicks "Osta kõik" -> checkout modal
-  - user clicks "Crypto" -> open crypto modal
-  - crypto modal: selects XMR or USDC
-  - we fetch EUR price from CoinGecko, compute amount = (cartTotal EUR) * 1.03 / price_per_coin
-  - show address & QR
-  - user clicks "I've Paid" -> create order in Firestore with paymentMethod:'crypto' and paymentDetails
+ Flow summary:
+ 1) User clicks "Osta kõik" -> checkout modal
+ 2) Click "Krüpto" -> crypto modal
+ 3) Choose XMR or USDC(Polygon)
+ 4) Script fetches CoinGecko prices (monero, usd-coin in EUR)
+ 5) amountCrypto = (cartTotal EUR * 1.03) / coinPriceEUR
+ 6) Show amountCrypto (already includes +3%) and QR/address
+ 7) When user clicks "I've paid" -> create order with paymentMethod:'crypto' and paymentDetails
 */
 
-openCryptoBtn && openCryptoBtn.addEventListener('click', async () => {
+// open crypto modal from checkout
+payCryptoOpenBtn && payCryptoOpenBtn.addEventListener('click', async ()=> {
   checkoutModal && checkoutModal.classList.remove('show');
-  await openCryptoModal();
+  openCryptoModal();
 });
 
 closeCryptoBtn && closeCryptoBtn.addEventListener('click', ()=> {
   cryptoModal && cryptoModal.classList.remove('show');
 });
 
-cryptoSelect && cryptoSelect.addEventListener('change', ()=> updateCryptoInfo());
+selectXmrBtn && selectXmrBtn.addEventListener('click', ()=> {
+  showCryptoDetails('xmr');
+});
 
-confirmPaidBtn && confirmPaidBtn.addEventListener('click', async () => {
-  // When user clicks "I've Paid": we create the order in Firestore with paymentMethod=crypto
+selectUsdcBtn && selectUsdcBtn.addEventListener('click', ()=> {
+  showCryptoDetails('usdc_polygon');
+});
+
+cryptoPaidBtn && cryptoPaidBtn.addEventListener('click', async ()=> {
+  // Save order as pending with crypto payment details
+  const currency = cryptoModal.dataset.selectedCurrency;
+  if (!currency) { alert('Vali valuuta'); return; }
   const user = auth.currentUser;
   if (!user) { alert("Palun logi sisse."); return; }
   if (!cart.length) { alert("Ostukorv on tühi."); return; }
 
-  const currency = cryptoSelect.value;
-  const eurTotal = cartTotal();
-  const prices = await fetchCoinPrices(); // may fail but we try
+  // fetch price to compute final amounts (again, to avoid stale display)
+  const prices = await fetchCoinPrices();
   const coinPrice = currency === 'xmr' ? (prices.monero?.eur || null) : (prices['usd-coin']?.eur || null);
-  if (!coinPrice) { alert("Viga hindade laadimisel."); return; }
-  const amountCrypto = ((eurTotal * 1.03) / coinPrice).toFixed(8);
+  if (!coinPrice) { alert("Hindade laadimisel tekkis viga."); return; }
+
+  const eurTotal = cartTotal();
+  const amountCrypto = ( (eurTotal * 1.03) / coinPrice );
 
   const paymentDetails = {
-    currency: currency,
-    address: WALLET[currency],
-    amountCrypto: String(amountCrypto),
+    currency: currency === 'xmr' ? 'XMR' : 'USDC',
+    address: currency === 'xmr' ? WALLET.xmr : WALLET.usdc_polygon,
+    amountCrypto: amountCrypto.toString(),
     amountEur: Number((eurTotal * 1.03).toFixed(2)),
     feeMarkup: 0.03
   };
 
-  // enforce 3 active orders max:
+  // check 3 active orders
   try {
     const ordersRef = collection(db, "orders");
     const q = query(ordersRef, where("uid","==",user.uid), where("status","in",["pending","processing"]));
@@ -474,60 +484,66 @@ confirmPaidBtn && confirmPaidBtn.addEventListener('click', async () => {
   }
 });
 
-/* fetch coin prices (CoinGecko) */
+/* Fetch CoinGecko prices for monero and usd-coin (EUR) */
 async function fetchCoinPrices(){
-  // coin ids: monero, usd-coin
   try {
-    const res = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=monero,usd-coin&vs_currencies=eur');
+    const url = 'https://api.coingecko.com/api/v3/simple/price?ids=monero,usd-coin&vs_currencies=eur';
+    const res = await fetch(url);
     if (!res.ok) throw new Error('price fetch failed');
-    return await res.json();
+    const data = await res.json();
+    return data;
   } catch(e){
     console.error('CoinGecko error', e);
     return {};
   }
 }
 
+/* Open crypto modal initial */
 async function openCryptoModal(){
   if (!cryptoModal) return;
-  // show modal
   cryptoModal.classList.add('show');
-
-  // initial update
-  await updateCryptoInfo();
+  cryptoDetails.style.display = 'none';
+  cryptoModal.dataset.selectedCurrency = '';
+  // show EUR total
+  const eurTotal = cartTotal();
+  cryptoEurAmountEl.innerText = eurTotal.toFixed(2);
 }
 
-async function updateCryptoInfo(){
-  const currency = cryptoSelect.value;
+/* Show crypto details after selecting currency */
+async function showCryptoDetails(currencyKey){
+  if (!cryptoModal) return;
+  cryptoModal.dataset.selectedCurrency = currencyKey;
+  cryptoDetails.style.display = 'block';
+
   const eurTotal = cartTotal();
-  cryptoEurAmountEl.innerText = eurTotal.toFixed(2) + " €";
+  cryptoEurAmountEl.innerText = eurTotal.toFixed(2);
 
   const prices = await fetchCoinPrices();
-  const coinPrice = currency === 'xmr' ? (prices.monero?.eur || null) : (prices['usd-coin']?.eur || null);
-
+  const coinPrice = currencyKey === 'xmr' ? (prices.monero?.eur || null) : (prices['usd-coin']?.eur || null);
   if (!coinPrice) {
-    cryptoAmountEl.innerText = "Hind puudub";
-    cryptoAddressEl.innerText = WALLET[currency] || "ADDRESS_NOT_SET";
+    cryptoAmountEl.innerText = 'Hind pole saadaval';
+    cryptoAddressEl.innerText = currencyKey === 'xmr' ? WALLET.xmr : WALLET.usdc_polygon;
     cryptoQrImg.src = '';
     return;
   }
 
   const amountCrypto = ( (eurTotal * 1.03) / coinPrice );
-  // format
-  const decimals = currency === 'xmr' ? 12 : 8;
-  cryptoAmountEl.innerText = amountCrypto.toFixed(decimals) + ` ${currency.toUpperCase()}`;
-  cryptoAddressEl.innerText = WALLET[currency] || "ADDRESS_NOT_SET";
+  // choose decimals: XMR more decimals
+  const decimals = currencyKey === 'xmr' ? 12 : 8;
+  cryptoAmountEl.innerText = amountCrypto.toFixed(decimals);
+  cryptoAddressEl.innerText = currencyKey === 'xmr' ? WALLET.xmr : WALLET.usdc_polygon;
 
-  // Build QR: for ERC20/USDC use ethereum URI scheme; for XMR just encode the address
-  let qrData = "";
-  if (currency === 'usdc') {
-    // ethereum:0xADDRESS?value=AMOUNT (some wallets accept this)
-    qrData = `ethereum:${WALLET[currency]}?value=${amountCrypto.toFixed(8)}`;
+  // QR generation:
+  let qrData = '';
+  if (currencyKey === 'usdc_polygon') {
+    // Use ethereum URI scheme (works for many polygon wallets)
+    // Note: many wallets expect value in ether units or hex; this simple approach usually opens wallet and pre-fills address.
+    qrData = `ethereum:${WALLET.usdc_polygon}?value=${amountCrypto.toFixed(decimals)}`;
   } else {
-    // XMR: no universal URI standard used here — just place address and amount as plain text
-    qrData = `${WALLET[currency]}?amount=${amountCrypto.toFixed(decimals)}`;
+    // XMR - not a standard universal URI; show address + amount as plain text in QR.
+    qrData = `${WALLET.xmr}?amount=${amountCrypto.toFixed(decimals)}`;
   }
   const encoded = encodeURIComponent(qrData);
-  // Google Charts QR generator
   cryptoQrImg.src = `https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=${encoded}&choe=UTF-8`;
 }
 
