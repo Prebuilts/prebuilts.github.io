@@ -1,21 +1,13 @@
-/* admin.css - matches site theme */
 body { font-family: Arial, sans-serif; background:#F4F4F9; color:#333; margin:0; padding:0; }
-#header{ display:flex; align-items:center; justify-content:space-between; padding:15px 22px; background:#2C3E50; border-bottom:5px solid #34495E; }
-#HIcon{ max-width:60px; } #HH1{ color:#D1D8E0; margin:0; }
-.admin-container{ max-width:1000px; margin:24px auto; padding:0 12px; }
-.admin-box{ background:#F1F3F5; border-radius:10px; padding:18px; margin-bottom:18px; box-shadow:0 4px 12px rgba(0,0,0,0.06); }
-label{ display:block; margin-top:10px; font-weight:600; color:#222; }
-input, textarea, select { width:100%; padding:9px; margin-top:6px; border-radius:8px; border:1px solid #d0d7df; box-sizing:border-box; }
-textarea{ min-height:80px; resize:vertical; }
-button, .btn{ background:#FF6F61; color:#fff; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; font-weight:700; }
-button:hover, .btn:hover{ background:#FF5733; }
-.product-item{ display:flex; gap:12px; align-items:flex-start; background:#fff; border:1px solid #e6ebf2; padding:12px; border-radius:8px; margin-bottom:12px; }
-.product-item img{ width:110px; height:80px; object-fit:cover; border-radius:6px; }
-.product-item .fields{ flex:1; display:flex; gap:8px; flex-direction:column; }
-.product-item .actions{ display:flex; gap:8px; align-items:center; }
-.order-item{ background:#fff; border:1px solid #e6ebf2; padding:12px; border-radius:8px; margin-bottom:12px; }
-.status-select{ padding:8px 10px; border-radius:8px; border:1px solid #cfd8e3; font-weight:700; }
-.confirm-btn{ background:#2b9f5b; border:none; color:#fff; padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:700; }
-.confirm-btn:hover{ background:#248b4b; }
-.btn.danger{ background:#c0392b; }
-@media (max-width:700px){ .product-item{ flex-direction:column; } .product-item img{ width:100%; height:auto; } }
+.admin-header{ text-align:center; padding:20px; background:#2C3E50; color:white; }
+.status-box{ background:#fff3cd; padding:10px; margin:12px; border:1px solid #ffeeba; border-radius:6px; }
+.admin-box{ background:#fff; padding:20px; margin:20px; border-radius:10px; box-shadow:0 2px 6px rgba(0,0,0,0.08); }
+label{ display:block; font-weight:600; margin-top:12px; }
+input, textarea{ width:100%; padding:8px; border-radius:6px; border:1px solid #ccc; margin-top:5px; }
+button{ margin-top:12px; padding:10px 14px; background:#FF6F61; color:white; border:none; border-radius:8px; cursor:pointer; }
+button:hover{ background:#FF5733; }
+.product-item{ display:flex; gap:12px; background:white; padding:10px; margin-top:10px; border-radius:6px; border:1px solid #ddd; }
+.product-item img{ width:90px; height:70px; object-fit:cover; border-radius:6px; }
+.actions{ display:flex; gap:8px; }
+.btn{ padding:6px 10px; border-radius:6px; background:#6c63ff; color:white; cursor:pointer; }
+.btn.danger{ background:#d9534f; }
