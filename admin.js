@@ -5,8 +5,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-/* FIREBASE CONFIG (use the one you requested) */
-const firebaseConfig = { 
+const firebaseConfig = {
   apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
   authDomain: "prebuiltid-website.firebaseapp.com",
   projectId: "prebuiltid-website",
@@ -89,7 +88,7 @@ addProductBtn.onclick = async () => {
 
 /* Realtime load & render */
 function loadProductsRealtime() {
-  productList.innerHTML = "Loading...";
+  productList.innerHTML = "";
   const col = collection(db, "products");
   onSnapshot(col, snap => {
     productList.innerHTML = "";
@@ -99,6 +98,7 @@ function loadProductsRealtime() {
 
       const div = document.createElement("div");
       div.className = "product-item";
+
       div.innerHTML = `
         <div>
           <h3>${escapeHtml(p.name || '')}</h3>
@@ -165,5 +165,5 @@ function loadProductsRealtime() {
 }
 
 /* helpers */
-function escapeHtml(s=''){ return String(s).replace(/[&<>\"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c])); }
-function escapeAttr(s=''){ return String(s).replace(/\"/g,'&quot;'); }
+function escapeHtml(s=''){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escapeAttr(s=''){ return String(s).replace(/"/g,'&quot;'); }
