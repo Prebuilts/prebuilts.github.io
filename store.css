@@ -1,4 +1,4 @@
-/* store.css - kept to your theme, fixed 3x3 grid & iPhone-safe */
+/* store.css - 3x3 grid + basket + modals */
 
 /* === GLOBAL BODY / THEME === */
 body {
@@ -37,13 +37,7 @@ nav li a:hover, nav li a.active { background:#34495E; }
 .category-filter { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:16px; }
 .category-filter label { font-weight:600; color:#333; }
 
-/* === 3x3 GRID (REPLACED: was horizontal-scroll) ===
-   This section now creates a classic responsive 3×3 grid:
-   - Desktop: 3 columns
-   - Tablet: 2 columns
-   - Mobile: 1 column
-   It preserves your product card sizing and overall theme.
-*/
+/* === 3x3 GRID === */
 #shopgrid, .recommended-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -51,28 +45,18 @@ nav li a:hover, nav li a.active { background:#34495E; }
   padding: 12px;
   width: 100%;
   box-sizing: border-box;
-  /* Keep vertical scrolling behavior normal (no horizontal scroll) */
   overflow-x: hidden;
   -webkit-overflow-scrolling: touch;
 }
-
-/* Tablet breakpoint: 2 columns */
 @media (max-width: 900px) {
-  #shopgrid, .recommended-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  #shopgrid, .recommended-grid { grid-template-columns: repeat(2, 1fr); }
 }
-
-/* Mobile breakpoint: 1 column */
 @media (max-width: 600px) {
-  #shopgrid, .recommended-grid {
-    grid-template-columns: 1fr;
-  }
+  #shopgrid, .recommended-grid { grid-template-columns: 1fr; }
 }
 
 /* product card */
 .productbox {
-  /* make card stretch to fill the grid cell */
   width: 100%;
   box-sizing: border-box;
   background: #FFF;
@@ -81,12 +65,10 @@ nav li a:hover, nav li a.active { background:#34495E; }
   padding: 14px;
   text-align: left;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  /* removed scroll-snap and column specific rules */
   display:flex;
   flex-direction:column;
   justify-content:space-between;
 }
-
 .productbox img { width:100%; border-radius:6px; margin-bottom:10px; object-fit:cover; }
 .productbox h3 { margin:6px 0; font-size:1rem; color:#111; }
 .productbox p { font-size:13px; color:#555; margin:6px 0 10px; }
@@ -110,29 +92,49 @@ button[disabled] { background:#ddd; color:#777; cursor:not-allowed; }
 /* cart icon & panel */
 #cart-icon { position:fixed; right:20px; bottom:22px; z-index:1200; display:flex; align-items:center; gap:8px; padding:10px 14px; background:#FF6F61; color:#fff; border-radius:999px; box-shadow:0 6px 18px rgba(0,0,0,0.18); cursor:pointer; }
 #cart-count { background:#fff; color:#FF6F61; padding:3px 8px; border-radius:999px; font-weight:800; font-size:13px; }
-#basket-panel { position:fixed; top:0; right:-400px; width:360px; height:100%; background:#fff; box-shadow:-6px 0 20px rgba(0,0,0,0.18); transition:right .28s ease; z-index:1250; display:flex; flex-direction:column; padding:14px; }
+
+#basket-panel { position:fixed; top:0; right:-420px; width:420px; height:100%; background:#fff; box-shadow:-6px 0 20px rgba(0,0,0,0.18); transition:right .28s ease; z-index:1250; display:flex; flex-direction:column; padding:14px; }
 #basket-panel.open { right:0; }
 #basket-header { display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid #eee; }
 #basket-items { flex:1; overflow-y:auto; padding:10px 0; -webkit-overflow-scrolling: touch; }
-.basket-item { display:flex; gap:8px; align-items:center; justify-content:space-between; padding:8px; border-radius:8px; background:#fafafa; margin-bottom:8px; }
-.basket-item img { width:56px; height:56px; object-fit:cover; border-radius:6px; }
+
+/* basket item box (Option 2 style) */
+.basket-item {
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  padding:10px;
+  border-radius:8px;
+  border:1px solid #eef2f6;
+  background:#fff;
+  margin-bottom:12px;
+}
+.basket-item img { width:80px; height:80px; object-fit:cover; border-radius:6px; }
+.basket-item .info { flex:1; }
+.basket-item .info h4 { margin:0 0 6px; font-size:15px; }
+.basket-item .info .price { font-weight:700; margin-bottom:8px; }
+.basket-item .actions { display:flex; gap:8px; flex-direction:column; align-items:flex-end; }
+
+/* payment embed box inside basket */
+.payment-embed {
+  margin-top:8px;
+  padding:8px;
+  background:#fbfbfb;
+  border:1px dashed #e6e6e6;
+  border-radius:6px;
+}
 
 /* modal */
 .modal { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,0.45); z-index:1300; padding:18px; }
 .modal.show { display:flex; }
-.modal-content { width:100%; max-width:480px; background:#fff; padding:18px; border-radius:10px; box-shadow:0 8px 30px rgba(0,0,0,0.16); }
+.modal-content { width:100%; max-width:520px; background:#fff; padding:18px; border-radius:10px; box-shadow:0 8px 30px rgba(0,0,0,0.16); }
 
 /* footer */
 #footer { text-align:center; background:#2C3E50; color:#D1D8E0; padding:20px; margin:30px 20px 20px; border-radius:10px; }
 
-/* responsive adjustments (keep existing mobile behavior) */
+/* responsive */
 @media (max-width:700px) {
-  /* small screens: productboxes full width inside 1-column grid */
-  .productbox { width:100%; }
   #basket-panel { width:100%; right:-100%; }
   #basket-panel.open { right:0; }
-  nav ul { gap:8px; flex-wrap:wrap; }
+  .payment-embed { overflow-wrap: anywhere; }
 }
-
-/* keep footer consistent */
-#footer { text-align:center; background:#2C3E50; color:#D1D8E0; padding:20px; margin:30px 20px 20px; border-radius:10px; }
