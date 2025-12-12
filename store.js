@@ -1,4 +1,4 @@
-// store.js
+// store.js (patched: disclaimer before opening basket)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
   getFirestore, collection, onSnapshot, getDoc, doc, setDoc
@@ -56,6 +56,11 @@ const closeSettingsBtn = document.getElementById("close-settings");
 
 const logoutEl = document.getElementById("logoutBtn");
 const accountLink = document.getElementById("accountLink");
+
+/* DISCLAIMER modal refs */
+const disclaimerModal = document.getElementById("disclaimer-modal");
+const disclaimerAccept = document.getElementById("disclaimer-accept");
+const disclaimerCancel = document.getElementById("disclaimer-cancel");
 
 let allProducts = [];
 let cart = JSON.parse(localStorage.getItem("cart_v1") || "[]");
@@ -135,10 +140,57 @@ window.addToCart = function(product){
   saveCart(); renderCart(); updateCartCount();
 };
 
-/* UI for opening/closing basket */
-cartIcon && cartIcon.addEventListener('click', ()=> { basketPanel.classList.add('open'); basketPanel.setAttribute('aria-hidden','false'); renderCart(); });
-closeBasket && closeBasket.addEventListener('click', ()=> { basketPanel.classList.remove('open'); basketPanel.setAttribute('aria-hidden','true'); });
+/* DISCLAIMER flow:
+   - when user clicks cart-icon, show disclaimer first (unless already accepted this session)
+   - if accepted -> open basket
+   - acceptance stored in session/localStorage
+*/
+function openBasketWithDisclaimer() {
+  const accepted = localStorage.getItem('nowpay_disclaimer_accepted_v1');
+  if (accepted === 'true') {
+    openBasket();
+    return;
+  }
+  // show disclaimer modal
+  if (!disclaimerModal) { openBasket(); return; }
+  disclaimerModal.classList.add('show');
+  disclaimerModal.setAttribute('aria-hidden','false');
+}
 
+/* Open/close basket helpers */
+function openBasket(){
+  basketPanel.classList.add('open');
+  basketPanel.setAttribute('aria-hidden','false');
+  renderCart();
+}
+function closeBasketPanel(){
+  basketPanel.classList.remove('open');
+  basketPanel.setAttribute('aria-hidden','true');
+}
+
+/* UI for opening/closing basket */
+cartIcon && cartIcon.addEventListener('click', ()=> { openBasketWithDisclaimer(); });
+closeBasket && closeBasket.addEventListener('click', ()=> { closeBasketPanel(); });
+
+/* disclaimer handlers */
+if (disclaimerAccept) {
+  disclaimerAccept.addEventListener('click', ()=> {
+    // set accepted flag for this origin/session
+    try { localStorage.setItem('nowpay_disclaimer_accepted_v1', 'true'); } catch(e){ /* ignore */ }
+    disclaimerModal.classList.remove('show');
+    disclaimerModal.setAttribute('aria-hidden','true');
+    openBasket();
+  });
+}
+if (disclaimerCancel) {
+  disclaimerCancel.addEventListener('click', ()=> {
+    disclaimerModal.classList.remove('show');
+    disclaimerModal.setAttribute('aria-hidden','true');
+    // do nothing else
+  });
+}
+
+/* rest of your basket controls */
 clearCartBtn && clearCartBtn.addEventListener('click', ()=> {
   if (confirm("Tühjendada ostukorv?")) {
     cart = []; saveCart(); renderCart(); updateCartCount();
@@ -148,14 +200,13 @@ clearCartBtn && clearCartBtn.addEventListener('click', ()=> {
 /* buy all: simply show confirmation modal here (admin buttons inside cart handle crypto) */
 buyAllBtn && buyAllBtn.addEventListener('click', ()=> {
   if (!cart.length) { alert("Ostukorv on tühi."); return; }
-  // show simple confirmation
   checkoutModal.classList.add('show');
 });
 
 /* confirm/ cancel checkout */
 cancelCheckoutBtn && cancelCheckoutBtn.addEventListener('click', ()=> checkoutModal.classList.remove('show'));
 confirmCheckoutBtn && confirmCheckoutBtn.addEventListener('click', ()=> {
-  // For now we keep offline flow: create an order? (left minimal)
+  // offline flow: notify and clear cart
   alert("Tellimus registreeritud. Me võtame teiega ühendust.");
   cart = []; saveCart(); renderCart(); updateCartCount();
   checkoutModal.classList.remove('show');
