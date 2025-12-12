@@ -1,55 +1,161 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="et">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sotsiaalmeedia</title>
-  <link rel="stylesheet" href="social.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Prebuiltid | Pood</title>
+  <link rel="stylesheet" href="store.css" />
 </head>
 <body>
-  <!-- HEADER -->
-  <header id="header">
-    <img id="HIcon" src="Images/Viiru.png" alt="Logo">
-    <h1 id="HH1">Prebuiltid</h1>
-    <nav>
-      <ul>
-        <li><a href="https://prebuilts.github.io/Prebuilts/">Kodu</a></li>
-        <li><a href="https://prebuilts.github.io/Prebuiltid/Store">Pood</a></li>
-        <li><a href="https://www.example.com/" class="active">Sotsiaalmeedia</a></li>
-      </ul>
-    </nav>
-    <button id="darkModeToggle">🌙</button>
-  </header>
 
-  <!-- MAIN CONTENT -->
-  <section class="social-section">
-    <h2>Follow Us</h2>
-    <p>Stay connected with me on our social platforms!</p>
+<header id="header">
+  <img src="Images/Prebuiltid.png" alt="Prebuiltid Logo" id="HIcon" />
+  <h1 id="HH1">Prebuiltid</h1>
+  <nav>
+    <ul>
+      <li><a href="index.html">Kodu</a></li>
+      <li><a href="#" class="active">Pood</a></li>
+      <li><a href="#" id="settingsBtn">Seaded</a></li>
+      <li><a href="login.html" id="accountLink">Logi sisse</a></li>
+      <li><a href="#" id="logoutBtn" style="display:none">Logi välja</a></li>
+    </ul>
+  </nav>
+</header>
 
-    <div class="social-links">
-      <a href="https://twitter.com/callmeviiru" target="_blank" class="social-btn twitter">Twitter</a>
-      <a href="https://twitch.tv/callmeviiru" target="_blank" class="social-btn facebook">Twitch</a>
-      <a href="https://viiru.top/" target="_blank" class="social-btn instagram">Official website</a>
-      <a href="https://youtube.com/@ViiruTech" target="_blank" class="social-btn youtube">YouTube</a>
-      <a href="https://dsc.gg/viir" target="_blank" class="social-btn discord">Discord</a>
+<section class="store-section">
+  <h2>Meie pood</h2>
+
+  <div class="category-filter" style="align-items:center;">
+    <label for="categorySelect">Filtreeri kategooria järgi:</label>
+    <select id="categorySelect">
+      <option value="all">Kõik</option>
+      <option value="gaming-pcs">Mänguriarvutid</option>
+      <option value="consoles">Konsoolid</option>
+      <option value="controllers">Konsooli Puldid</option>
+      <option value="smartphones">Nutitelefonid</option>
+      <option value="phones">Lauatelefonid</option>
+      <option value="handhelds">Käsikonsoolid</option>
+      <option value="monitors">Monitorid</option>
+      <option value="pcs">Lauaarvutid</option>
+      <option value="gpu">Graafikakaardid</option>
+      <option value="tv">Televiisorid</option>
+      <option value="keyboards">Klaviatuurid</option>
+      <option value="mice">Arvutihiired</option>
+      <option value="headphones">Kõrvaklapid</option>
+      <option value="games">Mängud</option>
+      <option value="routers">Ruuterid</option>
+      <option value="network-switches">Network Switchid</option>
+    </select>
+
+    <label for="sortSelect" style="margin-left:14px;">Sorteeri:</label>
+    <select id="sortSelect">
+      <option value="none">Sotreerimata</option>
+      <option value="price-asc">Hind: odavam → kallim</option>
+      <option value="price-desc">Hind: kallim → odavam</option>
+      <option value="name-asc">Nimi: A → Z</option>
+      <option value="name-desc">Nimi: Z → A</option>
+      <option value="newest">Uuemad ees</option>
+      <option value="stock-desc">Laos: palju → vähe</option>
+      <option value="stock-asc">Laos: vähe → palju</option>
+    </select>
+
+    <label for="searchInput" style="margin-left:14px;">Otsi:</label>
+    <input id="searchInput" placeholder="Otsi toote nime järgi" style="padding:8px;border-radius:6px;border:1px solid #d0d7df;">
+  </div>
+
+  <!-- 3x3 grid element -->
+  <div id="shopgrid" class="recommended-grid"></div>
+</section>
+
+<!-- Floating Cart Button -->
+<div id="cart-icon" title="Vaata ostukorvi">
+  🛒 <span id="cart-count">0</span>
+</div>
+
+<!-- Slide-out Basket Panel -->
+<div id="basket-panel" aria-hidden="true">
+  <div id="basket-header">
+    <h2>Ostukorv</h2>
+    <button id="close-basket" aria-label="Sulge ostukorv">✖</button>
+  </div>
+
+  <div id="basket-items"></div>
+
+  <div id="basket-footer">
+    <h3>Kokku: <span id="basket-total">0€</span></h3>
+    <div class="basket-actions">
+      <button id="clear-cart-btn">Tühjenda</button>
+      <button id="buy-all-btn">Osta kõik</button>
     </div>
-  </section>
+    <div style="margin-top:10px;">
+      <button id="my-orders-btn">Minu tellimused</button>
+    </div>
+  </div>
+</div>
 
-  <!-- FOOTER -->
-  <footer id="footer">
-    <p>© 2025 viiru.top</p>
-    <p>
-      <a href="privacy.html">Privacy Policy</a> | 
-      <a href="terms.html">Terms of Service</a>
+<!-- DISCLAIMER MODAL (shows before basket on cart click unless accepted) -->
+<div id="disclaimer-modal" class="modal" aria-hidden="true">
+  <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="disclaimer-title">
+    <h2 id="disclaimer-title">Oluline teade</h2>
+    <p style="font-weight:700; margin-top:8px;">
+      Palun sisestage NowPayments-i makseterminali oma email või telefoninumber,
+      et saaksime teiega ühendust võtta, et panna pakk teele või anda teile teada kuhu toodetele järgi tulla!
     </p>
-  </footer>
 
-  <script>
-    // === Dark Mode Toggle ===
-    const toggle = document.getElementById("darkModeToggle");
-    toggle.addEventListener("click", () => {
-      document.body.classList.toggle("dark-mode");
-    });
-  </script>
+    <div style="margin-top:16px; display:flex; gap:10px; justify-content:flex-end;">
+      <button id="disclaimer-cancel" style="background:#bbb;">Tühista</button>
+      <button id="disclaimer-accept">Olen teadlik ja saan aru</button>
+    </div>
+  </div>
+</div>
+
+<!-- Checkout Confirmation Modal -->
+<div id="checkout-modal" class="modal" aria-hidden="true">
+  <div class="modal-content">
+    <h3>Oled sa kindel?</h3>
+    <p id="checkout-message">Me kontakteerume teiega 1-5 tööpäeva jooksul ning saadame info kuhu järgi tulla. Makse toimub kohapeal.</p>
+
+    <div style="margin-top:12px; display:flex; gap:10px; justify-content:flex-end;">
+      <button id="cancel-checkout">Tühista</button>
+      <button id="confirm-checkout">Kinnita ostu</button>
+    </div>
+  </div>
+</div>
+
+<!-- Crypto modal (kept for compatibility; buttons are provided inside basket per product) -->
+<div id="crypto-modal" class="modal" aria-hidden="true">
+  <div class="modal-content">
+    <h3>Krüpto</h3>
+    <p>Krüpto makse kuvatakse iga toote all eraldi ostukorvis, kui admin on lisanud NOWPayments embedi.</p>
+    <div style="margin-top:12px; display:flex; gap:10px; justify-content:flex-end;">
+      <button id="close-crypto">Sulge</button>
+    </div>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div id="settings-modal" class="modal" aria-hidden="true">
+  <div class="modal-content">
+    <h3>Seaded</h3>
+    <p>Email: <span id="settings-email">Laen...</span></p>
+
+    <label for="settings-address">Aadress</label>
+    <input id="settings-address" placeholder="Näiteks: Tartu mnt 10, Tallinn">
+
+    <label for="settings-dpd">DPD pakiautomaat (nimi)</label>
+    <input id="settings-dpd" placeholder="Näiteks: Mustamäe Rimi pakiautomaat">
+
+    <div style="margin-top:12px; display:flex; gap:10px; justify-content:flex-end;">
+      <button id="save-settings">Salvesta</button>
+      <button id="close-settings">Sulge</button>
+    </div>
+  </div>
+</div>
+
+<footer id="footer">
+  <p>Kõik õigused kaitstud &copy; Prebuiltid 2025</p>
+</footer>
+
+<script type="module" src="store.js"></script>
 </body>
 </html>
