@@ -1,4 +1,4 @@
-// store.js (patched: disclaimer before opening basket)
+// store.js (finalized: disclaimer + hidden basket + settings + per-item NowPayments embeds)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
   getFirestore, collection, onSnapshot, getDoc, doc, setDoc
@@ -7,7 +7,7 @@ import {
   getAuth, onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-/* FIREBASE CONFIG (use the one you specified) */
+/* FIREBASE CONFIG (as requested) */
 const firebaseConfig = {
   apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
   authDomain: "prebuiltid-website.firebaseapp.com",
@@ -65,9 +65,14 @@ const disclaimerCancel = document.getElementById("disclaimer-cancel");
 let allProducts = [];
 let cart = JSON.parse(localStorage.getItem("cart_v1") || "[]");
 
+/* helpers for cart persistence and counters */
 function saveCart() { localStorage.setItem("cart_v1", JSON.stringify(cart)); }
 function updateCartCount() { cartCountEl && (cartCountEl.innerText = cart.length); }
 function cartTotal() { return cart.reduce((s,i)=> s + (Number(i.price||0)), 0); }
+
+/* escape helpers */
+function escapeHtml(s=''){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escapeAttr(s=''){ return String(s).replace(/"/g,'&quot;'); }
 
 /* render cart items in basket */
 function renderCart(){
@@ -110,7 +115,6 @@ function renderCart(){
       try {
         payBox.innerHTML = item.paymentButton;
       } catch(e){
-        // fallback: if not HTML, show as link
         const a = document.createElement('a');
         a.href = String(item.paymentButton);
         a.target = '_blank';
@@ -130,20 +134,24 @@ function renderCart(){
 
 /* add to cart (enforce 1 per product id) */
 window.addToCart = function(product){
-  // product must contain id,name,price,image,paymentButton
   if (cart.find(c=> c.id === product.id)) {
     alert("Seda toodet on juba ostukorvis. Iga toote kohta üks eksemplar.");
     return;
   }
-  // only add one unit per product
-  cart.push({ id: product.id, name: product.name, price: Number(product.price||0), image: product.image||'', paymentButton: product.paymentButton || '' });
+  cart.push({
+    id: product.id,
+    name: product.name,
+    price: Number(product.price||0),
+    image: product.image||'',
+    paymentButton: product.paymentButton || ''
+  });
   saveCart(); renderCart(); updateCartCount();
 };
 
 /* DISCLAIMER flow:
-   - when user clicks cart-icon, show disclaimer first (unless already accepted this session)
+   - when user clicks cart-icon, show disclaimer first (unless already accepted)
    - if accepted -> open basket
-   - acceptance stored in session/localStorage
+   - acceptance stored in localStorage nowpay_disclaimer_accepted_v1
 */
 function openBasketWithDisclaimer() {
   const accepted = localStorage.getItem('nowpay_disclaimer_accepted_v1');
@@ -151,7 +159,6 @@ function openBasketWithDisclaimer() {
     openBasket();
     return;
   }
-  // show disclaimer modal
   if (!disclaimerModal) { openBasket(); return; }
   disclaimerModal.classList.add('show');
   disclaimerModal.setAttribute('aria-hidden','false');
@@ -175,7 +182,6 @@ closeBasket && closeBasket.addEventListener('click', ()=> { closeBasketPanel(); 
 /* disclaimer handlers */
 if (disclaimerAccept) {
   disclaimerAccept.addEventListener('click', ()=> {
-    // set accepted flag for this origin/session
     try { localStorage.setItem('nowpay_disclaimer_accepted_v1', 'true'); } catch(e){ /* ignore */ }
     disclaimerModal.classList.remove('show');
     disclaimerModal.setAttribute('aria-hidden','true');
@@ -186,7 +192,6 @@ if (disclaimerCancel) {
   disclaimerCancel.addEventListener('click', ()=> {
     disclaimerModal.classList.remove('show');
     disclaimerModal.setAttribute('aria-hidden','true');
-    // do nothing else
   });
 }
 
@@ -197,7 +202,7 @@ clearCartBtn && clearCartBtn.addEventListener('click', ()=> {
   }
 });
 
-/* buy all: simply show confirmation modal here (admin buttons inside cart handle crypto) */
+/* buy all: show confirmation modal (admin-provided buttons inside basket handle per-item crypto) */
 buyAllBtn && buyAllBtn.addEventListener('click', ()=> {
   if (!cart.length) { alert("Ostukorv on tühi."); return; }
   checkoutModal.classList.add('show');
@@ -206,14 +211,13 @@ buyAllBtn && buyAllBtn.addEventListener('click', ()=> {
 /* confirm/ cancel checkout */
 cancelCheckoutBtn && cancelCheckoutBtn.addEventListener('click', ()=> checkoutModal.classList.remove('show'));
 confirmCheckoutBtn && confirmCheckoutBtn.addEventListener('click', ()=> {
-  // offline flow: notify and clear cart
   alert("Tellimus registreeritud. Me võtame teiega ühendust.");
   cart = []; saveCart(); renderCart(); updateCartCount();
   checkoutModal.classList.remove('show');
   basketPanel.classList.remove('open');
 });
 
-/* My orders button - keep minimal (depends on your orders collection) */
+/* My orders button - minimal placeholder */
 myOrdersBtn && myOrdersBtn.addEventListener('click', ()=> {
   alert("Minu tellimused - funktsioon sõltub orders kogust (pole siin implementeeritud).");
 });
@@ -246,12 +250,14 @@ function renderProducts(products){
     `;
 
     // view link
-    div.querySelector('.view').addEventListener('click', ()=> {
+    const vBtn = div.querySelector('.view');
+    if (vBtn) vBtn.addEventListener('click', ()=> {
       if (product.link) window.open(product.link, '_blank');
     });
 
     // add to cart handler (enforce 1 per product)
-    div.querySelector('.add').addEventListener('click', ()=> {
+    const aBtn = div.querySelector('.add');
+    if (aBtn) aBtn.addEventListener('click', ()=> {
       window.addToCart({
         id: product.id,
         name: product.name,
@@ -299,7 +305,6 @@ settingsBtn && settingsBtn.addEventListener('click', ()=> {
       return;
     }
     settingsEmail.innerText = user.email || user.uid;
-    // load user doc
     try {
       const ref = doc(db, "users", user.uid);
       const snap = await getDoc(ref);
@@ -346,10 +351,6 @@ onAuthStateChanged(auth, (user) => {
     logoutEl.onclick = ()=> signOut(auth);
   }
 });
-
-/* helpers */
-function escapeHtml(s=''){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function escapeAttr(s=''){ return String(s).replace(/"/g,'&quot;'); }
 
 /* init */
 updateCartCount();
