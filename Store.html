@@ -27,16 +27,12 @@
   <h2>Meie pood</h2>
 
   <div class="category-filter">
-    <select id="categorySelect">
-      <option value="all">Kõik</option>
-    </select>
-
+    <select id="categorySelect"></select>
     <select id="sortSelect">
       <option value="none">Sorteerimata</option>
       <option value="price-asc">Hind ↑</option>
       <option value="price-desc">Hind ↓</option>
     </select>
-
     <input id="searchInput" placeholder="Otsi toodet">
   </div>
 
@@ -44,9 +40,7 @@
 </section>
 
 <!-- CART BUTTON -->
-<div id="cart-icon">
-  🛒 <span id="cart-count">0</span>
-</div>
+<div id="cart-icon">🛒 <span id="cart-count">0</span></div>
 
 <!-- BASKET -->
 <div id="basket-panel">
@@ -59,7 +53,7 @@
 
   <div id="basket-footer">
     <strong>Kokku: <span id="basket-total">0€</span></strong>
-    <button id="clear-cart-btn">Tühjenda</button>
+    <button id="clear-cart-btn" class="danger">Tühjenda</button>
   </div>
 </div>
 
