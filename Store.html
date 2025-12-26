@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="et">
 <head>
-<meta charset="UTF-8">
-<title>Prebuiltid Store</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="store.css">
+  <meta charset="utf-8">
+  <title>Prebuiltid | Pood</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="store.css">
 </head>
 <body>
 
 <header id="header">
-  <img id="HIcon" src="logo.png">
+  <img src="Images/Prebuiltid.png" id="HIcon">
   <h1 id="HH1">Prebuiltid</h1>
 
   <nav>
@@ -21,26 +21,25 @@
 </header>
 
 <section class="store-section">
+  <h2>Meie pood</h2>
+
   <div class="category-filter">
     <label>Kategooria:</label>
-    <select id="categoryFilter">
+    <select id="categorySelect">
       <option value="all">Kõik</option>
     </select>
   </div>
 
-  <div id="shopgrid"></div>
+  <div id="shopgrid" class="recommended-grid"></div>
 </section>
 
-<!-- CART ICON -->
-<div id="cart-icon">
-  🛒 <span id="cart-count">0</span>
-</div>
+<!-- CART -->
+<div id="cart-icon">🛒 <span id="cart-count">0</span></div>
 
-<!-- BASKET -->
 <div id="basket-panel">
   <div id="basket-header">
     <h3>Ostukorv</h3>
-    <button id="closeBasket">✕</button>
+    <button id="closeBasket">✖</button>
   </div>
 
   <div id="basket-items"></div>
@@ -49,32 +48,22 @@
   <div id="shipping-box">
     <h4>Tarneviis</h4>
 
-    <label>
-      <input type="radio" name="shipping" value="DPD pakiautomaat" checked>
-      DPD pakiautomaat
-    </label>
+    <label><input type="radio" name="shipping" value="DPD pakiautomaat" checked> DPD pakiautomaat</label>
+    <label><input type="radio" name="shipping" value="Kohapeal"> Kohapeal</label>
 
-    <label>
-      <input type="radio" name="shipping" value="Kohapeal kättesaamine">
-      Kohapeal kättesaamine
-    </label>
-
-    <label>Pakiautomaat / aadress</label>
-    <input id="shippingAddress" placeholder="Nt: Ülemiste DPD">
+    <input id="shippingAddress" placeholder="Pakiautomaat / aadress">
   </div>
 
   <!-- PAYMENT -->
   <div id="payment-section" style="display:none">
     <p class="disclaimer">
-      Palun saatke õige summa mis hetkel crypto hinnaks on (+ saatmiskulu) ja valige pakiautomaat kuhu saata.
+      Palun saatke õige summa mis hetkel crypto hinnaks on (+ saatmiskulu).
       Me ei saa tagastada valesid summasid.
     </p>
 
     <div id="nowpayments-container"></div>
 
-    <label>NowPayments Order ID</label>
-    <input id="orderIdInput">
-
+    <input id="orderIdInput" placeholder="NowPayments Order ID">
     <button id="paidBtn">Maksin ära</button>
   </div>
 </div>
