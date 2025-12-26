@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="et">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Prebuiltid | Pood</title>
   <link rel="stylesheet" href="store.css">
@@ -11,14 +11,13 @@
 <header id="header">
   <img src="Images/Prebuiltid.png" id="HIcon">
   <h1 id="HH1">Prebuiltid</h1>
-
   <nav>
     <ul>
       <li><a href="index.html">Kodu</a></li>
       <li><a class="active">Pood</a></li>
-      <li><a id="settingsBtn">Seaded</a></li>
+      <li><a href="#" id="settingsBtn">Seaded</a></li>
       <li><a href="login.html" id="accountLink">Logi sisse</a></li>
-      <li><a id="logoutBtn" style="display:none">Logi välja</a></li>
+      <li><a href="#" id="logoutBtn" style="display:none">Logi välja</a></li>
     </ul>
   </nav>
 </header>
@@ -26,36 +25,78 @@
 <section class="store-section">
   <h2>Meie pood</h2>
 
+  <!-- FILTERS (UNCHANGED) -->
   <div class="category-filter">
-    <select id="categorySelect"></select>
+    <select id="categorySelect">
+      <option value="all">Kõik</option>
+      <option value="monitors">Monitorid</option>
+      <option value="keyboards">Klaviatuurid</option>
+    </select>
+
     <select id="sortSelect">
       <option value="none">Sorteerimata</option>
       <option value="price-asc">Hind ↑</option>
       <option value="price-desc">Hind ↓</option>
     </select>
+
     <input id="searchInput" placeholder="Otsi toodet">
   </div>
 
   <div id="shopgrid"></div>
 </section>
 
-<!-- CART BUTTON -->
+<!-- CART ICON -->
 <div id="cart-icon">🛒 <span id="cart-count">0</span></div>
 
 <!-- BASKET -->
 <div id="basket-panel">
   <div id="basket-header">
-    <h3>Ostukorv</h3>
+    <h2>Ostukorv</h2>
     <button id="close-basket">✖</button>
   </div>
 
   <div id="basket-items"></div>
 
   <div id="basket-footer">
-    <strong>Kokku: <span id="basket-total">0€</span></strong>
-    <button id="clear-cart-btn" class="danger">Tühjenda</button>
+    <div id="shipping-info"></div>
+
+    <p class="disclaimer">
+      Palun saatke õige summa mis hetkel crypto hinnaks on (+ saatmiskulu) ja
+      valige pakiautomaat kuhu saata. Vale summat ei saa tagastada.
+    </p>
+
+    <div id="payment-iframe"></div>
+
+    <input id="payment-id" placeholder="NOWPayments Order ID">
+
+    <button id="paidBtn">Maksin ära</button>
   </div>
 </div>
+
+<!-- SETTINGS -->
+<div id="settings-modal" class="modal">
+  <div class="modal-content">
+    <h3>Seaded</h3>
+    <p>Email: <strong id="settings-email"></strong></p>
+
+    <label>Aadress</label>
+    <input id="settings-address">
+
+    <label>DPD pakiautomaat</label>
+    <input id="settings-dpd">
+
+    <button id="save-settings">Salvesta</button>
+
+    <h4>Minu tellimused</h4>
+    <div id="my-orders"></div>
+
+    <button id="close-settings">Sulge</button>
+  </div>
+</div>
+
+<footer id="footer">
+  <p>© Prebuiltid 2025</p>
+</footer>
 
 <script type="module" src="store.js"></script>
 </body>
