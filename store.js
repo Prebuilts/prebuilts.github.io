@@ -1,10 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import {
-  getFirestore, collection, onSnapshot
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-import {
-  getAuth, onAuthStateChanged, signOut
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 /* FIREBASE */
 const app = initializeApp({
@@ -24,35 +20,32 @@ const searchInput = document.getElementById("searchInput");
 const cartIcon = document.getElementById("cart-icon");
 const basket = document.getElementById("basket-panel");
 const basketItems = document.getElementById("basket-items");
+const cartCount = document.getElementById("cart-count");
+const removeBtn = document.getElementById("remove-item");
 
 /* STATE */
 let products = [];
-let cart = [];
+let cartItem = null;
 
-/* AUTH */
+/* AUTH UI */
 onAuthStateChanged(auth, user => {
   document.getElementById("loginBtn").style.display = user ? "none" : "block";
   document.getElementById("logoutBtn").style.display = user ? "block" : "none";
-  document.getElementById("user-email").textContent = user?.email || "—";
 });
-
-document.getElementById("logoutBtn").onclick = () => signOut(auth);
 
 /* PRODUCTS */
 onSnapshot(collection(db, "products"), snap => {
   products = [];
-  const categories = new Set();
+  const cats = new Set(["Kõik"]);
 
   snap.forEach(d => {
     const p = { id:d.id, ...d.data() };
     products.push(p);
-    if (p.category) categories.add(p.category);
+    if (p.category) cats.add(p.category);
   });
 
-  categorySelect.innerHTML = `<option value="all">Kõik</option>`;
-  categories.forEach(c =>
-    categorySelect.innerHTML += `<option value="${c}">${c}</option>`
-  );
+  categorySelect.innerHTML = [...cats]
+    .map(c=>`<option value="${c}">${c}</option>`).join("");
 
   render();
 });
@@ -61,30 +54,37 @@ onSnapshot(collection(db, "products"), snap => {
 function render() {
   let list = [...products];
 
-  if (categorySelect.value !== "all")
-    list = list.filter(p => p.category === categorySelect.value);
+  if (categorySelect.value !== "Kõik")
+    list = list.filter(p=>p.category===categorySelect.value);
 
   if (searchInput.value)
-    list = list.filter(p =>
-      p.name.toLowerCase().includes(searchInput.value.toLowerCase())
-    );
+    list = list.filter(p=>p.name.toLowerCase().includes(searchInput.value.toLowerCase()));
 
-  if (sortSelect.value === "price-asc")
+  if (sortSelect.value==="price-asc")
     list.sort((a,b)=>a.price-b.price);
-  if (sortSelect.value === "price-desc")
+  if (sortSelect.value==="price-desc")
     list.sort((a,b)=>b.price-a.price);
 
   grid.innerHTML = "";
-  list.forEach(p => {
+  list.forEach(p=>{
+    const out = p.quantity <= 0;
+
     const div = document.createElement("div");
     div.className = "productbox";
     div.innerHTML = `
       <img src="${p.image}">
       <h3>${p.name}</h3>
       <p>${p.price} €</p>
-      <button>Lisa korvi</button>
+      <div class="stock">Jäänud: ${p.quantity}</div>
+      <button ${out?'disabled':''}>
+        ${out?'Välja müüdud':'Lisa korvi'}
+      </button>
     `;
-    div.querySelector("button").onclick = () => addToCart(p);
+
+    div.querySelector("button").onclick = ()=>{
+      if (!out) addToCart(p);
+    };
+
     grid.appendChild(div);
   });
 }
@@ -95,24 +95,24 @@ sortSelect.onchange = render;
 searchInput.oninput = render;
 
 /* CART */
-cartIcon.onclick = () => basket.classList.add("open");
-document.getElementById("close-basket").onclick = () =>
-  basket.classList.remove("open");
+cartIcon.onclick = ()=>basket.classList.add("open");
+document.getElementById("close-basket").onclick = ()=>basket.classList.remove("open");
 
 function addToCart(p) {
-  cart = [p];
-  basketItems.innerHTML = `<p>${p.name} – ${p.price} €</p>`;
-  document.getElementById("cart-count").textContent = "1";
+  cartItem = p;
+  cartCount.textContent = "1";
+
+  basketItems.innerHTML = `
+    <h4>${p.name}</h4>
+    <p>${p.price} €</p>
+    <div style="margin-top:10px">
+      ${p.paymentButton || "<em>Makse puudub</em>"}
+    </div>
+  `;
 }
 
-/* SETTINGS */
-const overlay = document.getElementById("settings-overlay");
-document.getElementById("settingsBtn").onclick = e => {
-  e.preventDefault();
-  overlay.classList.add("show");
-};
-document.getElementById("settings-close").onclick =
-  () => overlay.classList.remove("show");
-overlay.onclick = e => {
-  if (e.target === overlay) overlay.classList.remove("show");
+removeBtn.onclick = ()=>{
+  cartItem = null;
+  basketItems.innerHTML = "<p>Ostukorv on tühi</p>";
+  cartCount.textContent = "0";
 };
