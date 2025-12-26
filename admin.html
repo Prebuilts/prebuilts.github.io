@@ -2,7 +2,7 @@
 <html lang="et">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Admin Dashboard | Prebuiltid</title>
   <link rel="stylesheet" href="admin.css">
 </head>
@@ -10,49 +10,34 @@
 
 <header class="admin-header">
   <h1>Admin Dashboard</h1>
-  <p>Manage store products</p>
+  <p>Manage store products & orders</p>
 </header>
 
 <div id="status" class="status-box">Checking admin permissions...</div>
 
-<!-- Add Product -->
 <section class="admin-box">
   <h2>Add Product</h2>
 
-  <label for="name">Product Name</label>
-  <input id="name" placeholder="Product Name" type="text">
+  <label>Name</label><input id="name">
+  <label>Price</label><input id="price" type="number">
+  <label>Description</label><textarea id="description"></textarea>
+  <label>Image URL</label><input id="image">
+  <label>Category</label><input id="category">
+  <label>Link</label><input id="link">
+  <label>Quantity</label><input id="quantity" type="number">
+  <label>NOWPayments embed</label><textarea id="paymentButton"></textarea>
 
-  <label for="price">Price (number, ex: 199.99)</label>
-  <input id="price" placeholder="199.99" type="number" step="0.01" min="0">
-
-  <label for="description">Description</label>
-  <textarea id="description" placeholder="Description"></textarea>
-
-  <label for="image">Image URL (direct link)</label>
-  <input id="image" placeholder="https://.../image.jpg" type="text">
-
-  <label for="category">Category</label>
-  <input id="category" placeholder="Category" type="text">
-
-  <label for="link">Product Link (optional)</label>
-  <input id="link" placeholder="https://..." type="text">
-
-  <label for="quantity">Quantity (number)</label>
-  <input id="quantity" placeholder="10" type="number" step="1" min="0">
-
-  <label for="paymentButton">NOWPayments Button HTML or URL (optional)</label>
-  <textarea id="paymentButton" placeholder='Paste full NOWPayments embed HTML (recommended) or just URL'></textarea>
-  <div class="note">Admin: paste full &lt;a&gt; embed HTML to render in store/basket exactly as provided.</div>
-
-  <div style="margin-top:10px;">
-    <button id="addProduct">Add Product</button>
-  </div>
+  <button id="addProduct">Add Product</button>
 </section>
 
-<!-- Product List -->
 <section class="admin-box">
-  <h2>Existing Products</h2>
-  <div id="productList">Loading products...</div>
+  <h2>Products</h2>
+  <div id="productList"></div>
+</section>
+
+<section class="admin-box">
+  <h2>Orders</h2>
+  <div id="ordersList"></div>
 </section>
 
 <script type="module" src="admin.js"></script>
