@@ -1,92 +1,115 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
-  getFirestore, collection, addDoc, getDocs, query, where, deleteDoc, doc
+  getFirestore, collection, onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-import {
-  getAuth, onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 const app = initializeApp({
-  apiKey: "AIzaSy...",
+  apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
   authDomain: "prebuiltid-website.firebaseapp.com",
   projectId: "prebuiltid-website"
 });
 
 const db = getFirestore(app);
-const auth = getAuth(app);
 
+/* DOM */
 const grid = document.getElementById("shopgrid");
-const basket = document.getElementById("basket");
-const basketItems = document.getElementById("basket-items");
+const catSelect = document.getElementById("categorySelect");
+const sortSelect = document.getElementById("sortSelect");
+const searchInput = document.getElementById("searchInput");
+
 const cartIcon = document.getElementById("cart-icon");
+const basket = document.getElementById("basket-panel");
+const closeBasket = document.getElementById("close-basket");
+const basketItems = document.getElementById("basket-items");
+const basketTotal = document.getElementById("basket-total");
 const cartCount = document.getElementById("cart-count");
 
+let products = [];
 let cart = [];
 
-cartIcon.onclick = () => basket.classList.toggle("open");
-
-onAuthStateChanged(auth, async user => {
-  if (!user) return;
-
-  document.getElementById("user-email").innerText = user.email;
-  loadProducts();
-  loadOrders(user.uid);
+/* LOAD PRODUCTS */
+onSnapshot(collection(db,"products"), snap => {
+  products = snap.docs.map(d => ({ id:d.id, ...d.data() }));
+  buildCategories();
+  renderProducts(products);
 });
 
-async function loadProducts() {
-  const snap = await getDocs(collection(db,"products"));
-  grid.innerHTML = "";
-  snap.forEach(d => {
-    const p = d.data();
-    const div = document.createElement("div");
-    div.className="product";
-    div.innerHTML = `
+/* RENDER PRODUCTS */
+function renderProducts(list){
+  grid.innerHTML="";
+  list.forEach(p=>{
+    const box=document.createElement("div");
+    box.className="productbox";
+    box.innerHTML=`
       <img src="${p.image}">
       <h3>${p.name}</h3>
-      <p>${p.price}€</p>
+      <strong>${p.price.toFixed(2)}€</strong>
       <p>Laos: ${p.quantity}</p>
-      <button ${p.quantity<=0?'disabled':''}>Lisa korvi</button>
+      <button ${p.quantity<=0?"disabled":""}>Lisa korvi</button>
     `;
-    div.querySelector("button").onclick = () => addToCart(d.id,p);
-    grid.appendChild(div);
-  });
-}
-
-function addToCart(id,p) {
-  if(cart.length>=1) return alert("Ainult 1 toode korraga");
-  cart.push({id,...p});
-  renderCart();
-}
-
-function renderCart() {
-  basketItems.innerHTML="";
-  cart.forEach((i,idx)=>{
-    const div=document.createElement("div");
-    div.className="basket-item";
-    div.innerHTML=`
-      <span>${i.name}</span>
-      <button>Eemalda</button>
-    `;
-    div.querySelector("button").onclick=()=>{
-      cart.splice(idx,1);
+    box.querySelector("button").onclick=()=>{
+      cart=[p]; // single product only
       renderCart();
     };
-    basketItems.appendChild(div);
+    grid.appendChild(box);
   });
-  cartCount.innerText=cart.length;
 }
 
-async function loadOrders(uid){
-  const q=query(collection(db,"orders"),where("userId","==",uid));
-  const snap=await getDocs(q);
-  const list=document.getElementById("orders-list");
-  list.innerHTML="";
-  snap.forEach(d=>{
-    const o=d.data();
-    list.innerHTML+=`
-      <div>
-        ${o.productName} – ${o.status}
-      </div>
-    `;
+/* CATEGORIES */
+function buildCategories(){
+  const cats=[...new Set(products.map(p=>p.category).filter(Boolean))];
+  catSelect.innerHTML='<option value="all">Kõik</option>';
+  cats.forEach(c=>{
+    const o=document.createElement("option");
+    o.value=c;o.textContent=c;
+    catSelect.appendChild(o);
   });
+}
+
+/* FILTERS */
+catSelect.onchange=()=>applyFilters();
+sortSelect.onchange=()=>applyFilters();
+searchInput.oninput=()=>applyFilters();
+
+function applyFilters(){
+  let list=[...products];
+  if(catSelect.value!=="all")
+    list=list.filter(p=>p.category===catSelect.value);
+  if(searchInput.value)
+    list=list.filter(p=>p.name.toLowerCase().includes(searchInput.value.toLowerCase()));
+  if(sortSelect.value==="price-asc")
+    list.sort((a,b)=>a.price-b.price);
+  if(sortSelect.value==="price-desc")
+    list.sort((a,b)=>b.price-a.price);
+  renderProducts(list);
+}
+
+/* CART */
+cartIcon.onclick=()=>{
+  basket.classList.add("open");
+  renderCart();
+};
+closeBasket.onclick=()=>basket.classList.remove("open");
+
+function renderCart(){
+  basketItems.innerHTML="";
+  if(!cart.length){
+    basketItems.innerHTML="<p>Korb tühi</p>";
+    basketTotal.textContent="0€";
+    cartCount.textContent="0";
+    return;
+  }
+  const p=cart[0];
+  basketItems.innerHTML=`
+    <div class="basket-item">
+      <img src="${p.image}">
+      <div>
+        <strong>${p.name}</strong><br>
+        ${p.price.toFixed(2)}€
+      </div>
+    </div>
+    ${p.paymentButton || ""}
+  `;
+  basketTotal.textContent=p.price.toFixed(2)+"€";
+  cartCount.textContent="1";
 }
