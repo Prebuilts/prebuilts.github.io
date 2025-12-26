@@ -27,16 +27,12 @@
   <h2>Pood</h2>
 
   <div class="category-filter">
-    <select id="categorySelect">
-      <option value="all">Kõik kategooriad</option>
-    </select>
-
+    <select id="categorySelect"></select>
     <select id="sortSelect">
       <option value="none">Sorteerimata</option>
       <option value="price-asc">Hind ↑</option>
       <option value="price-desc">Hind ↓</option>
     </select>
-
     <input id="searchInput" placeholder="Otsi toodet">
   </div>
 
@@ -54,30 +50,13 @@
     <h3>Ostukorv</h3>
     <button id="close-basket">✖</button>
   </div>
+
   <div id="basket-items"></div>
-</div>
 
-<!-- SETTINGS -->
-<div id="settings-overlay">
-  <div id="settings-modal">
-    <button id="settings-close">✖</button>
-    <h3>Seaded</h3>
-
-    <p>Email: <strong id="user-email">—</strong></p>
-
-    <label>Aadress</label>
-    <input id="user-address">
-
-    <label>DPD pakiautomaat</label>
-    <input id="user-dpd">
-
-    <button id="save-settings">Salvesta</button>
+  <div id="basket-footer">
+    <button id="remove-item">Eemalda toode</button>
   </div>
 </div>
-
-<footer id="footer">
-  © Prebuiltid 2025
-</footer>
 
 <script type="module" src="store.js"></script>
 </body>
