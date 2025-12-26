@@ -1,10 +1,10 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
-  getFirestore, collection, onSnapshot, doc, getDoc,
-  setDoc, addDoc, query, where
+  getFirestore, doc, getDoc, setDoc,
+  collection, query, where, onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 import {
-  getAuth, onAuthStateChanged, signOut
+  getAuth, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 const app = initializeApp({
@@ -16,90 +16,31 @@ const app = initializeApp({
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-/* ===== CART ===== */
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-const saveCart = () => localStorage.setItem("cart", JSON.stringify(cart));
+/* ===== SETTINGS MODAL ===== */
+const overlay = document.getElementById("settings-overlay");
+const openBtn = document.getElementById("settingsBtn");
+const closeBtn = document.getElementById("settings-close");
 
-const cartIcon = document.getElementById("cart-icon");
-const basket = document.getElementById("basket-panel");
-cartIcon.onclick = () => basket.classList.add("open");
-document.getElementById("close-basket").onclick =
-  () => basket.classList.remove("open");
+openBtn.onclick = e => {
+  e.preventDefault();
+  overlay.classList.add("show");
+};
 
-/* ===== PRODUCTS ===== */
-const grid = document.getElementById("shopgrid");
-let allProducts = [];
+closeBtn.onclick = () => overlay.classList.remove("show");
 
-onSnapshot(collection(db, "products"), snap => {
-  allProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  render(allProducts);
-});
+overlay.onclick = e => {
+  if (e.target === overlay) overlay.classList.remove("show");
+};
 
-function render(list) {
-  grid.innerHTML = "";
-  list.forEach(p => {
-    const div = document.createElement("div");
-    div.className = "productbox";
-    div.innerHTML = `
-      <img src="${p.image}">
-      <h3>${p.name}</h3>
-      <strong>${p.price} €</strong>
-      <p>Laos: ${p.quantity}</p>
-      <button ${p.quantity<=0?"disabled":""}>Lisa korvi</button>
-    `;
-    div.querySelector("button").onclick = () => addToCart(p);
-    grid.appendChild(div);
-  });
-}
-
-function addToCart(p) {
-  if (cart.length) return alert("Ainult üks toode korraga");
-  cart = [p];
-  saveCart();
-  renderCart();
-}
-
-/* ===== BASKET ===== */
-function renderCart() {
-  const items = document.getElementById("basket-items");
-  items.innerHTML = "";
-  if (!cart.length) return;
-
-  const p = cart[0];
-  items.innerHTML = `
-    <div class="basket-item">
-      <img src="${p.image}">
-      <div>
-        <strong>${p.name}</strong><br>
-        ${p.price} €
-      </div>
-      <button id="remove">Eemalda</button>
-    </div>
-  `;
-  document.getElementById("remove").onclick = () => {
-    cart = [];
-    saveCart();
-    renderCart();
-  };
-
-  document.getElementById("payment-iframe").innerHTML =
-    p.paymentButton || "";
-}
-renderCart();
-
-/* ===== SETTINGS ===== */
-const settings = document.getElementById("settings-modal");
-document.getElementById("settingsBtn").onclick =
-  () => settings.classList.add("show");
-document.getElementById("close-settings").onclick =
-  () => settings.classList.remove("show");
-
+/* ===== USER SETTINGS ===== */
 onAuthStateChanged(auth, async user => {
   if (!user) return;
+
   document.getElementById("settings-email").textContent = user.email;
 
   const ref = doc(db, "users", user.uid);
   const snap = await getDoc(ref);
+
   if (snap.exists()) {
     document.getElementById("settings-address").value = snap.data().address || "";
     document.getElementById("settings-dpd").value = snap.data().dpd || "";
@@ -110,54 +51,33 @@ onAuthStateChanged(auth, async user => {
 
 document.getElementById("save-settings").onclick = async () => {
   const user = auth.currentUser;
-  await setDoc(doc(db,"users",user.uid),{
-    address: settingsAddress.value,
-    dpd: settingsDpd.value
-  },{merge:true});
+  if (!user) return;
+
+  await setDoc(
+    doc(db, "users", user.uid),
+    {
+      address: document.getElementById("settings-address").value,
+      dpd: document.getElementById("settings-dpd").value
+    },
+    { merge: true }
+  );
+
+  alert("Salvestatud!");
 };
 
-/* ===== ORDERS ===== */
-async function loadOrders(uid) {
-  const q = query(collection(db,"orders"), where("userId","==",uid));
-  onSnapshot(q,snap=>{
-    const el=document.getElementById("my-orders");
-    el.innerHTML="";
-    snap.forEach(d=>{
-      const o=d.data();
-      el.innerHTML+=`
-        <div>${o.productName} – ${o.status}
-        ${o.status==="pending"
-          ? `<button onclick="cancel('${d.id}')">Tühista</button>`:""}
-        </div>`;
+/* ===== ORDERS VIEW ===== */
+function loadOrders(uid) {
+  const q = query(
+    collection(db, "orders"),
+    where("userId", "==", uid)
+  );
+
+  onSnapshot(q, snap => {
+    const box = document.getElementById("my-orders");
+    box.innerHTML = "";
+    snap.forEach(d => {
+      const o = d.data();
+      box.innerHTML += `<div>${o.productName} – ${o.status}</div>`;
     });
   });
 }
-
-window.cancel = async id =>
-  setDoc(doc(db,"orders",id),{status:"cancelled"},{merge:true});
-
-/* ===== PAYMENT CONFIRM ===== */
-document.getElementById("paidBtn").onclick = async () => {
-  if (!confirm("Oled sa kindel?")) return;
-  const user = auth.currentUser;
-  if (!user) return alert("Logi sisse");
-
-  const q = query(collection(db,"orders"),
-    where("userId","==",user.uid),
-    where("status","==","pending"));
-
-  if ((await getDocs(q)).size >= 3)
-    return alert("Max 3 aktiivset tellimust");
-
-  await addDoc(collection(db,"orders"),{
-    userId:user.uid,
-    productName:cart[0].name,
-    price:cart[0].price,
-    status:"pending",
-    createdAt:new Date()
-  });
-
-  cart=[];
-  saveCart();
-  renderCart();
-};
