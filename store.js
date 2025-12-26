@@ -1,137 +1,163 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import {
+  getFirestore, collection, onSnapshot, doc, getDoc,
+  setDoc, addDoc, query, where
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import {
+  getAuth, onAuthStateChanged, signOut
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 const app = initializeApp({
   apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
   authDomain: "prebuiltid-website.firebaseapp.com",
   projectId: "prebuiltid-website"
 });
-const db = getFirestore(app);
 
-/* DOM */
-const grid = document.getElementById("shopgrid");
-const catSelect = document.getElementById("categorySelect");
-const sortSelect = document.getElementById("sortSelect");
-const searchInput = document.getElementById("searchInput");
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+/* ===== CART ===== */
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+const saveCart = () => localStorage.setItem("cart", JSON.stringify(cart));
 
 const cartIcon = document.getElementById("cart-icon");
 const basket = document.getElementById("basket-panel");
-const closeBasket = document.getElementById("close-basket");
-const basketItems = document.getElementById("basket-items");
-const basketTotal = document.getElementById("basket-total");
-const cartCount = document.getElementById("cart-count");
-const clearCartBtn = document.getElementById("clear-cart-btn");
+cartIcon.onclick = () => basket.classList.add("open");
+document.getElementById("close-basket").onclick =
+  () => basket.classList.remove("open");
 
-let products = [];
-let cart = loadCart();
+/* ===== PRODUCTS ===== */
+const grid = document.getElementById("shopgrid");
+let allProducts = [];
 
-/* COOKIE HELPERS */
-function setCookie(name, value, days=7) {
-  document.cookie = `${name}=${encodeURIComponent(value)};path=/;max-age=${days*86400}`;
-}
-function getCookie(name) {
-  return document.cookie.split("; ").find(r=>r.startsWith(name+"="))?.split("=")[1];
+onSnapshot(collection(db, "products"), snap => {
+  allProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  render(allProducts);
+});
+
+function render(list) {
+  grid.innerHTML = "";
+  list.forEach(p => {
+    const div = document.createElement("div");
+    div.className = "productbox";
+    div.innerHTML = `
+      <img src="${p.image}">
+      <h3>${p.name}</h3>
+      <strong>${p.price} €</strong>
+      <p>Laos: ${p.quantity}</p>
+      <button ${p.quantity<=0?"disabled":""}>Lisa korvi</button>
+    `;
+    div.querySelector("button").onclick = () => addToCart(p);
+    grid.appendChild(div);
+  });
 }
 
-/* CART STORAGE */
-function loadCart(){
-  try {
-    return JSON.parse(getCookie("cart_prebuiltid") || "[]");
-  } catch { return []; }
-}
-function saveCart(){
-  setCookie("cart_prebuiltid", JSON.stringify(cart));
-}
-function clearCart(){
-  cart = [];
+function addToCart(p) {
+  if (cart.length) return alert("Ainult üks toode korraga");
+  cart = [p];
   saveCart();
   renderCart();
 }
 
-/* LOAD PRODUCTS */
-onSnapshot(collection(db,"products"), snap=>{
-  products = snap.docs.map(d=>({id:d.id,...d.data()}));
-  buildCategories();
-  applyFilters();
-});
+/* ===== BASKET ===== */
+function renderCart() {
+  const items = document.getElementById("basket-items");
+  items.innerHTML = "";
+  if (!cart.length) return;
 
-/* RENDER PRODUCTS */
-function renderProducts(list){
-  grid.innerHTML="";
-  list.forEach(p=>{
-    const box=document.createElement("div");
-    box.className="productbox";
-    box.innerHTML=`
-      <img src="${p.image}">
-      <h3>${p.name}</h3>
-      <strong>${p.price.toFixed(2)}€</strong>
-      <p>Laos: ${p.quantity}</p>
-      <button ${p.quantity<=0?"disabled":""}>Lisa korvi</button>
-    `;
-    box.querySelector("button").onclick=()=>{
-      cart=[p]; // single product
-      saveCart();
-      renderCart();
-    };
-    grid.appendChild(box);
-  });
-}
-
-/* FILTERS */
-function buildCategories(){
-  catSelect.innerHTML='<option value="all">Kõik</option>';
-  [...new Set(products.map(p=>p.category).filter(Boolean))]
-    .forEach(c=>{
-      const o=document.createElement("option");
-      o.value=c; o.textContent=c;
-      catSelect.appendChild(o);
-    });
-}
-function applyFilters(){
-  let list=[...products];
-  if(catSelect.value!=="all")
-    list=list.filter(p=>p.category===catSelect.value);
-  if(searchInput.value)
-    list=list.filter(p=>p.name.toLowerCase().includes(searchInput.value.toLowerCase()));
-  if(sortSelect.value==="price-asc") list.sort((a,b)=>a.price-b.price);
-  if(sortSelect.value==="price-desc") list.sort((a,b)=>b.price-a.price);
-  renderProducts(list);
-}
-
-catSelect.onchange=applyFilters;
-sortSelect.onchange=applyFilters;
-searchInput.oninput=applyFilters;
-
-/* CART UI */
-cartIcon.onclick=()=>{
-  basket.classList.add("open");
-  renderCart();
-};
-closeBasket.onclick=()=>basket.classList.remove("open");
-clearCartBtn.onclick=clearCart;
-
-function renderCart(){
-  basketItems.innerHTML="";
-  if(!cart.length){
-    basketItems.innerHTML="<p>Korb on tühi</p>";
-    basketTotal.textContent="0€";
-    cartCount.textContent="0";
-    return;
-  }
-  const p=cart[0];
-  basketItems.innerHTML=`
+  const p = cart[0];
+  items.innerHTML = `
     <div class="basket-item">
       <img src="${p.image}">
       <div>
         <strong>${p.name}</strong><br>
-        ${p.price.toFixed(2)}€
+        ${p.price} €
       </div>
+      <button id="remove">Eemalda</button>
     </div>
-    ${p.paymentButton || ""}
   `;
-  basketTotal.textContent=p.price.toFixed(2)+"€";
-  cartCount.textContent="1";
+  document.getElementById("remove").onclick = () => {
+    cart = [];
+    saveCart();
+    renderCart();
+  };
+
+  document.getElementById("payment-iframe").innerHTML =
+    p.paymentButton || "";
+}
+renderCart();
+
+/* ===== SETTINGS ===== */
+const settings = document.getElementById("settings-modal");
+document.getElementById("settingsBtn").onclick =
+  () => settings.classList.add("show");
+document.getElementById("close-settings").onclick =
+  () => settings.classList.remove("show");
+
+onAuthStateChanged(auth, async user => {
+  if (!user) return;
+  document.getElementById("settings-email").textContent = user.email;
+
+  const ref = doc(db, "users", user.uid);
+  const snap = await getDoc(ref);
+  if (snap.exists()) {
+    document.getElementById("settings-address").value = snap.data().address || "";
+    document.getElementById("settings-dpd").value = snap.data().dpd || "";
+  }
+
+  loadOrders(user.uid);
+});
+
+document.getElementById("save-settings").onclick = async () => {
+  const user = auth.currentUser;
+  await setDoc(doc(db,"users",user.uid),{
+    address: settingsAddress.value,
+    dpd: settingsDpd.value
+  },{merge:true});
+};
+
+/* ===== ORDERS ===== */
+async function loadOrders(uid) {
+  const q = query(collection(db,"orders"), where("userId","==",uid));
+  onSnapshot(q,snap=>{
+    const el=document.getElementById("my-orders");
+    el.innerHTML="";
+    snap.forEach(d=>{
+      const o=d.data();
+      el.innerHTML+=`
+        <div>${o.productName} – ${o.status}
+        ${o.status==="pending"
+          ? `<button onclick="cancel('${d.id}')">Tühista</button>`:""}
+        </div>`;
+    });
+  });
 }
 
-/* INIT */
-renderCart();
+window.cancel = async id =>
+  setDoc(doc(db,"orders",id),{status:"cancelled"},{merge:true});
+
+/* ===== PAYMENT CONFIRM ===== */
+document.getElementById("paidBtn").onclick = async () => {
+  if (!confirm("Oled sa kindel?")) return;
+  const user = auth.currentUser;
+  if (!user) return alert("Logi sisse");
+
+  const q = query(collection(db,"orders"),
+    where("userId","==",user.uid),
+    where("status","==","pending"));
+
+  if ((await getDocs(q)).size >= 3)
+    return alert("Max 3 aktiivset tellimust");
+
+  await addDoc(collection(db,"orders"),{
+    userId:user.uid,
+    productName:cart[0].name,
+    price:cart[0].price,
+    status:"pending",
+    createdAt:new Date()
+  });
+
+  cart=[];
+  saveCart();
+  renderCart();
+};
