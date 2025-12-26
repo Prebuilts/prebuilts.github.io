@@ -1,102 +1,101 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import {
-  getFirestore, collection, onSnapshot, addDoc
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-import {
-  getAuth, onAuthStateChanged, signOut
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-const firebaseConfig = {
+const app = initializeApp({
   apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
   authDomain: "prebuiltid-website.firebaseapp.com",
   projectId: "prebuiltid-website"
-};
-
-const app = initializeApp(firebaseConfig);
+});
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-/* DOM */
-const grid = document.getElementById("shopgrid");
+const shopgrid = document.getElementById("shopgrid");
+const categorySelect = document.getElementById("categorySelect");
+const sortSelect = document.getElementById("sortSelect");
+const searchInput = document.getElementById("searchInput");
 const cartIcon = document.getElementById("cart-icon");
 const basket = document.getElementById("basket-panel");
 const basketItems = document.getElementById("basket-items");
 const cartCount = document.getElementById("cart-count");
 
-let cart = JSON.parse(localStorage.getItem("cart_v1") || "[]");
-let products = [];
+let allProducts = [];
+let cart = [];
 
-function saveCart() {
-  localStorage.setItem("cart_v1", JSON.stringify(cart));
-  cartCount.innerText = cart.length;
-}
-
-cartIcon.onclick = () => basket.classList.add("open");
-document.getElementById("close-basket").onclick = () => basket.classList.remove("open");
-
-onSnapshot(collection(db, "products"), snap => {
-  products = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  renderProducts(products);
+onSnapshot(collection(db,"products"), snap=>{
+  allProducts = snap.docs.map(d=>({id:d.id,...d.data()}));
+  fillCategories();
+  render(allProducts);
 });
 
-function renderProducts(list) {
-  grid.innerHTML = "";
-  list.forEach(p => {
-    const div = document.createElement("div");
-    div.className = "productbox";
-    div.innerHTML = `
+function fillCategories(){
+  categorySelect.innerHTML = `<option value="all">Kõik</option>`;
+  [...new Set(allProducts.map(p=>p.category))].forEach(c=>{
+    if(c){
+      const o=document.createElement("option");
+      o.value=c;o.textContent=c;
+      categorySelect.appendChild(o);
+    }
+  });
+}
+
+function render(list){
+  shopgrid.innerHTML="";
+  list.forEach(p=>{
+    const d=document.createElement("div");
+    d.className="productbox";
+    d.innerHTML=`
       <img src="${p.image}">
       <h3>${p.name}</h3>
       <b>${p.price.toFixed(2)}€</b>
       <p>${p.description}</p>
       <div class="stock">Laos: ${p.quantity}</div>
-      <button ${p.quantity <= 0 ? "disabled" : ""}>Lisa korvi</button>
+      <button ${p.quantity<=0?"disabled":""}>Lisa korvi</button>
     `;
-    div.querySelector("button").onclick = () => {
-      if (cart.length) return alert("Ainult 1 toode korraga");
-      cart = [p];
-      saveCart();
-      renderBasket();
+    d.querySelector("button").onclick=()=>{
+      if(p.quantity<=0) return;
+      cart=[p];
+      updateCart();
     };
-    grid.appendChild(div);
+    shopgrid.appendChild(d);
   });
 }
 
-function renderBasket() {
-  basketItems.innerHTML = "";
-  if (!cart.length) return;
-  const p = cart[0];
-  basketItems.innerHTML = `
-    <h4>${p.name}</h4>
-    ${p.paymentButton || ""}
-  `;
+function updateCart(){
+  basketItems.innerHTML="";
+  if(cart.length){
+    const p=cart[0];
+    basketItems.innerHTML=`
+      <div class="basket-item">
+        <img src="${p.image}" width="60">
+        <div>
+          <b>${p.name}</b><br>${p.price.toFixed(2)}€
+        </div>
+      </div>
+      ${p.paymentButton||""}
+    `;
+  }
+  cartCount.innerText=cart.length;
 }
 
-document.getElementById("paidBtn").onclick = async () => {
-  const orderId = document.getElementById("order-id-input").value.trim();
-  if (!orderId) return alert("Sisesta Order ID");
+cartIcon.onclick=()=>basket.classList.add("open");
+document.getElementById("close-basket").onclick=()=>basket.classList.remove("open");
 
-  const user = auth.currentUser;
-  if (!user) return alert("Logi sisse");
+categorySelect.onchange=apply;
+sortSelect.onchange=apply;
+searchInput.oninput=apply;
 
-  await addDoc(collection(db, "orders"), {
-    userId: user.uid,
-    email: user.email,
-    productId: cart[0].id,
-    productName: cart[0].name,
-    orderId,
-    status: "paid",
-    createdAt: new Date()
-  });
+function apply(){
+  let l=[...allProducts];
+  if(categorySelect.value!=="all") l=l.filter(p=>p.category===categorySelect.value);
+  if(searchInput.value) l=l.filter(p=>p.name.toLowerCase().includes(searchInput.value.toLowerCase()));
+  if(sortSelect.value==="price-asc") l.sort((a,b)=>a.price-b.price);
+  if(sortSelect.value==="price-desc") l.sort((a,b)=>b.price-a.price);
+  render(l);
+}
 
-  cart = [];
-  saveCart();
-  renderBasket();
-  alert("Tellimus salvestatud");
-};
-
-onAuthStateChanged(auth, user => {
-  document.getElementById("accountLink").style.display = user ? "none" : "inline";
-  document.getElementById("logoutBtn").style.display = user ? "inline" : "none";
-  document.getElementById("logoutBtn").onclick = () => signOut(auth);
+onAuthStateChanged(auth,u=>{
+  document.getElementById("accountLink").style.display=u?"none":"inline";
+  document.getElementById("logoutBtn").style.display=u?"inline":"none";
+  if(u) document.getElementById("logoutBtn").onclick=()=>signOut(auth);
 });
