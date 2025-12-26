@@ -1,9 +1,9 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
-  getFirestore, collection, onSnapshot
+  getFirestore, collection, onSnapshot, addDoc
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 import {
-  getAuth, onAuthStateChanged
+  getAuth, onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 const firebaseConfig = {
@@ -18,112 +18,85 @@ const auth = getAuth(app);
 
 /* DOM */
 const grid = document.getElementById("shopgrid");
-const categorySelect = document.getElementById("categorySelect");
-const searchInput = document.getElementById("searchInput");
 const cartIcon = document.getElementById("cart-icon");
-const basketPanel = document.getElementById("basket-panel");
+const basket = document.getElementById("basket-panel");
 const basketItems = document.getElementById("basket-items");
 const cartCount = document.getElementById("cart-count");
 
-/* State */
-let allProducts = [];
-let cart = [];
+let cart = JSON.parse(localStorage.getItem("cart_v1") || "[]");
+let products = [];
 
-/* Auth */
-onAuthStateChanged(auth, user => {
-  document.getElementById("user-email").textContent =
-    user ? user.email : "Not logged in";
-});
+function saveCart() {
+  localStorage.setItem("cart_v1", JSON.stringify(cart));
+  cartCount.innerText = cart.length;
+}
 
-/* Load products */
+cartIcon.onclick = () => basket.classList.add("open");
+document.getElementById("close-basket").onclick = () => basket.classList.remove("open");
+
 onSnapshot(collection(db, "products"), snap => {
-  allProducts = [];
-  snap.forEach(d => allProducts.push({ id:d.id, ...d.data() }));
-  rebuildCategories();
-  applyFilters();
+  products = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderProducts(products);
 });
 
-/* Filters */
-categorySelect.onchange = applyFilters;
-searchInput.oninput = applyFilters;
-
-function rebuildCategories() {
-  const cats = [...new Set(allProducts.map(p => p.category).filter(Boolean))];
-  categorySelect.innerHTML = `<option value="all">Kõik</option>`;
-  cats.forEach(c => {
-    categorySelect.innerHTML += `<option value="${c}">${c}</option>`;
-  });
-}
-
-function applyFilters() {
-  const cat = categorySelect.value;
-  const q = searchInput.value.toLowerCase();
-
-  const filtered = allProducts.filter(p => {
-    const okCat = cat === "all" || p.category === cat;
-    const okSearch =
-      p.name.toLowerCase().includes(q) ||
-      p.description.toLowerCase().includes(q);
-    return okCat && okSearch;
-  });
-
-  renderProducts(filtered);
-}
-
-/* Render store */
-function renderProducts(products) {
+function renderProducts(list) {
   grid.innerHTML = "";
-
-  products.forEach(p => {
-    const inStock = p.quantity > 0;
-
+  list.forEach(p => {
     const div = document.createElement("div");
     div.className = "productbox";
-
     div.innerHTML = `
       <img src="${p.image}">
       <h3>${p.name}</h3>
+      <b>${p.price.toFixed(2)}€</b>
       <p>${p.description}</p>
-      <div class="stock ${inStock ? "in" : "out"}">
-        ${inStock ? `Laos: ${p.quantity}` : "Välja müüdud"}
-      </div>
-      <strong>€${p.price}</strong>
-      <button ${!inStock ? "disabled" : ""}>Lisa ostukorvi</button>
+      <div class="stock">Laos: ${p.quantity}</div>
+      <button ${p.quantity <= 0 ? "disabled" : ""}>Lisa korvi</button>
     `;
-
     div.querySelector("button").onclick = () => {
-      if (!inStock) return;
+      if (cart.length) return alert("Ainult 1 toode korraga");
       cart = [p];
-      renderCart();
+      saveCart();
+      renderBasket();
     };
-
     grid.appendChild(div);
   });
 }
 
-/* Cart */
-function renderCart() {
-  cartCount.textContent = cart.length;
+function renderBasket() {
   basketItems.innerHTML = "";
-
-  if (!cart.length) {
-    basketItems.innerHTML = "<p>Ostukorv tühi</p>";
-    return;
-  }
-
+  if (!cart.length) return;
   const p = cart[0];
-
   basketItems.innerHTML = `
-    <div class="basket-item">
-      <img src="${p.image}">
-      <h4>${p.name}</h4>
-      <div>€${p.price}</div>
-      ${p.paymentButton || ""}
-    </div>
+    <h4>${p.name}</h4>
+    ${p.paymentButton || ""}
   `;
 }
 
-/* Basket toggle */
-cartIcon.onclick = () => basketPanel.classList.add("open");
-document.getElementById("close-basket").onclick =
-  () => basketPanel.classList.remove("open");
+document.getElementById("paidBtn").onclick = async () => {
+  const orderId = document.getElementById("order-id-input").value.trim();
+  if (!orderId) return alert("Sisesta Order ID");
+
+  const user = auth.currentUser;
+  if (!user) return alert("Logi sisse");
+
+  await addDoc(collection(db, "orders"), {
+    userId: user.uid,
+    email: user.email,
+    productId: cart[0].id,
+    productName: cart[0].name,
+    orderId,
+    status: "paid",
+    createdAt: new Date()
+  });
+
+  cart = [];
+  saveCart();
+  renderBasket();
+  alert("Tellimus salvestatud");
+};
+
+onAuthStateChanged(auth, user => {
+  document.getElementById("accountLink").style.display = user ? "none" : "inline";
+  document.getElementById("logoutBtn").style.display = user ? "inline" : "none";
+  document.getElementById("logoutBtn").onclick = () => signOut(auth);
+});
