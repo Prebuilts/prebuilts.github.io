@@ -2,62 +2,64 @@
 <html lang="et">
 <head>
   <meta charset="UTF-8">
-  <title>Prebuiltid Store</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Prebuiltid | Pood</title>
   <link rel="stylesheet" href="store.css">
 </head>
 <body>
 
 <header id="header">
-  <img src="logo.png" id="HIcon">
+  <img src="Images/Prebuiltid.png" id="HIcon">
   <h1 id="HH1">Prebuiltid</h1>
+
   <nav>
     <ul>
-      <li><a href="#" id="nav-store" class="active">Pood</a></li>
-      <li><a href="#" id="nav-settings">Seaded</a></li>
-      <li><a href="#" id="nav-orders">Tellimused</a></li>
-      <li id="user-email"></li>
+      <li><a href="index.html">Kodu</a></li>
+      <li><a class="active">Pood</a></li>
+      <li><a id="settingsBtn">Seaded</a></li>
+      <li><a href="login.html" id="accountLink">Logi sisse</a></li>
+      <li><a id="logoutBtn" style="display:none">Logi välja</a></li>
     </ul>
   </nav>
 </header>
 
-<section id="store-section" class="store-section">
-  <input id="searchInput" placeholder="Otsi toodet...">
-  <select id="categoryFilter">
-    <option value="">Kõik kategooriad</option>
-  </select>
+<section class="store-section">
+  <h2>Meie pood</h2>
+
+  <div class="category-filter">
+    <select id="categorySelect">
+      <option value="all">Kõik</option>
+    </select>
+
+    <select id="sortSelect">
+      <option value="none">Sorteerimata</option>
+      <option value="price-asc">Hind ↑</option>
+      <option value="price-desc">Hind ↓</option>
+    </select>
+
+    <input id="searchInput" placeholder="Otsi toodet">
+  </div>
 
   <div id="shopgrid"></div>
 </section>
 
-<section id="settings-section" class="store-section hidden">
-  <h2>Minu seaded</h2>
-  <label>Email</label>
-  <input id="settings-email" disabled>
-
-  <label>Aadress / Pakiautomaat</label>
-  <input id="settings-address">
-
-  <button id="save-settings">Salvesta</button>
-</section>
-
-<section id="orders-section" class="store-section hidden">
-  <h2>Minu tellimused</h2>
-  <div id="orders-list"></div>
-</section>
-
-<!-- CART ICON -->
+<!-- CART BUTTON -->
 <div id="cart-icon">
   🛒 <span id="cart-count">0</span>
 </div>
 
 <!-- BASKET -->
-<div id="basket">
-  <h3>Ostukorv</h3>
+<div id="basket-panel">
+  <div id="basket-header">
+    <h3>Ostukorv</h3>
+    <button id="close-basket">✖</button>
+  </div>
+
   <div id="basket-items"></div>
 
   <div id="basket-footer">
-    <button id="place-order">Esita tellimus</button>
+    <strong>Kokku: <span id="basket-total">0€</span></strong>
+    <button id="clear-cart-btn">Tühjenda</button>
   </div>
 </div>
 
