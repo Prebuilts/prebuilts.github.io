@@ -11,6 +11,7 @@
 <header id="header">
   <img src="Images/Prebuiltid.png" id="HIcon">
   <h1 id="HH1">Prebuiltid</h1>
+
   <nav>
     <ul>
       <li><a href="index.html">Kodu</a></li>
@@ -25,12 +26,9 @@
 <section class="store-section">
   <h2>Meie pood</h2>
 
-  <!-- FILTERS (UNCHANGED) -->
   <div class="category-filter">
     <select id="categorySelect">
       <option value="all">Kõik</option>
-      <option value="monitors">Monitorid</option>
-      <option value="keyboards">Klaviatuurid</option>
     </select>
 
     <select id="sortSelect">
@@ -54,27 +52,14 @@
     <h2>Ostukorv</h2>
     <button id="close-basket">✖</button>
   </div>
-
   <div id="basket-items"></div>
-
-  <div id="basket-footer">
-    <div id="shipping-info"></div>
-
-    <p class="disclaimer">
-      Palun makske läbi NowPaymentsi oma ostude eest ja sisestage makseterminalis õige info. Saadame teile edasise info emaili teel! Tänan mõistmast!
-    </p>
-
-    <div id="payment-iframe"></div>
-
-    <input id="payment-id" placeholder="NOWPayments Order ID">
-
-    <button id="paidBtn">Maksin ära</button>
-  </div>
 </div>
 
-<!-- SETTINGS -->
-<div id="settings-modal" class="modal">
-  <div class="modal-content">
+<!-- SETTINGS MODAL -->
+<div id="settings-overlay">
+  <div id="settings-modal">
+    <button id="settings-close">✖</button>
+
     <h3>Seaded</h3>
     <p>Email: <strong id="settings-email"></strong></p>
 
@@ -88,8 +73,6 @@
 
     <h4>Minu tellimused</h4>
     <div id="my-orders"></div>
-
-    <button id="close-settings">Sulge</button>
   </div>
 </div>
 
