@@ -94,17 +94,18 @@ button:disabled {
 }
 
 #basket-panel {
-  position:fixed;
-  top:0;
-  right:-420px;
-  width:420px;
-  height:100%;
-  background:#fff;
-  transition:right .3s;
-  padding:14px;
+  position: fixed;
+  top: 0;
+  right: -420px;
+  width: 420px;
+  height: 100%;
+  background: #fff;
+  transition: right .3s;
+  z-index: 1000;
 }
-
-#basket-panel.open { right:0; }
+#basket-panel.open {
+  right: 0;
+}
 
 .basket-item img {
   width:80px;
