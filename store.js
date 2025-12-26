@@ -1,289 +1,159 @@
-// ===============================
-// store.js – STABLE & FIXED
-// ===============================
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  onSnapshot,
-  doc,
-  getDoc,
-  setDoc
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-import {
-  getAuth,
-  onAuthStateChanged,
-  signOut
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-// -------------------------------
-// Firebase config
-// -------------------------------
+/* Firebase */
 const firebaseConfig = {
   apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
   authDomain: "prebuiltid-website.firebaseapp.com",
-  projectId: "prebuiltid-website",
-  storageBucket: "prebuiltid-website.firebasestorage.app",
-  messagingSenderId: "854871585546",
-  appId: "1:854871585546:web:568400979292a0c31740f3"
+  projectId: "prebuiltid-website"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const auth = getAuth(app);
 
-// -------------------------------
-// DOM elements (MUST EXIST IN HTML)
-// -------------------------------
-const shopgrid = document.getElementById("shopgrid");
+/* DOM */
+const grid = document.getElementById("shopgrid");
+const searchInput = document.getElementById("searchInput");
 const categorySelect = document.getElementById("categorySelect");
 const sortSelect = document.getElementById("sortSelect");
-const searchInput = document.getElementById("searchInput");
 
 const cartIcon = document.getElementById("cart-icon");
-const basketPanel = document.getElementById("basket-panel");
-const closeBasketBtn = document.getElementById("close-basket");
-const basketItemsEl = document.getElementById("basket-items");
-const basketTotalEl = document.getElementById("basket-total");
-const cartCountEl = document.getElementById("cart-count");
+const basket = document.getElementById("basket-panel");
+const closeBasket = document.getElementById("close-basket");
+const basketItems = document.getElementById("basket-items");
+const basketTotal = document.getElementById("basket-total");
+const cartCount = document.getElementById("cart-count");
 const clearCartBtn = document.getElementById("clear-cart-btn");
 
-const settingsBtn = document.getElementById("settingsBtn");
-const settingsModal = document.getElementById("settings-modal");
-const closeSettingsBtn = document.getElementById("close-settings");
-const settingsEmail = document.getElementById("settings-email");
-const settingsAddress = document.getElementById("settings-address");
-const settingsDpd = document.getElementById("settings-dpd");
-const saveSettingsBtn = document.getElementById("save-settings");
+/* State */
+let products = [];
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-const logoutBtn = document.getElementById("logoutBtn");
-const accountLink = document.getElementById("accountLink");
-
-// -------------------------------
-// State
-// -------------------------------
-let allProducts = [];
-let cart = JSON.parse(localStorage.getItem("cart_v1") || "[]");
-
-// -------------------------------
-// Helpers
-// -------------------------------
+/* Cart */
 function saveCart() {
-  localStorage.setItem("cart_v1", JSON.stringify(cart));
+  localStorage.setItem("cart", JSON.stringify(cart));
+  cartCount.textContent = cart.length;
 }
 
-function updateCartCount() {
-  cartCountEl.textContent = cart.length;
-}
-
-function cartTotal() {
-  return cart.reduce((sum, i) => sum + Number(i.price || 0), 0);
-}
-
-function escapeHtml(str = "") {
-  return str.replace(/[&<>"']/g, m => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  }[m]));
-}
-
-// -------------------------------
-// Basket logic
-// -------------------------------
-function renderBasket() {
-  basketItemsEl.innerHTML = "";
+function renderCart() {
+  basketItems.innerHTML = "";
+  let total = 0;
 
   if (cart.length === 0) {
-    basketItemsEl.innerHTML = "<p>Korb on tühi</p>";
-    basketTotalEl.textContent = "0 €";
-    updateCartCount();
+    basketItems.innerHTML = "<p>Korb on tühi</p>";
+    basketTotal.textContent = "0 €";
     return;
   }
 
   cart.forEach(item => {
+    total += item.price;
+
     const div = document.createElement("div");
     div.className = "basket-item";
-
     div.innerHTML = `
-      <img src="${item.image}" alt="">
-      <div class="info">
-        <h4>${escapeHtml(item.name)}</h4>
-        <div class="price">${item.price.toFixed(2)} €</div>
-      </div>
-      <div class="actions">
-        <button class="remove-btn">Eemalda</button>
-      </div>
+      <strong>${item.name}</strong><br>
+      ${item.price.toFixed(2)} €
+      <button>❌</button>
     `;
 
-    div.querySelector(".remove-btn").onclick = () => {
+    div.querySelector("button").onclick = () => {
       cart = cart.filter(c => c.id !== item.id);
       saveCart();
-      renderBasket();
+      renderCart();
     };
 
-    basketItemsEl.appendChild(div);
+    basketItems.appendChild(div);
   });
 
-  basketTotalEl.textContent = cartTotal().toFixed(2) + " €";
-  updateCartCount();
+  basketTotal.textContent = total.toFixed(2) + " €";
 }
 
-// -------------------------------
-// Add to cart (quantity safe)
-// -------------------------------
-window.addToCart = function (product) {
-  if (product.quantity <= 0) {
-    alert("Toode on otsas");
-    return;
-  }
-
-  if (cart.find(i => i.id === product.id)) {
-    alert("Toode on juba korvis");
-    return;
-  }
-
-  cart.push({
-    id: product.id,
-    name: product.name,
-    price: Number(product.price),
-    image: product.image
-  });
-
-  saveCart();
-  renderBasket();
-};
-
-// -------------------------------
-// Basket open / close (FIXED)
-// -------------------------------
 cartIcon.onclick = () => {
-  basketPanel.classList.add("open");
-  renderBasket();
+  basket.classList.add("open");
+  renderCart();
 };
 
-closeBasketBtn.onclick = () => {
-  basketPanel.classList.remove("open");
-};
+closeBasket.onclick = () => basket.classList.remove("open");
 
 clearCartBtn.onclick = () => {
-  if (!confirm("Tühjendada ostukorv?")) return;
   cart = [];
   saveCart();
-  renderBasket();
+  renderCart();
 };
 
-// -------------------------------
-// Products rendering
-// -------------------------------
+/* Products */
 function renderProducts(list) {
-  shopgrid.innerHTML = "";
+  grid.innerHTML = "";
 
   list.forEach(p => {
+    const out = Number(p.quantity) <= 0;
+
     const div = document.createElement("div");
     div.className = "productbox";
-
-    const outOfStock = Number(p.quantity || 0) <= 0;
-
     div.innerHTML = `
-      <img src="${p.image}" alt="">
-      <h3>${escapeHtml(p.name)}</h3>
-      <div><strong>${Number(p.price).toFixed(2)} €</strong></div>
-      <p>${escapeHtml(p.description || "")}</p>
-      <div class="stock">Laos: ${p.quantity}</div>
-      <button ${outOfStock ? "disabled" : ""}>Lisa korvi</button>
+      <img src="${p.image}">
+      <h3>${p.name}</h3>
+      <strong>${Number(p.price).toFixed(2)} €</strong>
+      <div>Laos: ${p.quantity}</div>
+      <button ${out ? "disabled" : ""}>
+        ${out ? "Otsas" : "Lisa korvi"}
+      </button>
     `;
 
-    div.querySelector("button").onclick = () => addToCart(p);
-    shopgrid.appendChild(div);
+    div.querySelector("button").onclick = () => {
+      if (cart.find(c => c.id === p.id)) {
+        alert("See toode on juba korvis");
+        return;
+      }
+      cart.push({ id: p.id, name: p.name, price: Number(p.price) });
+      saveCart();
+    };
+
+    grid.appendChild(div);
   });
 }
 
-// -------------------------------
-// Firestore products (REALTIME)
-// -------------------------------
-onSnapshot(collection(db, "products"), snap => {
-  allProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  applyFilters();
-});
-
-// -------------------------------
-// Filters / sorting / search
-// -------------------------------
+/* Filtering */
 function applyFilters() {
-  let list = [...allProducts];
-
-  if (categorySelect.value !== "all") {
-    list = list.filter(p => p.category === categorySelect.value);
-  }
+  let filtered = [...products];
 
   const q = searchInput.value.toLowerCase();
-  if (q) {
-    list = list.filter(p =>
-      (p.name || "").toLowerCase().includes(q) ||
-      (p.description || "").toLowerCase().includes(q)
-    );
+  if (q) filtered = filtered.filter(p => p.name.toLowerCase().includes(q));
+
+  if (categorySelect.value !== "all") {
+    filtered = filtered.filter(p => p.category === categorySelect.value);
   }
 
   if (sortSelect.value === "price-asc") {
-    list.sort((a, b) => a.price - b.price);
-  } else if (sortSelect.value === "price-desc") {
-    list.sort((a, b) => b.price - a.price);
+    filtered.sort((a,b) => a.price - b.price);
+  }
+  if (sortSelect.value === "price-desc") {
+    filtered.sort((a,b) => b.price - a.price);
   }
 
-  renderProducts(list);
+  renderProducts(filtered);
 }
 
+searchInput.oninput = applyFilters;
 categorySelect.onchange = applyFilters;
 sortSelect.onchange = applyFilters;
-searchInput.oninput = applyFilters;
 
-// -------------------------------
-// Auth UI + Settings
-// -------------------------------
-onAuthStateChanged(auth, async user => {
-  if (!user) {
-    accountLink.style.display = "inline-block";
-    logoutBtn.style.display = "none";
-    return;
-  }
+/* Firestore */
+onSnapshot(collection(db, "products"), snap => {
+  products = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-  accountLink.style.display = "none";
-  logoutBtn.style.display = "inline-block";
-  logoutBtn.onclick = () => signOut(auth);
+  const cats = new Set(products.map(p => p.category).filter(Boolean));
+  categorySelect.innerHTML = `<option value="all">Kõik kategooriad</option>`;
+  cats.forEach(c => {
+    const o = document.createElement("option");
+    o.value = c;
+    o.textContent = c;
+    categorySelect.appendChild(o);
+  });
 
-  settingsEmail.textContent = user.email || user.uid;
-
-  const snap = await getDoc(doc(db, "users", user.uid));
-  if (snap.exists()) {
-    settingsAddress.value = snap.data().address || "";
-    settingsDpd.value = snap.data().dpd || "";
-  }
+  applyFilters();
 });
 
-// Settings modal
-settingsBtn.onclick = () => settingsModal.classList.add("show");
-closeSettingsBtn.onclick = () => settingsModal.classList.remove("show");
-
-saveSettingsBtn.onclick = async () => {
-  const user = auth.currentUser;
-  if (!user) return;
-
-  await setDoc(doc(db, "users", user.uid), {
-    address: settingsAddress.value,
-    dpd: settingsDpd.value
-  }, { merge: true });
-
-  alert("Seaded salvestatud");
-  settingsModal.classList.remove("show");
-};
-
-// -------------------------------
-// Init
-// -------------------------------
-updateCartCount();
-renderBasket();
-
+/* Init */
+saveCart();
+renderCart();
