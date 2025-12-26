@@ -13,6 +13,11 @@ body {
   color:#D1D8E0;
 }
 
+.store-section {
+  max-width:1000px;
+  margin:30px auto;
+}
+
 #shopgrid {
   display:grid;
   grid-template-columns:repeat(3,1fr);
@@ -60,10 +65,29 @@ button {
   height:100%;
   background:#fff;
   transition:right .3s;
+  padding:14px;
 }
 
 #basket-panel.open {
   right:0;
+}
+
+#shipping-box {
+  margin-top:16px;
+  padding:10px;
+  background:#f6f6f6;
+  border-radius:8px;
+}
+
+#shipping-box label {
+  display:block;
+  margin-bottom:6px;
+}
+
+.disclaimer {
+  font-size:13px;
+  color:#444;
+  margin:10px 0;
 }
 
 .modal {
