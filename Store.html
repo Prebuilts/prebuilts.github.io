@@ -1,22 +1,21 @@
 <!DOCTYPE html>
 <html lang="et">
 <head>
-  <meta charset="UTF-8">
-  <title>Prebuiltid Pood</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="store.css">
+<meta charset="UTF-8">
+<title>Prebuiltid | Pood</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="store.css">
 </head>
 <body>
 
 <header id="header">
   <img src="Images/Prebuiltid.png" id="HIcon">
   <h1 id="HH1">Prebuiltid</h1>
-
   <nav>
     <ul>
       <li><a href="index.html">Kodu</a></li>
       <li><a class="active">Pood</a></li>
-      <li><a href="#" id="settingsBtn">Seaded</a></li>
+      <li><a href="#" id="ordersBtn">Minu tellimused</a></li>
       <li><a href="login.html" id="loginBtn">Logi sisse</a></li>
       <li><a href="#" id="logoutBtn" style="display:none">Logi välja</a></li>
     </ul>
@@ -39,12 +38,9 @@
   <div id="shopgrid"></div>
 </section>
 
-<!-- CART ICON -->
-<div id="cart-icon">
-  🛒 <span id="cart-count">0</span>
-</div>
+<!-- CART -->
+<div id="cart-icon">🛒 <span id="cart-count">0</span></div>
 
-<!-- BASKET -->
 <div id="basket-panel">
   <div id="basket-header">
     <h3>Ostukorv</h3>
@@ -54,7 +50,18 @@
   <div id="basket-items"></div>
 
   <div id="basket-footer">
-    <button id="remove-item">Eemalda toode</button>
+    <input id="paymentRef" placeholder="NOWPayments Order ID">
+    <button id="paidBtn">Maksin ära</button>
+    <button id="removeBtn">Eemalda</button>
+  </div>
+</div>
+
+<!-- ORDERS MODAL -->
+<div class="modal" id="ordersModal">
+  <div class="modal-content">
+    <h3>Minu tellimused</h3>
+    <div id="ordersList"></div>
+    <button id="closeOrders">Sulge</button>
   </div>
 </div>
 
