@@ -54,6 +54,22 @@
   <div id="basket-items"></div>
 
   <div id="basket-footer">
+    <hr>
+
+    <div id="payment-section" style="display:none">
+      <p class="disclaimer">
+        Palun saatke õige summa mis hetkel crypto hinnaks on (+ saatmiskulu) ja valige
+        pakiautomaat kuhu saata. Me ei saa tagastada valesid summasid.
+      </p>
+
+      <div id="nowpayments-container"></div>
+
+      <label>NowPayments Order ID</label>
+      <input id="orderIdInput" placeholder="Order ID">
+
+      <button id="paidBtn">Maksin ära</button>
+    </div>
+
     <strong>Kokku: <span id="basket-total">0€</span></strong>
     <button id="clear-cart-btn">Tühjenda</button>
   </div>
