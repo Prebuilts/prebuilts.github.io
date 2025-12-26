@@ -31,12 +31,12 @@
   <div id="shopgrid"></div>
 </section>
 
-<!-- CART BUTTON -->
+<!-- CART ICON -->
 <div id="cart-icon">
   🛒 <span id="cart-count">0</span>
 </div>
 
-<!-- BASKET PANEL -->
+<!-- BASKET -->
 <div id="basket-panel">
   <div id="basket-header">
     <h3>Ostukorv</h3>
@@ -45,9 +45,29 @@
 
   <div id="basket-items"></div>
 
+  <!-- SHIPPING -->
+  <div id="shipping-box">
+    <h4>Tarneviis</h4>
+
+    <label>
+      <input type="radio" name="shipping" value="DPD pakiautomaat" checked>
+      DPD pakiautomaat
+    </label>
+
+    <label>
+      <input type="radio" name="shipping" value="Kohapeal kättesaamine">
+      Kohapeal kättesaamine
+    </label>
+
+    <label>Pakiautomaat / aadress</label>
+    <input id="shippingAddress" placeholder="Nt: Ülemiste DPD">
+  </div>
+
+  <!-- PAYMENT -->
   <div id="payment-section" style="display:none">
     <p class="disclaimer">
-      Palun sisestage õige info NowPayments-i makseterminali, et saaksime teiega kontakteeruda seoses ostuga!
+      Palun saatke õige summa mis hetkel crypto hinnaks on (+ saatmiskulu) ja valige pakiautomaat kuhu saata.
+      Me ei saa tagastada valesid summasid.
     </p>
 
     <div id="nowpayments-container"></div>
@@ -59,7 +79,7 @@
   </div>
 </div>
 
-<!-- SETTINGS MODAL -->
+<!-- SETTINGS -->
 <div class="modal" id="settingsModal">
   <div class="modal-content">
     <h3>Seaded</h3>
