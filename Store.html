@@ -1,97 +1,84 @@
 <!DOCTYPE html>
 <html lang="et">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Prebuiltid | Pood</title>
-  <link rel="stylesheet" href="store.css" />
+<meta charset="UTF-8">
+<title>Prebuiltid Store</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="store.css">
 </head>
 <body>
 
 <header id="header">
-  <img src="Images/Prebuiltid.png" alt="Prebuiltid Logo" id="HIcon" />
+  <img id="HIcon" src="logo.png">
   <h1 id="HH1">Prebuiltid</h1>
+
   <nav>
     <ul>
-      <li><a href="index.html">Kodu</a></li>
-      <li><a href="#" class="active">Pood</a></li>
       <li><a href="#" id="settingsBtn">Seaded</a></li>
-      <li><a href="login.html" id="accountLink">Logi sisse</a></li>
-      <li><a href="#" id="logoutBtn" style="display:none">Logi välja</a></li>
+      <li><a href="#" id="ordersBtn">Tellimused</a></li>
     </ul>
   </nav>
 </header>
 
 <section class="store-section">
-  <h2>Meie pood</h2>
-
   <div class="category-filter">
-    <label>Kategooria</label>
-    <select id="categorySelect"></select>
-
-    <label>Sorteeri</label>
-    <select id="sortSelect">
-      <option value="none">—</option>
-      <option value="price-asc">Hind ↑</option>
-      <option value="price-desc">Hind ↓</option>
+    <label>Kategooria:</label>
+    <select id="categoryFilter">
+      <option value="all">Kõik</option>
     </select>
-
-    <input id="searchInput" placeholder="Otsi..." />
   </div>
 
-  <div id="shopgrid" class="recommended-grid"></div>
+  <div id="shopgrid"></div>
 </section>
 
-<!-- CART -->
-<div id="cart-icon">🛒 <span id="cart-count">0</span></div>
+<!-- CART BUTTON -->
+<div id="cart-icon">
+  🛒 <span id="cart-count">0</span>
+</div>
 
+<!-- BASKET PANEL -->
 <div id="basket-panel">
   <div id="basket-header">
-    <h2>Ostukorv</h2>
-    <button id="close-basket">✖</button>
+    <h3>Ostukorv</h3>
+    <button id="closeBasket">✕</button>
   </div>
 
   <div id="basket-items"></div>
 
-  <div id="basket-footer">
-    <hr>
+  <div id="payment-section" style="display:none">
+    <p class="disclaimer">
+      Palun sisestage õige info NowPayments-i makseterminali, et saaksime teiega kontakteeruda seoses ostuga!
+    </p>
 
-    <div id="payment-section" style="display:none">
-      <p class="disclaimer">
-        Palun saatke õige summa mis hetkel crypto hinnaks on (+ saatmiskulu) ja valige
-        pakiautomaat kuhu saata. Me ei saa tagastada valesid summasid.
-      </p>
+    <div id="nowpayments-container"></div>
 
-      <div id="nowpayments-container"></div>
+    <label>NowPayments Order ID</label>
+    <input id="orderIdInput">
 
-      <label>NowPayments Order ID</label>
-      <input id="orderIdInput" placeholder="Order ID">
-
-      <button id="paidBtn">Maksin ära</button>
-    </div>
-
-    <strong>Kokku: <span id="basket-total">0€</span></strong>
-    <button id="clear-cart-btn">Tühjenda</button>
+    <button id="paidBtn">Maksin ära</button>
   </div>
 </div>
 
-<!-- SETTINGS -->
-<div id="settingsModal" class="modal">
+<!-- SETTINGS MODAL -->
+<div class="modal" id="settingsModal">
   <div class="modal-content">
     <h3>Seaded</h3>
-    <p>Email: <span id="settings-email"></span></p>
+
     <label>Aadress</label>
-    <input id="settings-address">
+    <input id="addressInput">
+
     <label>DPD pakiautomaat</label>
-    <input id="settings-dpd">
-    <button id="save-settings">Salvesta</button>
-    <button id="closeSettings">Sulge</button>
+    <input id="dpdInput">
+
+    <button id="saveSettings">Salvesta</button>
+
+    <hr>
+    <h4>Minu tellimused</h4>
+    <div id="ordersList"></div>
+
+    <button onclick="closeSettings()">Sulge</button>
   </div>
 </div>
-
-<footer id="footer">
-  <p>© Prebuiltid 2025</p>
-</footer>
 
 <script type="module" src="store.js"></script>
 </body>
