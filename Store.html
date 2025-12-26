@@ -15,6 +15,7 @@
     <ul>
       <li><a href="index.html">Kodu</a></li>
       <li><a class="active">Pood</a></li>
+      <li><a href="#" id="settingsBtn">Seaded</a></li>
       <li><a href="#" id="ordersBtn">Minu tellimused</a></li>
       <li><a href="login.html" id="loginBtn">Logi sisse</a></li>
       <li><a href="#" id="logoutBtn" style="display:none">Logi välja</a></li>
@@ -50,9 +51,36 @@
   <div id="basket-items"></div>
 
   <div id="basket-footer">
+    <div id="basket-shipping"></div>
+
     <input id="paymentRef" placeholder="NOWPayments Order ID">
     <button id="paidBtn">Maksin ära</button>
     <button id="removeBtn">Eemalda</button>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal" id="settingsModal">
+  <div class="modal-content">
+    <h3>Seaded</h3>
+
+    <label>Email</label>
+    <input id="settingsEmail" disabled>
+
+    <label>Aadress</label>
+    <input id="settingsAddress" placeholder="Näide: Tartu mnt 10">
+
+    <label>Tarneviis</label>
+    <select id="settingsShipping">
+      <option value="DPD">DPD Pakiautomaat</option>
+      <option value="SmartPOST">SmartPOST</option>
+      <option value="Pickup">Tulen ise järgi</option>
+    </select>
+
+    <div style="margin-top:12px;display:flex;gap:10px;justify-content:flex-end">
+      <button id="saveSettings">Salvesta</button>
+      <button id="closeSettings">Sulge</button>
+    </div>
   </div>
 </div>
 
