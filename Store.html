@@ -1,83 +1,84 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import {
-  getFirestore, doc, getDoc, setDoc,
-  collection, query, where, onSnapshot
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-import {
-  getAuth, onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+<!DOCTYPE html>
+<html lang="et">
+<head>
+  <meta charset="UTF-8">
+  <title>Prebuiltid Pood</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="store.css">
+</head>
+<body>
 
-const app = initializeApp({
-  apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
-  authDomain: "prebuiltid-website.firebaseapp.com",
-  projectId: "prebuiltid-website"
-});
+<header id="header">
+  <img src="Images/Prebuiltid.png" id="HIcon">
+  <h1 id="HH1">Prebuiltid</h1>
 
-const db = getFirestore(app);
-const auth = getAuth(app);
+  <nav>
+    <ul>
+      <li><a href="index.html">Kodu</a></li>
+      <li><a class="active">Pood</a></li>
+      <li><a href="#" id="settingsBtn">Seaded</a></li>
+      <li><a href="login.html" id="loginBtn">Logi sisse</a></li>
+      <li><a href="#" id="logoutBtn" style="display:none">Logi välja</a></li>
+    </ul>
+  </nav>
+</header>
 
-/* ===== SETTINGS MODAL ===== */
-const overlay = document.getElementById("settings-overlay");
-const openBtn = document.getElementById("settingsBtn");
-const closeBtn = document.getElementById("settings-close");
+<section class="store-section">
+  <h2>Pood</h2>
 
-openBtn.onclick = e => {
-  e.preventDefault();
-  overlay.classList.add("show");
-};
+  <div class="category-filter">
+    <select id="categorySelect">
+      <option value="all">Kõik kategooriad</option>
+    </select>
 
-closeBtn.onclick = () => overlay.classList.remove("show");
+    <select id="sortSelect">
+      <option value="none">Sorteerimata</option>
+      <option value="price-asc">Hind ↑</option>
+      <option value="price-desc">Hind ↓</option>
+    </select>
 
-overlay.onclick = e => {
-  if (e.target === overlay) overlay.classList.remove("show");
-};
+    <input id="searchInput" placeholder="Otsi toodet">
+  </div>
 
-/* ===== USER SETTINGS ===== */
-onAuthStateChanged(auth, async user => {
-  if (!user) return;
+  <div id="shopgrid"></div>
+</section>
 
-  document.getElementById("settings-email").textContent = user.email;
+<!-- CART ICON -->
+<div id="cart-icon">
+  🛒 <span id="cart-count">0</span>
+</div>
 
-  const ref = doc(db, "users", user.uid);
-  const snap = await getDoc(ref);
+<!-- BASKET -->
+<div id="basket-panel">
+  <div id="basket-header">
+    <h3>Ostukorv</h3>
+    <button id="close-basket">✖</button>
+  </div>
+  <div id="basket-items"></div>
+</div>
 
-  if (snap.exists()) {
-    document.getElementById("settings-address").value = snap.data().address || "";
-    document.getElementById("settings-dpd").value = snap.data().dpd || "";
-  }
+<!-- SETTINGS -->
+<div id="settings-overlay">
+  <div id="settings-modal">
+    <button id="settings-close">✖</button>
+    <h3>Seaded</h3>
 
-  loadOrders(user.uid);
-});
+    <p>Email: <strong id="user-email">—</strong></p>
 
-document.getElementById("save-settings").onclick = async () => {
-  const user = auth.currentUser;
-  if (!user) return;
+    <label>Aadress</label>
+    <input id="user-address">
 
-  await setDoc(
-    doc(db, "users", user.uid),
-    {
-      address: document.getElementById("settings-address").value,
-      dpd: document.getElementById("settings-dpd").value
-    },
-    { merge: true }
-  );
+    <label>DPD pakiautomaat</label>
+    <input id="user-dpd">
 
-  alert("Salvestatud!");
-};
+    <button id="save-settings">Salvesta</button>
+  </div>
+</div>
 
-/* ===== ORDERS VIEW ===== */
-function loadOrders(uid) {
-  const q = query(
-    collection(db, "orders"),
-    where("userId", "==", uid)
-  );
+<footer id="footer">
+  © Prebuiltid 2025
+</footer>
 
-  onSnapshot(q, snap => {
-    const box = document.getElementById("my-orders");
-    box.innerHTML = "";
-    snap.forEach(d => {
-      const o = d.data();
-      box.innerHTML += `<div>${o.productName} – ${o.status}</div>`;
-    });
-  });
-}
+<script type="module" src="store.js"></script>
+</body>
+</html>
