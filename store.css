@@ -101,3 +101,20 @@ button:disabled { background:#ccc }
   border-radius:8px;
   margin-bottom:10px;
 }
+/* === FIX: hide basket completely when closed === */
+#basket {
+  position: fixed;
+  right: -420px; /* fully hidden */
+  top: 0;
+  width: 400px;
+  height: 100vh;
+  background: #fff;
+  z-index: 9999;
+  transition: right 0.3s ease;
+  overflow-y: auto;
+}
+
+/* when opened */
+#basket.open {
+  right: 0;
+}
