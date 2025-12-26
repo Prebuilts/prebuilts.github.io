@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <html lang="et">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Prebuiltid | Pood</title>
-  <link rel="stylesheet" href="store.css" />
+  <link rel="stylesheet" href="store.css">
 </head>
 <body>
 
 <header id="header">
-  <img src="Images/Prebuiltid.png" alt="Prebuiltid Logo" id="HIcon" />
+  <img src="Images/Prebuiltid.png" id="HIcon">
   <h1 id="HH1">Prebuiltid</h1>
+
   <nav>
     <ul>
       <li><a href="index.html">Kodu</a></li>
-      <li><a href="#" class="active">Pood</a></li>
-      <li><a href="#" id="settingsBtn">Seaded</a></li>
-      <li><a href="login.html" id="accountLink">Logi sisse</a></li>
-      <li><a href="#" id="logoutBtn" style="display:none">Logi välja</a></li>
+      <li><a class="active">Pood</a></li>
+      <li><span id="user-email">Not logged in</span></li>
     </ul>
   </nav>
 </header>
@@ -29,92 +28,31 @@
     <label>Kategooria</label>
     <select id="categorySelect">
       <option value="all">Kõik</option>
-      <option value="gaming-pcs">Mänguriarvutid</option>
-      <option value="consoles">Konsoolid</option>
-      <option value="controllers">Konsooli Puldid</option>
-      <option value="smartphones">Nutitelefonid</option>
-      <option value="phones">Lauatelefonid</option>
-      <option value="handhelds">Käsikonsoolid</option>
-      <option value="monitors">Monitorid</option>
-      <option value="pcs">Lauaarvutid</option>
-      <option value="gpu">Graafikakaardid</option>
-      <option value="tv">Televiisorid</option>
-      <option value="keyboards">Klaviatuurid</option>
-      <option value="mice">Arvutihiired</option>
-      <option value="headphones">Kõrvaklapid</option>
-      <option value="games">Mängud</option>
-      <option value="routers">Ruuterid</option>
-      <option value="network-switches">Network Switchid</option>
-      <option value="software">Tarkvara</option>
     </select>
 
-    <label>Sorteeri</label>
-    <select id="sortSelect">
-      <option value="none">---</option>
-      <option value="price-asc">Hind ↑</option>
-      <option value="price-desc">Hind ↓</option>
-    </select>
-
-    <input id="searchInput" placeholder="Otsi toodet...">
+    <label>Otsi</label>
+    <input id="searchInput" placeholder="Otsi toodet">
   </div>
 
   <div id="shopgrid"></div>
 </section>
 
-<!-- CART ICON -->
-<div id="cart-icon">🛒 <span id="cart-count">0</span></div>
+<div id="cart-icon">
+  🛒 <span id="cart-count">0</span>
+</div>
 
-<!-- BASKET -->
-<div id="basket-panel" aria-hidden="true">
+<div id="basket-panel">
   <div id="basket-header">
     <h2>Ostukorv</h2>
     <button id="close-basket">✖</button>
   </div>
 
   <div id="basket-items"></div>
-
-  <div id="payment-section" style="display:none">
-    <h3>Makse</h3>
-
-    <div id="nowpayments-frame" class="payment-embed"></div>
-
-    <label>Pakiautomaat</label>
-    <select id="shipping-select"></select>
-
-    <label>NOWPayments Order ID</label>
-    <input id="payment-order-id" placeholder="Order ID">
-
-    <p class="disclaimer">
-      ⚠️ Palun saatke õige summa vastavalt NOWPayments hinnale (+ saatmiskulu).
-      Vale summasid ei saa tagastada.
-    </p>
-
-    <button id="paid-btn">Ma maksin ära</button>
-  </div>
 </div>
 
-<!-- SETTINGS -->
-<div id="settings-modal" class="modal">
-  <div class="modal-content">
-    <h3>Seaded</h3>
-    <p>Email: <span id="settings-email"></span></p>
-
-    <label>Aadress</label>
-    <input id="settings-address">
-
-    <label>DPD pakiautomaat</label>
-    <input id="settings-dpd">
-
-    <button id="save-settings">Salvesta</button>
-
-    <h3>Minu tellimused</h3>
-    <div id="orders-list"></div>
-
-    <button id="close-settings">Sulge</button>
-  </div>
-</div>
-
-<footer id="footer">© Prebuiltid 2025</footer>
+<footer id="footer">
+  © Prebuiltid 2025
+</footer>
 
 <script type="module" src="store.js"></script>
 </body>
