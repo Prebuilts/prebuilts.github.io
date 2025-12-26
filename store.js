@@ -1,357 +1,175 @@
-// store.js (finalized: disclaimer + hidden basket + settings + per-item NowPayments embeds)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import {
-  getFirestore, collection, onSnapshot, getDoc, doc, setDoc
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-import {
-  getAuth, onAuthStateChanged, signOut
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { getFirestore, collection, onSnapshot, addDoc, getDocs, doc, getDoc, deleteDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-/* FIREBASE CONFIG (as requested) */
 const firebaseConfig = {
   apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
   authDomain: "prebuiltid-website.firebaseapp.com",
-  projectId: "prebuiltid-website",
-  storageBucket: "prebuiltid-website.firebasestorage.app",
-  messagingSenderId: "854871585546",
-  appId: "1:854871585546:web:568400979292a0c31740f3",
-  measurementId: "G-YS1Q1904H6"
+  projectId: "prebuiltid-website"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-/* DOM refs */
-const productContainer = document.getElementById('shopgrid');
-const categorySelect = document.getElementById('categorySelect');
-const sortSelect = document.getElementById('sortSelect');
-const searchInput = document.getElementById('searchInput');
-
+/* DOM */
+const shopgrid = document.getElementById("shopgrid");
 const cartIcon = document.getElementById("cart-icon");
 const basketPanel = document.getElementById("basket-panel");
 const closeBasket = document.getElementById("close-basket");
-const basketItemsEl = document.getElementById("basket-items");
-const basketTotalEl = document.getElementById("basket-total");
-const cartCountEl = document.getElementById("cart-count");
+const basketItems = document.getElementById("basket-items");
+const cartCount = document.getElementById("cart-count");
 
-const clearCartBtn = document.getElementById("clear-cart-btn");
-const buyAllBtn = document.getElementById("buy-all-btn");
-const checkoutModal = document.getElementById("checkout-modal");
-const cancelCheckoutBtn = document.getElementById("cancel-checkout");
-const confirmCheckoutBtn = document.getElementById("confirm-checkout");
-
-const myOrdersBtn = document.getElementById("my-orders-btn");
-const myOrdersModal = document.getElementById("my-orders-modal");
-const myOrdersList = document.getElementById("my-orders-list");
-const closeMyOrdersBtn = document.getElementById("close-my-orders");
+const paymentSection = document.getElementById("payment-section");
+const nowFrame = document.getElementById("nowpayments-frame");
+const shippingSelect = document.getElementById("shipping-select");
+const orderIdInput = document.getElementById("payment-order-id");
+const paidBtn = document.getElementById("paid-btn");
 
 const settingsBtn = document.getElementById("settingsBtn");
 const settingsModal = document.getElementById("settings-modal");
+const saveSettings = document.getElementById("save-settings");
+const closeSettings = document.getElementById("close-settings");
+const ordersList = document.getElementById("orders-list");
 const settingsEmail = document.getElementById("settings-email");
 const settingsAddress = document.getElementById("settings-address");
 const settingsDpd = document.getElementById("settings-dpd");
-const saveSettingsBtn = document.getElementById("save-settings");
-const closeSettingsBtn = document.getElementById("close-settings");
 
-const logoutEl = document.getElementById("logoutBtn");
-const accountLink = document.getElementById("accountLink");
+let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 
-/* DISCLAIMER modal refs */
-const disclaimerModal = document.getElementById("disclaimer-modal");
-const disclaimerAccept = document.getElementById("disclaimer-accept");
-const disclaimerCancel = document.getElementById("disclaimer-cancel");
-
-let allProducts = [];
-let cart = JSON.parse(localStorage.getItem("cart_v1") || "[]");
-
-/* helpers for cart persistence and counters */
-function saveCart() { localStorage.setItem("cart_v1", JSON.stringify(cart)); }
-function updateCartCount() { cartCountEl && (cartCountEl.innerText = cart.length); }
-function cartTotal() { return cart.reduce((s,i)=> s + (Number(i.price||0)), 0); }
-
-/* escape helpers */
-function escapeHtml(s=''){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
-function escapeAttr(s=''){ return String(s).replace(/"/g,'&quot;'); }
-
-/* render cart items in basket */
-function renderCart(){
-  if (!basketItemsEl) return;
-  basketItemsEl.innerHTML = "";
-
-  if (!cart.length) {
-    basketItemsEl.innerHTML = "<p>Korb on tühi.</p>";
-    basketTotalEl && (basketTotalEl.innerText = "0€");
-    updateCartCount();
-    return;
-  }
-
-  cart.forEach(item => {
-    const row = document.createElement('div');
-    row.className = 'basket-item';
-
-    const img = document.createElement('img'); img.src = item.image || '';
-    const info = document.createElement('div'); info.className='info';
-    info.innerHTML = `<h4>${escapeHtml(item.name)}</h4><div class="price">${Number(item.price).toFixed(2)}€</div>`;
-
-    const actions = document.createElement('div'); actions.className='actions';
-    const removeBtn = document.createElement('button'); removeBtn.innerText='Eemalda';
-    removeBtn.onclick = ()=> {
-      cart = cart.filter(c=> c.id !== item.id);
-      saveCart(); renderCart();
-      updateCartCount();
-    };
-    actions.appendChild(removeBtn);
-
-    row.appendChild(img);
-    row.appendChild(info);
-    row.appendChild(actions);
-
-    // Payment embed: if paymentButton present, add inside a box
-    if (item.paymentButton) {
-      const payBox = document.createElement('div');
-      payBox.className = 'payment-embed';
-      // Insert raw admin-provided HTML (trusted admin content)
-      try {
-        payBox.innerHTML = item.paymentButton;
-      } catch(e){
-        const a = document.createElement('a');
-        a.href = String(item.paymentButton);
-        a.target = '_blank';
-        a.rel = 'noreferrer noopener';
-        a.innerText = 'Maksa (NowPayments)';
-        payBox.appendChild(a);
-      }
-      row.appendChild(payBox);
-    }
-
-    basketItemsEl.appendChild(row);
-  });
-
-  basketTotalEl && (basketTotalEl.innerText = cartTotal().toFixed(2) + "€");
-  updateCartCount();
+/* CART */
+function saveCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
+  cartCount.innerText = cart.length;
 }
 
-/* add to cart (enforce 1 per product id) */
-window.addToCart = function(product){
-  if (cart.find(c=> c.id === product.id)) {
-    alert("Seda toodet on juba ostukorvis. Iga toote kohta üks eksemplar.");
+function renderCart() {
+  basketItems.innerHTML = "";
+  if (!cart.length) {
+    paymentSection.style.display = "none";
     return;
   }
-  cart.push({
-    id: product.id,
-    name: product.name,
-    price: Number(product.price||0),
-    image: product.image||'',
-    paymentButton: product.paymentButton || ''
-  });
-  saveCart(); renderCart(); updateCartCount();
+
+  const item = cart[0];
+
+  basketItems.innerHTML = `
+    <div class="basket-item">
+      <img src="${item.image}" width="70">
+      <div>
+        <b>${item.name}</b><br>${item.price}€
+      </div>
+    </div>
+  `;
+
+  paymentSection.style.display = "block";
+  nowFrame.innerHTML = item.paymentButton;
+
+  loadShipping();
+}
+
+window.addToCart = (p) => {
+  if (cart.length) return alert("Ainult üks toode korraga");
+  cart = [p];
+  saveCart();
+  renderCart();
 };
 
-/* DISCLAIMER flow:
-   - when user clicks cart-icon, show disclaimer first (unless already accepted)
-   - if accepted -> open basket
-   - acceptance stored in localStorage nowpay_disclaimer_accepted_v1
-*/
-function openBasketWithDisclaimer() {
-  const accepted = localStorage.getItem('nowpay_disclaimer_accepted_v1');
-  if (accepted === 'true') {
-    openBasket();
-    return;
-  }
-  if (!disclaimerModal) { openBasket(); return; }
-  disclaimerModal.classList.add('show');
-  disclaimerModal.setAttribute('aria-hidden','false');
-}
-
-/* Open/close basket helpers */
-function openBasket(){
-  basketPanel.classList.add('open');
-  basketPanel.setAttribute('aria-hidden','false');
+/* UI */
+cartIcon.onclick = () => {
+  basketPanel.classList.add("open");
   renderCart();
-}
-function closeBasketPanel(){
-  basketPanel.classList.remove('open');
-  basketPanel.setAttribute('aria-hidden','true');
-}
+};
+closeBasket.onclick = () => basketPanel.classList.remove("open");
 
-/* UI for opening/closing basket */
-cartIcon && cartIcon.addEventListener('click', ()=> { openBasketWithDisclaimer(); });
-closeBasket && closeBasket.addEventListener('click', ()=> { closeBasketPanel(); });
-
-/* disclaimer handlers */
-if (disclaimerAccept) {
-  disclaimerAccept.addEventListener('click', ()=> {
-    try { localStorage.setItem('nowpay_disclaimer_accepted_v1', 'true'); } catch(e){ /* ignore */ }
-    disclaimerModal.classList.remove('show');
-    disclaimerModal.setAttribute('aria-hidden','true');
-    openBasket();
-  });
-}
-if (disclaimerCancel) {
-  disclaimerCancel.addEventListener('click', ()=> {
-    disclaimerModal.classList.remove('show');
-    disclaimerModal.setAttribute('aria-hidden','true');
-  });
-}
-
-/* rest of your basket controls */
-clearCartBtn && clearCartBtn.addEventListener('click', ()=> {
-  if (confirm("Tühjendada ostukorv?")) {
-    cart = []; saveCart(); renderCart(); updateCartCount();
-  }
-});
-
-/* buy all: show confirmation modal (admin-provided buttons inside basket handle per-item crypto) */
-buyAllBtn && buyAllBtn.addEventListener('click', ()=> {
-  if (!cart.length) { alert("Ostukorv on tühi."); return; }
-  checkoutModal.classList.add('show');
-});
-
-/* confirm/ cancel checkout */
-cancelCheckoutBtn && cancelCheckoutBtn.addEventListener('click', ()=> checkoutModal.classList.remove('show'));
-confirmCheckoutBtn && confirmCheckoutBtn.addEventListener('click', ()=> {
-  alert("Tellimus registreeritud. Me võtame teiega ühendust.");
-  cart = []; saveCart(); renderCart(); updateCartCount();
-  checkoutModal.classList.remove('show');
-  basketPanel.classList.remove('open');
-});
-
-/* My orders button - minimal placeholder */
-myOrdersBtn && myOrdersBtn.addEventListener('click', ()=> {
-  alert("Minu tellimused - funktsioon sõltub orders kogust (pole siin implementeeritud).");
-});
-
-/* PRODUCTS: realtime */
-const productsRef = collection(db,"products");
-onSnapshot(productsRef, snap => {
-  allProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  renderProducts(allProducts);
-});
-
-/* render products in 3x3 grid */
-function renderProducts(products){
-  if (!productContainer) return;
-  productContainer.innerHTML = '';
-  products.forEach(product => {
-    const qty = Number(product.quantity || 0);
-    const div = document.createElement('div');
-    div.className = 'productbox';
-    div.innerHTML = `
-      <img src="${escapeAttr(product.image||'')}" alt="${escapeHtml(product.name||'')}">
-      <h3>${escapeHtml(product.name||'')}</h3>
-      <div style="font-weight:700">${Number(product.price||0).toFixed(2)}€</div>
-      <p>${escapeHtml(product.description||'')}</p>
-      <div class="stock">Laos: ${qty}</div>
-      <div style="margin-top:10px; display:flex; gap:8px;">
-        <button class="btn view" ${product.link ? '' : 'disabled'}>Vaata lisaks</button>
-        <button class="btn add" ${qty <= 0 ? 'disabled' : ''}>Lisa korvi</button>
-      </div>
-    `;
-
-    // view link
-    const vBtn = div.querySelector('.view');
-    if (vBtn) vBtn.addEventListener('click', ()=> {
-      if (product.link) window.open(product.link, '_blank');
-    });
-
-    // add to cart handler (enforce 1 per product)
-    const aBtn = div.querySelector('.add');
-    if (aBtn) aBtn.addEventListener('click', ()=> {
-      window.addToCart({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        image: product.image,
-        paymentButton: product.paymentButton || ''
-      });
-    });
-
-    productContainer.appendChild(div);
-  });
-}
-
-/* FILTER / SORT / SEARCH */
-if (categorySelect) categorySelect.addEventListener('change', ()=> {
-  const cat = categorySelect.value;
-  if (cat === 'all') renderProducts(allProducts);
-  else renderProducts(allProducts.filter(p => p.category === cat));
-});
-if (sortSelect) sortSelect.addEventListener('change', ()=> {
-  const s = sortSelect.value;
-  let copy = allProducts.slice();
-  if (s === 'price-asc') copy.sort((a,b)=> Number(a.price||0)-Number(b.price||0));
-  else if (s === 'price-desc') copy.sort((a,b)=> Number(b.price||0)-Number(a.price||0));
-  else if (s === 'name-asc') copy.sort((a,b)=> String(a.name||'').localeCompare(String(b.name||'')));
-  else if (s === 'name-desc') copy.sort((a,b)=> String(b.name||'').localeCompare(String(a.name||'')));
-  renderProducts(copy);
-});
-if (searchInput) searchInput.addEventListener('input', ()=> {
-  const q = searchInput.value.trim().toLowerCase();
-  if (!q) return renderProducts(allProducts);
-  renderProducts(allProducts.filter(p => (p.name||'').toLowerCase().includes(q) || (p.description||'').toLowerCase().includes(q)));
-});
-
-/* SETTINGS: open modal, show email, load user's settings from users/{uid}, allow save */
-settingsBtn && settingsBtn.addEventListener('click', ()=> {
-  settingsModal.classList.add('show');
-  settingsModal.setAttribute('aria-hidden','false');
-
-  onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-      settingsEmail.innerText = "Pole sisse logitud";
-      settingsAddress.value = "";
-      settingsDpd.value = "";
-      return;
-    }
-    settingsEmail.innerText = user.email || user.uid;
-    try {
-      const ref = doc(db, "users", user.uid);
-      const snap = await getDoc(ref);
-      if (snap.exists()) {
-        const data = snap.data();
-        settingsAddress.value = data.address || "";
-        settingsDpd.value = data.dpd || "";
-      } else {
-        settingsAddress.value = "";
-        settingsDpd.value = "";
-      }
-    } catch (err) {
-      console.error("Load user settings error", err);
-    }
-  });
-});
-
-closeSettingsBtn && closeSettingsBtn.addEventListener('click', ()=> {
-  settingsModal.classList.remove('show');
-  settingsModal.setAttribute('aria-hidden','true');
-});
-
-saveSettingsBtn && saveSettingsBtn.addEventListener('click', async ()=> {
+/* SHIPPING */
+async function loadShipping() {
   const user = auth.currentUser;
-  if (!user) { alert("Palun logige sisse, et salvestada"); return; }
-  try {
-    await setDoc(doc(db,"users",user.uid), { address: settingsAddress.value, dpd: settingsDpd.value }, { merge: true });
-    alert("Seaded salvestatud");
-    settingsModal.classList.remove('show');
-  } catch (err) {
-    console.error("Save settings error", err);
-    alert("Salvestamisel viga");
-  }
+  if (!user) return;
+  const snap = await getDoc(doc(db, "users", user.uid));
+  shippingSelect.innerHTML = `<option>${snap.data()?.dpd || ""}</option>`;
+}
+
+/* PAYMENT CONFIRM */
+paidBtn.onclick = async () => {
+  if (!orderIdInput.value) return alert("Sisesta Order ID");
+  if (!confirm("Oled sa kindel?")) return;
+
+  const user = auth.currentUser;
+  const snap = await getDocs(collection(db, "orders"));
+  if (snap.docs.filter(d => d.data().uid === user.uid).length >= 3)
+    return alert("Max 3 tellimust");
+
+  await addDoc(collection(db, "orders"), {
+    uid: user.uid,
+    product: cart[0],
+    shipping: shippingSelect.value,
+    orderId: orderIdInput.value,
+    status: "pending",
+    created: Date.now()
+  });
+
+  cart = [];
+  saveCart();
+  renderCart();
+  alert("Tellimus esitatud!");
+};
+
+/* PRODUCTS */
+onSnapshot(collection(db,"products"), snap => {
+  shopgrid.innerHTML = "";
+  snap.docs.forEach(d => {
+    const p = d.data();
+    const div = document.createElement("div");
+    div.className = "productbox";
+    div.innerHTML = `
+      <img src="${p.image}">
+      <h3>${p.name}</h3>
+      <b>${p.price}€</b>
+      <button>Lisa korvi</button>
+    `;
+    div.querySelector("button").onclick = () =>
+      addToCart({ ...p, id:d.id });
+    shopgrid.appendChild(div);
+  });
 });
 
-/* AUTH UI: show/hide login/logout */
-onAuthStateChanged(auth, (user) => {
-  if (!user) {
-    accountLink && (accountLink.style.display='inline-block');
-    logoutEl && (logoutEl.style.display='none');
-  } else {
-    accountLink && (accountLink.style.display='none');
-    logoutEl && (logoutEl.style.display='inline-block');
-    logoutEl.onclick = ()=> signOut(auth);
-  }
-});
+/* SETTINGS */
+settingsBtn.onclick = () => {
+  settingsModal.classList.add("show");
+  loadOrders();
+};
 
-/* init */
-updateCartCount();
-renderCart();
+closeSettings.onclick = () => settingsModal.classList.remove("show");
+
+saveSettings.onclick = async () => {
+  const u = auth.currentUser;
+  await setDoc(doc(db,"users",u.uid), {
+    address: settingsAddress.value,
+    dpd: settingsDpd.value
+  }, { merge:true });
+  alert("Salvestatud");
+};
+
+async function loadOrders() {
+  ordersList.innerHTML = "";
+  const user = auth.currentUser;
+  const snap = await getDocs(collection(db,"orders"));
+  snap.docs
+    .filter(d=>d.data().uid===user.uid)
+    .forEach(d=>{
+      const o=d.data();
+      const div=document.createElement("div");
+      div.innerHTML=`${o.product.name} (${o.status})
+        <button>Tühista</button>`;
+      div.querySelector("button").onclick=async()=>{
+        await deleteDoc(doc(db,"orders",d.id));
+        loadOrders();
+      };
+      ordersList.appendChild(div);
+    });
+}
+
+/* AUTH */
+onAuthStateChanged(auth,u=>{
+  if(u) settingsEmail.innerText=u.email;
+});
