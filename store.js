@@ -1,159 +1,165 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import {
+  getFirestore,
+  collection,
+  onSnapshot
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import {
+  getAuth,
+  onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-/* Firebase */
+/* ================= FIREBASE ================= */
 const firebaseConfig = {
   apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
   authDomain: "prebuiltid-website.firebaseapp.com",
-  projectId: "prebuiltid-website"
+  projectId: "prebuiltid-website",
+  storageBucket: "prebuiltid-website.firebasestorage.app",
+  messagingSenderId: "854871585546",
+  appId: "1:854871585546:web:568400979292a0c31740f3"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
+const auth = getAuth(app);
 
-/* DOM */
-const grid = document.getElementById("shopgrid");
-const searchInput = document.getElementById("searchInput");
-const categorySelect = document.getElementById("categorySelect");
-const sortSelect = document.getElementById("sortSelect");
-
+/* ================= DOM ================= */
+const shopgrid = document.getElementById("shopgrid");
 const cartIcon = document.getElementById("cart-icon");
-const basket = document.getElementById("basket-panel");
-const closeBasket = document.getElementById("close-basket");
-const basketItems = document.getElementById("basket-items");
-const basketTotal = document.getElementById("basket-total");
 const cartCount = document.getElementById("cart-count");
-const clearCartBtn = document.getElementById("clear-cart-btn");
+const basketPanel = document.getElementById("basket-panel");
+const closeBasketBtn = document.getElementById("closeBasket");
+const basketItemsDiv = document.getElementById("basket-items");
 
-/* State */
-let products = [];
+const categoryFilter = document.getElementById("categoryFilter");
+const searchInput = document.getElementById("searchInput");
+
+const loginStatus = document.getElementById("loginStatus");
+const settingsBtn = document.getElementById("settingsBtn");
+const ordersBtn = document.getElementById("ordersBtn");
+
+/* ================= STATE ================= */
+let allProducts = [];
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-/* Cart */
+/* ================= AUTH ================= */
+onAuthStateChanged(auth, user => {
+  if (user) {
+    loginStatus.innerText = user.email;
+  } else {
+    loginStatus.innerText = "Logimata";
+  }
+});
+
+/* ================= LOAD PRODUCTS ================= */
+onSnapshot(collection(db, "products"), snap => {
+  allProducts = [];
+  snap.forEach(doc => {
+    allProducts.push({ id: doc.id, ...doc.data() });
+  });
+  populateCategoryFilter();
+  renderProducts();
+});
+
+/* ================= RENDER PRODUCTS ================= */
+function renderProducts() {
+  shopgrid.innerHTML = "";
+
+  const category = categoryFilter.value;
+  const search = searchInput.value.toLowerCase();
+
+  allProducts
+    .filter(p =>
+      (category === "all" || p.category === category) &&
+      p.name.toLowerCase().includes(search)
+    )
+    .forEach(p => {
+      const box = document.createElement("div");
+      box.className = "productbox";
+
+      const outOfStock = p.quantity <= 0;
+
+      box.innerHTML = `
+        <img src="${p.image}" alt="">
+        <h3>${p.name}</h3>
+        <p>${p.description || ""}</p>
+        <p><strong>${p.price} €</strong></p>
+        <p>Laos: ${p.quantity}</p>
+        <button ${outOfStock ? "disabled" : ""}>
+          ${outOfStock ? "Otsas" : "Lisa korvi"}
+        </button>
+      `;
+
+      if (!outOfStock) {
+        box.querySelector("button").onclick = () => addToCart(p);
+      }
+
+      shopgrid.appendChild(box);
+    });
+}
+
+/* ================= CATEGORY FILTER ================= */
+function populateCategoryFilter() {
+  const cats = ["all", ...new Set(allProducts.map(p => p.category).filter(Boolean))];
+  categoryFilter.innerHTML = "";
+  cats.forEach(c => {
+    const opt = document.createElement("option");
+    opt.value = c;
+    opt.innerText = c === "all" ? "Kõik" : c;
+    categoryFilter.appendChild(opt);
+  });
+}
+
+categoryFilter.onchange = renderProducts;
+searchInput.oninput = renderProducts;
+
+/* ================= CART ================= */
+function addToCart(product) {
+  if (cart.find(i => i.id === product.id)) return;
+
+  cart.push(product);
+  saveCart();
+}
+
+function removeFromCart(id) {
+  cart = cart.filter(i => i.id !== id);
+  saveCart();
+}
+
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
-  cartCount.textContent = cart.length;
+  renderCart();
 }
 
 function renderCart() {
-  basketItems.innerHTML = "";
-  let total = 0;
-
-  if (cart.length === 0) {
-    basketItems.innerHTML = "<p>Korb on tühi</p>";
-    basketTotal.textContent = "0 €";
-    return;
-  }
+  basketItemsDiv.innerHTML = "";
+  cartCount.innerText = cart.length;
 
   cart.forEach(item => {
-    total += item.price;
-
     const div = document.createElement("div");
     div.className = "basket-item";
+
     div.innerHTML = `
-      <strong>${item.name}</strong><br>
-      ${item.price.toFixed(2)} €
-      <button>❌</button>
+      <img src="${item.image}">
+      <div style="flex:1">
+        <strong>${item.name}</strong>
+        <div>${item.price} €</div>
+      </div>
+      <button>X</button>
     `;
 
-    div.querySelector("button").onclick = () => {
-      cart = cart.filter(c => c.id !== item.id);
-      saveCart();
-      renderCart();
-    };
-
-    basketItems.appendChild(div);
-  });
-
-  basketTotal.textContent = total.toFixed(2) + " €";
-}
-
-cartIcon.onclick = () => {
-  basket.classList.add("open");
-  renderCart();
-};
-
-closeBasket.onclick = () => basket.classList.remove("open");
-
-clearCartBtn.onclick = () => {
-  cart = [];
-  saveCart();
-  renderCart();
-};
-
-/* Products */
-function renderProducts(list) {
-  grid.innerHTML = "";
-
-  list.forEach(p => {
-    const out = Number(p.quantity) <= 0;
-
-    const div = document.createElement("div");
-    div.className = "productbox";
-    div.innerHTML = `
-      <img src="${p.image}">
-      <h3>${p.name}</h3>
-      <strong>${Number(p.price).toFixed(2)} €</strong>
-      <div>Laos: ${p.quantity}</div>
-      <button ${out ? "disabled" : ""}>
-        ${out ? "Otsas" : "Lisa korvi"}
-      </button>
-    `;
-
-    div.querySelector("button").onclick = () => {
-      if (cart.find(c => c.id === p.id)) {
-        alert("See toode on juba korvis");
-        return;
-      }
-      cart.push({ id: p.id, name: p.name, price: Number(p.price) });
-      saveCart();
-    };
-
-    grid.appendChild(div);
+    div.querySelector("button").onclick = () => removeFromCart(item.id);
+    basketItemsDiv.appendChild(div);
   });
 }
 
-/* Filtering */
-function applyFilters() {
-  let filtered = [...products];
+/* ================= BASKET TOGGLE ================= */
+cartIcon.onclick = () => basketPanel.classList.add("open");
+closeBasketBtn.onclick = () => basketPanel.classList.remove("open");
 
-  const q = searchInput.value.toLowerCase();
-  if (q) filtered = filtered.filter(p => p.name.toLowerCase().includes(q));
+/* ================= SETTINGS / ORDERS (PLACEHOLDERS) ================= */
+settingsBtn.onclick = () => alert("Settings menu opens (JS works)");
+ordersBtn.onclick = () => alert("Orders menu opens (JS works)");
 
-  if (categorySelect.value !== "all") {
-    filtered = filtered.filter(p => p.category === categorySelect.value);
-  }
-
-  if (sortSelect.value === "price-asc") {
-    filtered.sort((a,b) => a.price - b.price);
-  }
-  if (sortSelect.value === "price-desc") {
-    filtered.sort((a,b) => b.price - a.price);
-  }
-
-  renderProducts(filtered);
-}
-
-searchInput.oninput = applyFilters;
-categorySelect.onchange = applyFilters;
-sortSelect.onchange = applyFilters;
-
-/* Firestore */
-onSnapshot(collection(db, "products"), snap => {
-  products = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-
-  const cats = new Set(products.map(p => p.category).filter(Boolean));
-  categorySelect.innerHTML = `<option value="all">Kõik kategooriad</option>`;
-  cats.forEach(c => {
-    const o = document.createElement("option");
-    o.value = c;
-    o.textContent = c;
-    categorySelect.appendChild(o);
-  });
-
-  applyFilters();
-});
-
-/* Init */
-saveCart();
+/* ================= INIT ================= */
 renderCart();
