@@ -1,3 +1,152 @@
+body {
+  font-family: Arial, sans-serif;
+  background:#F4F4F9;
+  color:#333;
+  margin:0;
+}
+
+/* HEADER */
+#header {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:15px 22px;
+  background:#2C3E50;
+  border-bottom:5px solid #34495E;
+}
+
+#HIcon { max-width:60px; }
+#HH1 { color:#D1D8E0; margin:0; }
+
+nav ul {
+  display:flex;
+  gap:18px;
+  list-style:none;
+  margin-left:auto;
+  padding:0;
+}
+
+nav a {
+  color:#E2E8F0;
+  font-weight:700;
+  text-decoration:none;
+  padding:8px 12px;
+  border-radius:6px;
+}
+
+nav a.active,
+nav a:hover {
+  background:#34495E;
+}
+
+/* STORE */
+.store-section {
+  max-width:1000px;
+  margin:40px auto;
+  padding:30px;
+  background:#F1F3F5;
+  border-radius:10px;
+}
+
+.category-filter {
+  display:flex;
+  gap:12px;
+  margin-bottom:20px;
+}
+
+/* GRID */
+#shopgrid {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.productbox {
+  background:#fff;
+  border-radius:10px;
+  padding:14px;
+  display:flex;
+  flex-direction:column;
+}
+
+.productbox img {
+  width:100%;
+  height:200px;
+  object-fit:contain;
+  margin-bottom:10px;
+}
+
+.stock {
+  font-size:13px;
+  margin-bottom:8px;
+}
+
+/* BUTTONS */
+button {
+  background:#FF6F61;
+  color:#fff;
+  border:none;
+  padding:10px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+button:disabled {
+  background:#ccc;
+  cursor:not-allowed;
+}
+
+/* CART */
+#cart-icon {
+  position:fixed;
+  right:20px;
+  bottom:22px;
+  background:#FF6F61;
+  color:#fff;
+  padding:10px 14px;
+  border-radius:999px;
+  cursor:pointer;
+  z-index:1000;
+}
+
+#cart-count {
+  background:#fff;
+  color:#FF6F61;
+  padding:3px 8px;
+  border-radius:999px;
+  font-weight:800;
+}
+
+/* BASKET PANEL */
+#basket-panel {
+  position:fixed;
+  top:0;
+  right:-420px;
+  width:420px;
+  height:100%;
+  background:#fff;
+  box-shadow:-6px 0 20px rgba(0,0,0,0.18);
+  transition:right .3s ease;
+  z-index:1100;
+  padding:14px;
+}
+
+#basket-panel.open {
+  right:0;
+}
+
+#basket-header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #eee;
+  padding-bottom:8px;
+}
+
+#basket-items {
+  margin-top:12px;
+}
 /* === KEEP ALL YOUR EXISTING CSS EXACTLY === */
 /* (Everything below is ADDITIVE only) */
 
