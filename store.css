@@ -1,106 +1,64 @@
-/* GLOBAL */
 body {
-  margin:0;
-  font-family:Arial, sans-serif;
+  font-family: Arial, sans-serif;
   background:#F4F4F9;
+  margin:0;
   color:#333;
 }
 
 /* HEADER */
 #header {
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  padding:14px 20px;
+  padding:15px 22px;
   background:#2C3E50;
-  border-bottom:4px solid #34495E;
-}
-
-.header-left {
-  display:flex;
-  align-items:center;
   gap:12px;
 }
 
-#HIcon {
-  height:48px;
-}
-
-#HH1 {
-  color:#D1D8E0;
-  font-size:1.6rem;
-  margin:0;
-}
+#HIcon { height:50px }
+#HH1 { color:#D1D8E0 }
 
 nav ul {
   list-style:none;
   display:flex;
-  gap:14px;
-  margin:0;
-  padding:0;
+  gap:15px;
+  margin-left:auto;
 }
 
 nav a {
   color:#E2E8F0;
-  text-decoration:none;
   font-weight:700;
-  padding:8px 12px;
-  border-radius:6px;
-}
-
-nav a.active,
-nav a:hover {
-  background:#34495E;
+  text-decoration:none;
 }
 
 /* STORE */
 .store-section {
   max-width:1000px;
   margin:30px auto;
-  padding:24px;
-  background:#F1F3F5;
-  border-radius:10px;
 }
 
-/* FILTER */
-.category-filter {
-  display:flex;
-  gap:12px;
-  margin-bottom:16px;
-}
-
-/* GRID */
 #shopgrid {
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:20px;
 }
 
-@media(max-width:900px){
-  #shopgrid { grid-template-columns:repeat(2,1fr); }
-}
-@media(max-width:600px){
-  #shopgrid { grid-template-columns:1fr; }
-}
-
-/* PRODUCT */
 .productbox {
   background:#fff;
   border-radius:10px;
-  padding:14px;
-  box-shadow:0 2px 6px rgba(0,0,0,.1);
+  padding:12px;
   display:flex;
   flex-direction:column;
 }
 
 .productbox img {
   width:100%;
-  height:180px;
+  height:auto;
   object-fit:contain;
-  border-radius:6px;
 }
 
-/* CART ICON */
+.stock { font-size:13px }
+
+/* CART */
 #cart-icon {
   position:fixed;
   right:20px;
@@ -110,10 +68,8 @@ nav a:hover {
   padding:10px 14px;
   border-radius:999px;
   cursor:pointer;
-  z-index:3000;
 }
 
-/* BASKET */
 #basket-panel {
   position:fixed;
   top:0;
@@ -121,62 +77,39 @@ nav a:hover {
   width:420px;
   height:100%;
   background:#fff;
-  box-shadow:-6px 0 20px rgba(0,0,0,.2);
-  transition:right .3s ease;
-  z-index:4000;
-  padding:14px;
-  overflow-y:auto;
+  transition:right .3s;
+  z-index:999;
+  padding:12px;
 }
 
 #basket-panel.open {
   right:0;
 }
 
-#basket-header {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-bottom:1px solid #eee;
-  padding-bottom:8px;
+.primary-btn {
+  background:#FF6F61;
+  border:none;
+  color:#fff;
+  padding:12px;
+  border-radius:8px;
+  font-weight:700;
+  width:100%;
+  cursor:pointer;
 }
 
-.basket-item {
-  margin-top:16px;
-}
-
-/* NOWPAYMENTS FIX */
-.payment-embed iframe {
-  width: 100%;
-  max-width: 100%;
-  height: 720px;           /* enough for full NOWPayments UI */
-  border: none;
-  display: block;
-}
-
-.payment-embed {
-  overflow: visible;       /* IMPORTANT: allow full render */
-}
-
-
-/* MODAL */
 .modal {
+  display:none;
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.4);
-  display:none;
-  justify-content:center;
+  background:rgba(0,0,0,.45);
   align-items:center;
-  z-index:5000;
+  justify-content:center;
 }
 
-.modal.show {
-  display:flex;
-}
+.modal.show { display:flex }
 
 .modal-content {
   background:#fff;
   padding:20px;
   border-radius:10px;
-  width:90%;
-  max-width:420px;
 }
