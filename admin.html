@@ -2,52 +2,39 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin Dashboard | Prebuiltid</title>
+  <title>Admin Panel</title>
   <link rel="stylesheet" href="admin.css">
 </head>
 <body>
 
 <header class="admin-header">
-  <h1>Admin Dashboard</h1>
-  <p>Manage store products</p>
+  <h1>Admin Panel</h1>
+  <div id="status">Checking login…</div>
 </header>
-
-<div id="status" class="status-box">Checking admin permissions...</div>
 
 <section class="admin-box">
   <h2>Add Product</h2>
 
-  <label>Name</label>
-  <input id="name">
+  <input id="name" placeholder="Name">
+  <input id="price" type="number" placeholder="Price">
+  <input id="image" placeholder="Image URL">
+  <input id="category" placeholder="Category">
+  <input id="link" placeholder="Product link">
+  <input id="quantity" type="number" placeholder="Quantity">
+  <textarea id="description" placeholder="Description"></textarea>
+  <textarea id="paymentButton" placeholder="NOWPayments iframe / button"></textarea>
 
-  <label>Price</label>
-  <input id="price" type="number" step="0.01">
-
-  <label>Description</label>
-  <textarea id="description"></textarea>
-
-  <label>Image URL</label>
-  <input id="image">
-
-  <label>Category</label>
-  <input id="category">
-
-  <label>Product link</label>
-  <input id="link">
-
-  <label>Quantity</label>
-  <input id="quantity" type="number" min="0">
-
-  <label>NOWPayments HTML / URL</label>
-  <textarea id="paymentButton"></textarea>
-
-  <button id="addProduct">Add product</button>
+  <button id="addProduct" class="btn">Add product</button>
 </section>
 
 <section class="admin-box">
-  <h2>Existing products</h2>
-  <div id="productList">Loading…</div>
+  <h2>Products</h2>
+  <div id="productList"></div>
+</section>
+
+<section class="admin-box">
+  <h2>Orders</h2>
+  <div id="ordersBox"></div>
 </section>
 
 <script type="module" src="admin.js"></script>
