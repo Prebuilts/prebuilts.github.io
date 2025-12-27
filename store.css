@@ -146,11 +146,17 @@ nav a:hover {
 
 /* NOWPAYMENTS FIX */
 .payment-embed iframe {
-  width:100%;
-  max-width:100%;
-  height:520px;
-  border:none;
+  width: 100%;
+  max-width: 100%;
+  height: 720px;           /* enough for full NOWPayments UI */
+  border: none;
+  display: block;
 }
+
+.payment-embed {
+  overflow: visible;       /* IMPORTANT: allow full render */
+}
+
 
 /* MODAL */
 .modal {
