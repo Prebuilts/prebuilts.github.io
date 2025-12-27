@@ -1,100 +1,72 @@
 <!DOCTYPE html>
 <html lang="et">
 <head>
-  <meta charset="UTF-8">
-  <title>Prebuiltid Store</title>
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Prebuiltid | Pood</title>
   <link rel="stylesheet" href="store.css">
 </head>
-  <!-- SETTINGS MODAL -->
+<body>
+
+<header id="header">
+  <img src="Images/Prebuiltid.png" id="HIcon">
+  <h1 id="HH1">Prebuiltid</h1>
+  <nav>
+    <ul>
+      <li><a href="index.html">Kodu</a></li>
+      <li><a class="active">Pood</a></li>
+      <li><a href="#" id="settingsBtn">Seaded</a></li>
+      <li><a href="login.html" id="accountLink">Logi sisse</a></li>
+      <li><a href="#" id="logoutBtn" style="display:none">Logi välja</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="store-section">
+  <h2>Meie pood</h2>
+
+  <div class="category-filter">
+    <select id="categorySelect">
+      <option value="all">Kõik</option>
+    </select>
+
+    <input id="searchInput" placeholder="Otsi toodet">
+  </div>
+
+  <div id="shopgrid"></div>
+</section>
+
+<!-- CART -->
+<div id="cart-icon">🛒 <span id="cart-count">0</span></div>
+
+<div id="basket-panel">
+  <div id="basket-header">
+    <h3>Ostukorv</h3>
+    <button id="close-basket">✖</button>
+  </div>
+
+  <div id="basket-items"></div>
+
+  <div id="basket-footer">
+    <strong>Kokku: <span id="basket-total">0€</span></strong>
+  </div>
+</div>
+
+<!-- SETTINGS -->
 <div id="settings-modal" class="modal">
   <div class="modal-content">
     <h3>Seaded</h3>
-    <p>Email: <span id="settings-email">—</span></p>
+    <p>Email: <span id="settings-email"></span></p>
 
-    <label>Aadress</label>
-    <input id="settings-address" placeholder="Tänav, linn">
+    <input id="settings-address" placeholder="Aadress">
+    <input id="settings-dpd" placeholder="DPD pakiautomaat">
 
-    <label>DPD pakiautomaat</label>
-    <input id="settings-dpd" placeholder="Pakiautomaadi nimi">
-
-    <div style="margin-top:12px; text-align:right;">
+    <div class="modal-actions">
       <button id="save-settings">Salvesta</button>
       <button id="close-settings">Sulge</button>
     </div>
   </div>
 </div>
-
-<!-- ORDERS MODAL -->
-<div id="orders-modal" class="modal">
-  <div class="modal-content">
-    <h3>Minu tellimused</h3>
-    <div id="orders-list">Tellimusi pole</div>
-
-    <div style="margin-top:12px; text-align:right;">
-      <button id="close-orders">Sulge</button>
-    </div>
-  </div>
-</div>
-
-<body>
-
-<!-- HEADER -->
-<header id="header">
-  <img id="HIcon" src="logo.png" alt="Prebuiltid">
-  <h1 id="HH1">Prebuiltid</h1>
-
-  <nav>
-    <ul>
-      <li><a href="#" class="active">Pood</a></li>
-      <li><a href="#" id="settingsBtn">Seaded</a></li>
-      <li><a href="#" id="ordersBtn">Tellimused</a></li>
-      <li><a href="#" id="loginStatus">Logimata</a></li>
-    </ul>
-  </nav>
-</header>
-
-<!-- STORE -->
-<section class="store-section">
-
-  <!-- FILTER BAR (structure only, your JS plugs in) -->
-  <div class="category-filter">
-    <label>Kategooria:</label>
-    <select id="categoryFilter">
-      <option value="all">Kõik</option>
-    </select>
-
-    <input id="searchInput" placeholder="Otsi toodet...">
-  </div>
-
-  <!-- PRODUCT GRID -->
-  <div id="shopgrid">
-    <!-- products rendered by JS -->
-  </div>
-
-</section>
-
-<!-- CART ICON -->
-<div id="cart-icon">
-  🛒 <span id="cart-count">0</span>
-</div>
-
-<!-- BASKET PANEL -->
-<div id="basket-panel">
-  <div id="basket-header">
-    <h3>Ostukorv</h3>
-    <button id="closeBasket">✕</button>
-  </div>
-
-  <div id="basket-items">
-    <!-- basket items -->
-  </div>
-</div>
-
-<!-- FOOTER -->
-<footer id="footer">
-  © Prebuiltid
-</footer>
 
 <script type="module" src="store.js"></script>
 </body>
