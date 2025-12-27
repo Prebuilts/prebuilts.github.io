@@ -1,21 +1,20 @@
 <!DOCTYPE html>
 <html lang="et">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Prebuiltid Store</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="store.css">
 </head>
 <body>
 
 <header id="header">
-  <img id="HIcon" src="logo.png">
+  <img id="HIcon" src="logo.png" alt="Logo">
   <h1 id="HH1">Prebuiltid</h1>
 
   <nav>
     <ul>
-      <li><a href="#" id="openSettings">Seaded</a></li>
-      <li><a href="#" id="openOrders">Tellimused</a></li>
+      <li><a href="#" class="active">Pood</a></li>
     </ul>
   </nav>
 </header>
@@ -23,7 +22,7 @@
 <section class="store-section">
 
   <div class="category-filter">
-    <label>Kategooria</label>
+    <label for="categoryFilter">Kategooria</label>
     <select id="categoryFilter">
       <option value="all">Kõik</option>
     </select>
@@ -42,45 +41,12 @@
 <!-- BASKET -->
 <div id="basket-panel">
   <div id="basket-header">
-    <h3>Ostukorv</h3>
+    <strong>Ostukorv</strong>
     <button id="closeBasket">✕</button>
   </div>
 
-  <div id="basket-items"></div>
-
-  <div id="paymentBox" style="display:none">
-    <iframe id="paymentIframe" width="100%" height="520" frameborder="0"></iframe>
-
-    <p class="disclaimer">
-      Palun saatke õige summa (+ saatmiskulu). Valesid summasid ei tagastata.
-    </p>
-
-    <input id="orderIdInput" placeholder="NOWPayments Order ID">
-    <button id="paidBtn" class="primary-btn">Maksin ära</button>
-  </div>
-</div>
-
-<!-- SETTINGS -->
-<div class="modal" id="settingsModal">
-  <div class="modal-content">
-    <h3>Seaded</h3>
-
-    <label>Pakiautomaat</label>
-    <select id="shippingSelect">
-      <option value="Omniva">Omniva</option>
-      <option value="DPD">DPD</option>
-    </select>
-
-    <button class="btn" id="closeSettings">Sulge</button>
-  </div>
-</div>
-
-<!-- ORDERS -->
-<div class="modal" id="ordersModal">
-  <div class="modal-content">
-    <h3>Minu tellimused</h3>
-    <div id="ordersList"></div>
-    <button class="btn" id="closeOrders">Sulge</button>
+  <div id="basket-items">
+    <p>Ostukorv on tühi</p>
   </div>
 </div>
 
