@@ -130,6 +130,7 @@ button:disabled {
   transition:right .3s ease;
   z-index:1100;
   padding:14px;
+  overflow-y: auto;
 }
 
 #basket-panel.open {
