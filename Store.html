@@ -1,35 +1,30 @@
 <!DOCTYPE html>
 <html lang="et">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Prebuiltid | Pood</title>
+  <meta charset="UTF-8">
+  <title>Prebuiltid Store</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="store.css">
 </head>
 <body>
 
 <header id="header">
-  <div class="header-left">
-    <img src="Images/Prebuiltid.png" id="HIcon">
-    <h1 id="HH1">Prebuiltid</h1>
-  </div>
+  <img id="HIcon" src="logo.png">
+  <h1 id="HH1">Prebuiltid</h1>
 
   <nav>
     <ul>
-      <li><a href="index.html">Kodu</a></li>
-      <li><a class="active">Pood</a></li>
-      <li><a href="#" id="settingsBtn">Seaded</a></li>
-      <li><a href="login.html" id="accountLink">Logi sisse</a></li>
-      <li><a href="#" id="logoutBtn" style="display:none">Logi välja</a></li>
+      <li><a href="#" id="openSettings">Seaded</a></li>
+      <li><a href="#" id="openOrders">Tellimused</a></li>
     </ul>
   </nav>
 </header>
 
 <section class="store-section">
-  <h2>Meie pood</h2>
 
   <div class="category-filter">
-    <select id="categorySelect">
+    <label>Kategooria</label>
+    <select id="categoryFilter">
       <option value="all">Kõik</option>
     </select>
 
@@ -39,39 +34,53 @@
   <div id="shopgrid"></div>
 </section>
 
-<!-- CART BUTTON -->
+<!-- CART ICON -->
 <div id="cart-icon">
   🛒 <span id="cart-count">0</span>
 </div>
 
 <!-- BASKET -->
-<div id="basket-panel" aria-hidden="true">
+<div id="basket-panel">
   <div id="basket-header">
     <h3>Ostukorv</h3>
-    <button id="close-basket">✖</button>
+    <button id="closeBasket">✕</button>
   </div>
 
   <div id="basket-items"></div>
 
-  <div id="basket-footer">
-    <strong>Kokku: <span id="basket-total">0€</span></strong>
+  <div id="paymentBox" style="display:none">
+    <iframe id="paymentIframe" width="100%" height="520" frameborder="0"></iframe>
+
+    <p class="disclaimer">
+      Palun saatke õige summa (+ saatmiskulu). Valesid summasid ei tagastata.
+    </p>
+
+    <input id="orderIdInput" placeholder="NOWPayments Order ID">
+    <button id="paidBtn" class="primary-btn">Maksin ära</button>
   </div>
 </div>
 
 <!-- SETTINGS -->
-<div id="settings-modal" class="modal">
+<div class="modal" id="settingsModal">
   <div class="modal-content">
     <h3>Seaded</h3>
 
-    <p>Email: <span id="settings-email"></span></p>
+    <label>Pakiautomaat</label>
+    <select id="shippingSelect">
+      <option value="Omniva">Omniva</option>
+      <option value="DPD">DPD</option>
+    </select>
 
-    <input id="settings-address" placeholder="Aadress">
-    <input id="settings-dpd" placeholder="DPD pakiautomaat">
+    <button class="btn" id="closeSettings">Sulge</button>
+  </div>
+</div>
 
-    <div class="modal-actions">
-      <button id="save-settings">Salvesta</button>
-      <button id="close-settings">Sulge</button>
-    </div>
+<!-- ORDERS -->
+<div class="modal" id="ordersModal">
+  <div class="modal-content">
+    <h3>Minu tellimused</h3>
+    <div id="ordersList"></div>
+    <button class="btn" id="closeOrders">Sulge</button>
   </div>
 </div>
 
