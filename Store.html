@@ -8,42 +8,62 @@
 </head>
 <body>
 
-<header class="store-header">
-  <h1>Prebuiltid</h1>
+<!-- HEADER -->
+<header id="header">
+  <img id="HIcon" src="logo.png" alt="Prebuiltid">
+  <h1 id="HH1">Prebuiltid</h1>
 
-  <div class="controls">
-    <input id="searchInput" placeholder="Otsi toodet…">
-    <select id="categorySelect">
-      <option value="all">Kõik kategooriad</option>
-    </select>
-    <select id="sortSelect">
-      <option value="default">Sorteeri</option>
-      <option value="price-asc">Hind ↑</option>
-      <option value="price-desc">Hind ↓</option>
-    </select>
-  </div>
-
-  <div id="cart-icon">🛒 <span id="cart-count">0</span></div>
+  <nav>
+    <ul>
+      <li><a href="#" class="active">Pood</a></li>
+      <li><a href="#" id="settingsBtn">Seaded</a></li>
+      <li><a href="#" id="ordersBtn">Tellimused</a></li>
+      <li><a href="#" id="loginStatus">Logimata</a></li>
+    </ul>
+  </nav>
 </header>
 
-<main>
-  <div id="shopgrid" class="product-grid"></div>
-</main>
+<!-- STORE -->
+<section class="store-section">
 
-<!-- BASKET -->
-<div id="basket-panel" class="basket">
-  <div class="basket-header">
-    <h2>Ostukorv</h2>
-    <button id="close-basket">✕</button>
+  <!-- FILTER BAR (structure only, your JS plugs in) -->
+  <div class="category-filter">
+    <label>Kategooria:</label>
+    <select id="categoryFilter">
+      <option value="all">Kõik</option>
+    </select>
+
+    <input id="searchInput" placeholder="Otsi toodet...">
   </div>
 
-  <div id="basket-items"></div>
+  <!-- PRODUCT GRID -->
+  <div id="shopgrid">
+    <!-- products rendered by JS -->
+  </div>
 
-  <div class="basket-footer">
-    <strong>Kokku: <span id="basket-total">0 €</span></strong>
-    <button id="clear-cart-btn">Tühjenda</button>
+</section>
+
+<!-- CART ICON -->
+<div id="cart-icon">
+  🛒 <span id="cart-count">0</span>
+</div>
+
+<!-- BASKET PANEL -->
+<div id="basket-panel">
+  <div id="basket-header">
+    <h3>Ostukorv</h3>
+    <button id="closeBasket">✕</button>
+  </div>
+
+  <div id="basket-items">
+    <!-- basket items -->
   </div>
 </div>
+
+<!-- FOOTER -->
+<footer id="footer">
+  © Prebuiltid
+</footer>
 
 <script type="module" src="store.js"></script>
 </body>
