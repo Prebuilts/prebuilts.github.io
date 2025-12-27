@@ -1,129 +1,103 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
-  getFirestore, collection, onSnapshot, doc, getDoc, setDoc
+  getFirestore, collection, onSnapshot,
+  addDoc, query, where, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-import {
-  getAuth, onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-/* FIREBASE */
-const app = initializeApp({
+const firebaseConfig = {
   apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
   authDomain: "prebuiltid-website.firebaseapp.com",
   projectId: "prebuiltid-website"
-});
+};
 
+const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-/* DOM */
+let products = [];
+let cart = [];
+
 const grid = document.getElementById("shopgrid");
-const cartIcon = document.getElementById("cart-icon");
 const basket = document.getElementById("basket-panel");
-const closeBasket = document.getElementById("close-basket");
 const basketItems = document.getElementById("basket-items");
-const basketTotal = document.getElementById("basket-total");
 const cartCount = document.getElementById("cart-count");
 
-/* STATE */
-let products = [];
-let cart = JSON.parse(localStorage.getItem("cart") || "[]");
-
-/* CART */
-function saveCart() {
-  localStorage.setItem("cart", JSON.stringify(cart));
-}
-
-function renderCart() {
-  basketItems.innerHTML = "";
-  cartCount.innerText = cart.length;
-
-  if (!cart.length) {
-    basketTotal.innerText = "0€";
-    return;
-  }
-
-  const p = cart[0];
-  basketItems.innerHTML = `
-    <div class="basket-item">
-      <h4>${p.name}</h4>
-      <div class="payment-embed">${p.paymentButton}</div>
-      <button id="removeItem">Eemalda</button>
-    </div>
-  `;
-
-  document.getElementById("removeItem").onclick = () => {
-    cart = [];
-    saveCart();
-    renderCart();
-  };
-
-  basketTotal.innerText = p.price + "€";
-}
-
 /* PRODUCTS */
-function renderProducts(list) {
+onSnapshot(collection(db,"products"), snap => {
+  products = [];
+  snap.forEach(d => products.push({id:d.id,...d.data()}));
+  renderProducts();
+});
+
+function renderProducts() {
   grid.innerHTML = "";
-  list.forEach(p => {
+  products.forEach(p => {
+    const out = p.quantity <= 0;
     const div = document.createElement("div");
     div.className = "productbox";
     div.innerHTML = `
       <img src="${p.image}">
       <h3>${p.name}</h3>
-      <strong>${p.price}€</strong>
-      <p>Laos: ${p.quantity}</p>
-      <button ${p.quantity <= 0 ? "disabled" : ""}>Lisa korvi</button>
+      <p>${p.price} €</p>
+      <div class="stock">${out ? "Otsas" : "Laos: "+p.quantity}</div>
+      <button ${out ? "disabled":""}>Lisa korvi</button>
     `;
-
-    div.querySelector("button").onclick = () => {
-      if (cart.length) return alert("Ainult üks toode korraga");
-      cart = [p];
-      saveCart();
-      renderCart();
-      basket.classList.add("open");
-    };
-
+    div.querySelector("button").onclick = () => addToCart(p);
     grid.appendChild(div);
   });
 }
 
-/* FIRESTORE */
-onSnapshot(collection(db, "products"), snap => {
-  products = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-  renderProducts(products);
-});
+/* CART */
+function addToCart(p) {
+  cart = [p];
+  cartCount.innerText = "1";
+  basketItems.innerHTML = `<b>${p.name}</b><br>${p.price}€`;
+  document.getElementById("paymentIframe").src = p.paymentButton;
+  document.getElementById("paymentBox").style.display = "block";
+  openBasket();
+}
 
-/* UI */
-cartIcon.onclick = () => basket.classList.add("open");
-closeBasket.onclick = () => basket.classList.remove("open");
+function openBasket(){ basket.classList.add("open"); }
+function closeBasket(){ basket.classList.remove("open"); }
 
-/* SETTINGS */
-const settingsBtn = document.getElementById("settingsBtn");
-const settingsModal = document.getElementById("settings-modal");
-const closeSettings = document.getElementById("close-settings");
-const saveSettings = document.getElementById("save-settings");
+document.getElementById("cart-icon").onclick = openBasket;
+document.getElementById("closeBasket").onclick = closeBasket;
 
-settingsBtn.onclick = () => settingsModal.classList.add("show");
-closeSettings.onclick = () => settingsModal.classList.remove("show");
+/* PAYMENT CONFIRM */
+document.getElementById("paidBtn").onclick = async () => {
+  const orderId = document.getElementById("orderIdInput").value;
+  if(!orderId) return alert("Sisesta Order ID");
 
-onAuthStateChanged(auth, async user => {
-  if (!user) return;
-  document.getElementById("settings-email").innerText = user.email;
-  const snap = await getDoc(doc(db, "users", user.uid));
-  if (snap.exists()) {
-    settingsAddress.value = snap.data().address || "";
-    settingsDpd.value = snap.data().dpd || "";
-  }
-});
+  await addDoc(collection(db,"orders"),{
+    userId: auth.currentUser.uid,
+    product: cart[0].name,
+    orderId,
+    status:"paid",
+    createdAt: serverTimestamp()
+  });
 
-saveSettings.onclick = async () => {
-  const user = auth.currentUser;
-  if (!user) return;
-  await setDoc(doc(db, "users", user.uid), {
-    address: settingsAddress.value,
-    dpd: settingsDpd.value
-  }, { merge: true });
-  alert("Salvestatud");
+  alert("Tellimus saadetud!");
+  cart = [];
+  closeBasket();
 };
 
-renderCart();
+/* SETTINGS & ORDERS */
+document.getElementById("openSettings").onclick=()=>document.getElementById("settingsModal").classList.add("show");
+document.getElementById("closeSettings").onclick=()=>document.getElementById("settingsModal").classList.remove("show");
+
+document.getElementById("openOrders").onclick=()=>document.getElementById("ordersModal").classList.add("show");
+document.getElementById("closeOrders").onclick=()=>document.getElementById("ordersModal").classList.remove("show");
+
+onAuthStateChanged(auth,user=>{
+  if(!user) return;
+  const q = query(collection(db,"orders"), where("userId","==",user.uid));
+  onSnapshot(q,snap=>{
+    const list=document.getElementById("ordersList");
+    list.innerHTML="";
+    snap.forEach(d=>{
+      const o=d.data();
+      list.innerHTML+=`<div>${o.product} – ${o.status}</div>`;
+    });
+  });
+});
