@@ -9,8 +9,11 @@
 <body>
 
 <header id="header">
-  <img src="Images/Prebuiltid.png" id="HIcon">
-  <h1 id="HH1">Prebuiltid</h1>
+  <div class="header-left">
+    <img src="Images/Prebuiltid.png" id="HIcon">
+    <h1 id="HH1">Prebuiltid</h1>
+  </div>
+
   <nav>
     <ul>
       <li><a href="index.html">Kodu</a></li>
@@ -36,10 +39,13 @@
   <div id="shopgrid"></div>
 </section>
 
-<!-- CART -->
-<div id="cart-icon">🛒 <span id="cart-count">0</span></div>
+<!-- CART BUTTON -->
+<div id="cart-icon">
+  🛒 <span id="cart-count">0</span>
+</div>
 
-<div id="basket-panel">
+<!-- BASKET -->
+<div id="basket-panel" aria-hidden="true">
   <div id="basket-header">
     <h3>Ostukorv</h3>
     <button id="close-basket">✖</button>
@@ -56,6 +62,7 @@
 <div id="settings-modal" class="modal">
   <div class="modal-content">
     <h3>Seaded</h3>
+
     <p>Email: <span id="settings-email"></span></p>
 
     <input id="settings-address" placeholder="Aadress">
