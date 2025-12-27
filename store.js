@@ -1,15 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  onSnapshot
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-import {
-  getAuth,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-/* ================= FIREBASE ================= */
+/* FIREBASE */
 const firebaseConfig = {
   apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
   authDomain: "prebuiltid-website.firebaseapp.com",
@@ -23,106 +16,77 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-/* ================= DOM ================= */
+/* DOM */
 const shopgrid = document.getElementById("shopgrid");
 const cartIcon = document.getElementById("cart-icon");
 const cartCount = document.getElementById("cart-count");
 const basketPanel = document.getElementById("basket-panel");
-const closeBasketBtn = document.getElementById("closeBasket");
-const basketItemsDiv = document.getElementById("basket-items");
-
+const basketItems = document.getElementById("basket-items");
 const categoryFilter = document.getElementById("categoryFilter");
 const searchInput = document.getElementById("searchInput");
 
-const loginStatus = document.getElementById("loginStatus");
 const settingsBtn = document.getElementById("settingsBtn");
 const ordersBtn = document.getElementById("ordersBtn");
 
-/* ================= STATE ================= */
+/* MODALS */
+const settingsModal = document.getElementById("settings-modal");
+const ordersModal = document.getElementById("orders-modal");
+const closeSettings = document.getElementById("close-settings");
+const closeOrders = document.getElementById("close-orders");
+
+const settingsEmail = document.getElementById("settings-email");
+
+/* STATE */
 let allProducts = [];
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-/* ================= AUTH ================= */
+/* AUTH */
 onAuthStateChanged(auth, user => {
-  if (user) {
-    loginStatus.innerText = user.email;
-  } else {
-    loginStatus.innerText = "Logimata";
-  }
+  if (user) settingsEmail.innerText = user.email;
 });
 
-/* ================= LOAD PRODUCTS ================= */
+/* PRODUCTS */
 onSnapshot(collection(db, "products"), snap => {
-  allProducts = [];
-  snap.forEach(doc => {
-    allProducts.push({ id: doc.id, ...doc.data() });
-  });
-  populateCategoryFilter();
+  allProducts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
   renderProducts();
 });
 
-/* ================= RENDER PRODUCTS ================= */
 function renderProducts() {
   shopgrid.innerHTML = "";
-
-  const category = categoryFilter.value;
-  const search = searchInput.value.toLowerCase();
+  const cat = categoryFilter.value;
+  const q = searchInput.value.toLowerCase();
 
   allProducts
     .filter(p =>
-      (category === "all" || p.category === category) &&
-      p.name.toLowerCase().includes(search)
+      (cat === "all" || p.category === cat) &&
+      p.name.toLowerCase().includes(q)
     )
     .forEach(p => {
-      const box = document.createElement("div");
-      box.className = "productbox";
+      const out = p.quantity <= 0;
 
-      const outOfStock = p.quantity <= 0;
-
-      box.innerHTML = `
-        <img src="${p.image}" alt="">
+      const div = document.createElement("div");
+      div.className = "productbox";
+      div.innerHTML = `
+        <img src="${p.image}">
         <h3>${p.name}</h3>
-        <p>${p.description || ""}</p>
-        <p><strong>${p.price} €</strong></p>
+        <p>${p.price} €</p>
         <p>Laos: ${p.quantity}</p>
-        <button ${outOfStock ? "disabled" : ""}>
-          ${outOfStock ? "Otsas" : "Lisa korvi"}
+        <button ${out ? "disabled" : ""}>
+          ${out ? "Otsas" : "Lisa korvi"}
         </button>
       `;
 
-      if (!outOfStock) {
-        box.querySelector("button").onclick = () => addToCart(p);
-      }
-
-      shopgrid.appendChild(box);
+      if (!out) div.querySelector("button").onclick = () => addToCart(p);
+      shopgrid.appendChild(div);
     });
-}
-
-/* ================= CATEGORY FILTER ================= */
-function populateCategoryFilter() {
-  const cats = ["all", ...new Set(allProducts.map(p => p.category).filter(Boolean))];
-  categoryFilter.innerHTML = "";
-  cats.forEach(c => {
-    const opt = document.createElement("option");
-    opt.value = c;
-    opt.innerText = c === "all" ? "Kõik" : c;
-    categoryFilter.appendChild(opt);
-  });
 }
 
 categoryFilter.onchange = renderProducts;
 searchInput.oninput = renderProducts;
 
-/* ================= CART ================= */
-function addToCart(product) {
-  if (cart.find(i => i.id === product.id)) return;
-
-  cart.push(product);
-  saveCart();
-}
-
-function removeFromCart(id) {
-  cart = cart.filter(i => i.id !== id);
+/* CART */
+function addToCart(p) {
+  cart = [p]; // ONLY ONE PRODUCT
   saveCart();
 }
 
@@ -132,34 +96,49 @@ function saveCart() {
 }
 
 function renderCart() {
-  basketItemsDiv.innerHTML = "";
+  basketItems.innerHTML = "";
   cartCount.innerText = cart.length;
 
-  cart.forEach(item => {
-    const div = document.createElement("div");
-    div.className = "basket-item";
+  if (!cart.length) return;
 
-    div.innerHTML = `
-      <img src="${item.image}">
-      <div style="flex:1">
-        <strong>${item.name}</strong>
-        <div>${item.price} €</div>
-      </div>
-      <button>X</button>
-    `;
+  const p = cart[0];
 
-    div.querySelector("button").onclick = () => removeFromCart(item.id);
-    basketItemsDiv.appendChild(div);
-  });
+  basketItems.innerHTML = `
+    <h4>${p.name}</h4>
+
+    <iframe
+      src="${p.paymentButton}"
+      width="410"
+      height="696"
+      frameborder="0"
+      scrolling="no">
+    </iframe>
+
+    <p style="margin-top:10px;font-size:13px;">
+      Palun saatke õige summa vastavalt hetke hinnale.
+    </p>
+
+    <input id="order-id" placeholder="NOWPayments Order ID">
+
+    <button id="paid-btn">Maksin ära</button>
+  `;
+
+  document.getElementById("paid-btn").onclick = () => {
+    if (!confirm("Oled sa kindel?")) return;
+    alert("Tellimus edastatud (admin näeb seda)");
+    cart = [];
+    saveCart();
+  };
 }
 
-/* ================= BASKET TOGGLE ================= */
+/* BASKET TOGGLE */
 cartIcon.onclick = () => basketPanel.classList.add("open");
-closeBasketBtn.onclick = () => basketPanel.classList.remove("open");
 
-/* ================= SETTINGS / ORDERS (PLACEHOLDERS) ================= */
-settingsBtn.onclick = () => alert("Settings menu opens (JS works)");
-ordersBtn.onclick = () => alert("Orders menu opens (JS works)");
+/* SETTINGS / ORDERS */
+settingsBtn.onclick = () => settingsModal.classList.add("show");
+ordersBtn.onclick = () => ordersModal.classList.add("show");
+closeSettings.onclick = () => settingsModal.classList.remove("show");
+closeOrders.onclick = () => ordersModal.classList.remove("show");
 
-/* ================= INIT ================= */
+/* INIT */
 renderCart();
