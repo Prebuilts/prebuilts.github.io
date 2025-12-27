@@ -114,3 +114,41 @@ function renderProduct(id, p) {
 
   productList.appendChild(div);
 }
+import {
+  collection,
+  onSnapshot,
+  updateDoc,
+  doc
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+const ordersCol = collection(db, "orders");
+const ordersBox = document.getElementById("ordersBox");
+
+onSnapshot(ordersCol, snap => {
+  ordersBox.innerHTML = "";
+  snap.forEach(d => {
+    const o = d.data();
+
+    const div = document.createElement("div");
+    div.className = "product-item";
+
+    div.innerHTML = `
+      <div class="fields">
+        <strong>${o.productName}</strong>
+        <div>${o.userEmail}</div>
+        <div>${o.shipping}</div>
+        <div>Status: ${o.status}</div>
+        <button class="btn">Completed</button>
+        <button class="btn danger">Cancel</button>
+      </div>
+    `;
+
+    div.querySelector(".btn").onclick = () =>
+      updateDoc(doc(db, "orders", d.id), { status: "completed" });
+
+    div.querySelector(".danger").onclick = () =>
+      updateDoc(doc(db, "orders", d.id), { status: "cancelled" });
+
+    ordersBox.appendChild(div);
+  });
+});
