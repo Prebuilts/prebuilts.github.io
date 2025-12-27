@@ -189,3 +189,24 @@ button:hover {
   margin: 30px;
   border-radius: 10px;
 }
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 18px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 420px;
+}
