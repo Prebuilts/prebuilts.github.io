@@ -15,6 +15,7 @@
   <nav>
     <ul>
       <li><a href="#" class="active">Pood</a></li>
+      <li><a href="#" id="settingsBtn">Seaded</a></li>
     </ul>
   </nav>
 </header>
@@ -45,8 +46,37 @@
     <button id="closeBasket">✕</button>
   </div>
 
-  <div id="basket-items">
-    <p>Ostukorv on tühi</p>
+  <div id="basket-items"></div>
+
+  <!-- NOWPAYMENTS IFRAME -->
+  <div id="paymentBox" style="display:none;margin-top:12px;">
+    <iframe
+      id="nowIframe"
+      width="100%"
+      height="520"
+      frameborder="0"
+      scrolling="no">
+    </iframe>
+
+    <button id="paidBtn" style="margin-top:10px;width:100%;">
+      Maksin ära
+    </button>
+  </div>
+</div>
+
+<!-- SETTINGS POPUP -->
+<div id="settingsModal" class="modal">
+  <div class="modal-content">
+    <h3>Seaded</h3>
+
+    <label>Email</label>
+    <input id="userEmail" placeholder="email@example.com">
+
+    <label>Pakiautomaat / tarneaadress</label>
+    <textarea id="userShipping" placeholder="DPD / Omniva / aadress"></textarea>
+
+    <button id="saveSettings">Salvesta</button>
+    <button id="closeSettings" style="margin-top:6px;">Sulge</button>
   </div>
 </div>
 
