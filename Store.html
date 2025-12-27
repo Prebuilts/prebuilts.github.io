@@ -6,6 +6,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="store.css">
 </head>
+  <!-- SETTINGS MODAL -->
+<div id="settings-modal" class="modal">
+  <div class="modal-content">
+    <h3>Seaded</h3>
+    <p>Email: <span id="settings-email">—</span></p>
+
+    <label>Aadress</label>
+    <input id="settings-address" placeholder="Tänav, linn">
+
+    <label>DPD pakiautomaat</label>
+    <input id="settings-dpd" placeholder="Pakiautomaadi nimi">
+
+    <div style="margin-top:12px; text-align:right;">
+      <button id="save-settings">Salvesta</button>
+      <button id="close-settings">Sulge</button>
+    </div>
+  </div>
+</div>
+
+<!-- ORDERS MODAL -->
+<div id="orders-modal" class="modal">
+  <div class="modal-content">
+    <h3>Minu tellimused</h3>
+    <div id="orders-list">Tellimusi pole</div>
+
+    <div style="margin-top:12px; text-align:right;">
+      <button id="close-orders">Sulge</button>
+    </div>
+  </div>
+</div>
+
 <body>
 
 <!-- HEADER -->
