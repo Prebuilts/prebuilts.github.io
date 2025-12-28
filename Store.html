@@ -7,41 +7,43 @@
 </head>
 <body>
 
-<header class="header">
-  <h1>Prebuiltid Store</h1>
-  <nav>
-    <button id="openSettings">Settings</button>
-    <button id="openOrders">Orders</button>
-    <button id="openCart">Cart</button>
-  </nav>
-</header>
+<header id="header"></header>
 
-<main>
-  <div class="filters">
-    <select id="categoryFilter">
-      <option value="">All</option>
-    </select>
-  </div>
-
-  <div id="productGrid" class="grid"></div>
+<main id="store">
+  <div id="filters"></div>
+  <div id="productGrid"></div>
 </main>
 
 <!-- CART -->
-<div id="cartOverlay" class="overlay hidden">
-  <div class="cart">
-    <button id="closeCart">✕</button>
+<div id="cartOverlay" class="hidden">
+  <div id="cartBox">
+    <button id="cartClose">✕</button>
 
     <div id="cartProduct"></div>
 
-    <label>Shipping</label>
-    <select id="shippingSelect"></select>
-
-    <label>NOWPayments Order ID</label>
-    <input id="orderIdInput" placeholder="Enter order id">
+    <div id="shippingBox"></div>
 
     <div id="paymentIframeBox"></div>
 
-    <button id="paidBtn" class="btn">Maksin ära</button>
+    <input id="orderIdInput" placeholder="NOWPayments order ID">
+
+    <button id="paidBtn">Maksin ära</button>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div id="settingsOverlay" class="hidden">
+  <div id="settingsBox">
+    <button id="settingsClose">✕</button>
+    <div id="settingsContent"></div>
+  </div>
+</div>
+
+<!-- ORDERS -->
+<div id="ordersOverlay" class="hidden">
+  <div id="ordersBox">
+    <button id="ordersClose">✕</button>
+    <div id="ordersContent"></div>
   </div>
 </div>
 
