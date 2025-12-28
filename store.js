@@ -1,13 +1,14 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
-  getFirestore, collection, getDocs, addDoc, serverTimestamp
+  getFirestore, collection, getDocs, addDoc, query, where, onSnapshot, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 import {
   getAuth, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
+/* FIREBASE */
 const firebaseConfig = {
-  apiKey: "AIzaSyBkbXzURYKixzURY",
+  apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
   authDomain: "prebuiltid-website.firebaseapp.com",
   projectId: "prebuiltid-website"
 };
@@ -21,27 +22,30 @@ const grid = document.getElementById("productGrid");
 const cartOverlay = document.getElementById("cartOverlay");
 const cartProduct = document.getElementById("cartProduct");
 const iframeBox = document.getElementById("paymentIframeBox");
-
-const openCart = document.getElementById("openCart");
-const closeCart = document.getElementById("closeCart");
 const paidBtn = document.getElementById("paidBtn");
 const orderIdInput = document.getElementById("orderIdInput");
+
+const settingsOverlay = document.getElementById("settingsOverlay");
+const ordersOverlay = document.getElementById("ordersOverlay");
 
 let currentUser = null;
 let selectedProduct = null;
 
 /* AUTH */
-onAuthStateChanged(auth, u => currentUser = u);
+onAuthStateChanged(auth, user => {
+  currentUser = user;
+  loadOrders();
+});
 
-/* LOAD PRODUCTS */
+/* PRODUCTS */
 const snap = await getDocs(collection(db, "products"));
 snap.forEach(d => renderProduct(d.id, d.data()));
 
 function renderProduct(id, p) {
-  const div = document.createElement("div");
-  div.className = "product";
+  const el = document.createElement("div");
+  el.className = "product";
 
-  div.innerHTML = `
+  el.innerHTML = `
     <img src="${p.image}">
     <h3>${p.name}</h3>
     <div>${p.price} €</div>
@@ -49,19 +53,16 @@ function renderProduct(id, p) {
     <button ${p.quantity <= 0 ? "disabled" : ""}>Add to cart</button>
   `;
 
-  div.querySelector("button").onclick = () => {
+  el.querySelector("button").onclick = () => {
     selectedProduct = { id, ...p };
-    openCartView();
+    openCart();
   };
 
-  grid.appendChild(div);
+  grid.appendChild(el);
 }
 
-/* CART OPEN */
-openCart.onclick = openCartView;
-closeCart.onclick = () => cartOverlay.classList.add("hidden");
-
-function openCartView() {
+/* CART */
+function openCart() {
   if (!selectedProduct) return;
 
   cartProduct.innerHTML = `
@@ -69,7 +70,6 @@ function openCartView() {
     <div>${selectedProduct.price} €</div>
   `;
 
-  /* 🔑 IFRAME LOGIC */
   iframeBox.innerHTML = "";
   if (selectedProduct.paymentButton) {
     iframeBox.innerHTML = selectedProduct.paymentButton;
@@ -78,9 +78,12 @@ function openCartView() {
   cartOverlay.classList.remove("hidden");
 }
 
-/* PAID */
+document.getElementById("cartClose").onclick =
+  () => cartOverlay.classList.add("hidden");
+
+/* MAKSIN ÄRA */
 paidBtn.onclick = async () => {
-  if (!currentUser || !selectedProduct) return alert("Login required");
+  if (!currentUser) return alert("Login required");
   if (!orderIdInput.value.trim()) return alert("Enter order ID");
 
   await addDoc(collection(db, "orders"), {
@@ -94,6 +97,37 @@ paidBtn.onclick = async () => {
     createdAt: serverTimestamp()
   });
 
-  alert("Order submitted ✔");
+  alert("Order submitted");
   cartOverlay.classList.add("hidden");
 };
+
+/* ORDERS */
+function loadOrders() {
+  if (!currentUser) return;
+
+  const q = query(
+    collection(db, "orders"),
+    where("userId", "==", currentUser.uid)
+  );
+
+  onSnapshot(q, snap => {
+    const box = document.getElementById("ordersContent");
+    box.innerHTML = "";
+    snap.forEach(d => {
+      const o = d.data();
+      box.innerHTML += `
+        <div>
+          <strong>${o.productName}</strong>
+          <div>Status: ${o.status}</div>
+        </div>
+      `;
+    });
+  });
+}
+
+/* SETTINGS / ORDERS OPEN CLOSE */
+document.getElementById("settingsClose").onclick =
+  () => settingsOverlay.classList.add("hidden");
+
+document.getElementById("ordersClose").onclick =
+  () => ordersOverlay.classList.add("hidden");
