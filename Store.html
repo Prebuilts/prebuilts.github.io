@@ -1,82 +1,47 @@
 <!DOCTYPE html>
 <html lang="et">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Prebuiltid Store</title>
+  <meta charset="UTF-8">
+  <title>Store</title>
   <link rel="stylesheet" href="store.css">
 </head>
 <body>
 
-<header id="header">
-  <img id="HIcon" src="logo.png" alt="Logo">
-  <h1 id="HH1">Prebuiltid</h1>
-
+<header class="header">
+  <h1>Prebuiltid Store</h1>
   <nav>
-    <ul>
-      <li><a href="#" class="active">Pood</a></li>
-      <li><a href="#" id="settingsBtn">Seaded</a></li>
-    </ul>
+    <button id="openSettings">Settings</button>
+    <button id="openOrders">Orders</button>
+    <button id="openCart">Cart</button>
   </nav>
 </header>
 
-<section class="store-section">
-
-  <div class="category-filter">
-    <label for="categoryFilter">Kategooria</label>
+<main>
+  <div class="filters">
     <select id="categoryFilter">
-      <option value="all">Kõik</option>
+      <option value="">All</option>
     </select>
-
-    <input id="searchInput" placeholder="Otsi toodet">
   </div>
 
-  <div id="shopgrid"></div>
-</section>
+  <div id="productGrid" class="grid"></div>
+</main>
 
-<!-- CART ICON -->
-<div id="cart-icon">
-  🛒 <span id="cart-count">0</span>
-</div>
+<!-- CART -->
+<div id="cartOverlay" class="overlay hidden">
+  <div class="cart">
+    <button id="closeCart">✕</button>
 
-<!-- BASKET -->
-<div id="basket-panel" scrolling="yes">
-  <div id="basket-header">
-    <strong>Ostukorv</strong>
-    <button id="closeBasket">✕</button>
-  </div>
+    <div id="cartProduct"></div>
 
-  <div id="basket-items"></div>
+    <label>Shipping</label>
+    <select id="shippingSelect"></select>
 
-  <!-- NOWPAYMENTS IFRAME -->
-  <div id="paymentBox" style="display:none;margin-top:12px;">
-    <iframe
-      id="nowIframe"
-      width="100%"
-      height="620"
-      frameborder="0"
-      scrolling="yes">
-    </iframe>
+    <label>NOWPayments Order ID</label>
+    <input id="orderIdInput" placeholder="Enter order id">
 
-    <button id="paidBtn" style="margin-top:10px;width:100%;">
-      Maksin ära
-    </button>
-  </div>
-</div>
+    <div id="paymentIframeBox"></div>
 
-<!-- SETTINGS POPUP -->
-<div id="settingsModal" class="modal">
-  <div class="modal-content">
-    <h3>Seaded</h3>
-
-    <label>Email</label>
-    <input id="userEmail" placeholder="email@example.com">
-
-    <label>Pakiautomaat / tarneaadress</label>
-    <textarea id="userShipping" placeholder="DPD / Omniva / aadress"></textarea>
-
-    <button id="saveSettings">Salvesta</button>
-    <button id="closeSettings" style="margin-top:6px;">Sulge</button>
+    <button id="paidBtn" class="btn">Maksin ära</button>
   </div>
 </div>
 
