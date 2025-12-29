@@ -1,155 +1,169 @@
+// admin.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
-  getFirestore, collection, addDoc, deleteDoc,
-  updateDoc, doc, onSnapshot, serverTimestamp
+  getFirestore, collection, addDoc, deleteDoc, updateDoc, doc, onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-import {
-  getAuth, onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBkbXzURYKixzURYKixzURYKixzURY",
+  apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
   authDomain: "prebuiltid-website.firebaseapp.com",
-  projectId: "prebuiltid-website"
+  projectId: "prebuiltid-website",
+  storageBucket: "prebuiltid-website.firebasestorage.app",
+  messagingSenderId: "854871585546",
+  appId: "1:854871585546:web:568400979292a0c31740f3",
+  measurementId: "G-YS1Q1904H6"
 };
 
-const ADMIN_UID = "zL2LJWPAiFWFpcdFFh3E7KfDrxi2";
+const ADMIN_EMAILS = [
+  "prebuiltid@gmail.com",
+  "info@komisjonikaubamaja.ee"
+];
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
+/* DOM */
 const statusDiv = document.getElementById("status");
 const productList = document.getElementById("productList");
-const ordersBox = document.getElementById("ordersBox");
 
-/* ---------- AUTH ---------- */
+const nameInput = document.getElementById("name");
+const priceInput = document.getElementById("price");
+const descInput = document.getElementById("description");
+const imageInput = document.getElementById("image");
+const categoryInput = document.getElementById("category");
+const linkInput = document.getElementById("link");
+const quantityInput = document.getElementById("quantity");
+const paymentButtonInput = document.getElementById("paymentButton");
+const addProductBtn = document.getElementById("addProduct");
+
+/* Auth check */
 onAuthStateChanged(auth, user => {
   if (!user) {
-    statusDiv.innerText = "Please log in";
-    setTimeout(() => location.href = "login.html", 800);
+    statusDiv.innerText = "You must log in.";
+    setTimeout(()=> window.location.href = "login.html", 700);
     return;
   }
-
-  if (user.uid !== ADMIN_UID) {
-    statusDiv.innerText = "Access denied";
-    setTimeout(() => location.href = "index.html", 800);
+  if (!ADMIN_EMAILS.includes(user.email)) {
+    statusDiv.innerText = "Not an admin.";
+    setTimeout(()=> window.location.href = "index.html", 700);
     return;
   }
-
-  statusDiv.innerText = "Admin logged in ✔";
-  loadProducts();
-  loadOrders();
+  statusDiv.innerText = "Logged in as admin: " + user.email;
+  loadProductsRealtime();
 });
 
-/* ---------- ADD PRODUCT ---------- */
-document.getElementById("addProduct").onclick = async () => {
-  await addDoc(collection(db,"products"), {
-    name: name.value,
-    price: Number(price.value),
-    description: description.value,
-    image: image.value,
-    category: category.value,
-    link: link.value,
-    quantity: Number(quantity.value),
-    paymentButton: paymentButton.value,
-    createdAt: serverTimestamp()
-  });
-  alert("Product added ✔");
+/* Add product */
+addProductBtn.onclick = async () => {
+  const newProduct = {
+    name: nameInput.value.trim(),
+    price: Number(priceInput.value) || 0,
+    description: descInput.value.trim(),
+    image: imageInput.value.trim(),
+    category: categoryInput.value.trim(),
+    link: linkInput.value.trim(),
+    quantity: Number(quantityInput.value) || 0,
+    paymentButton: paymentButtonInput.value.trim(),
+    createdAt: new Date()
+  };
+
+  try {
+    await addDoc(collection(db, "products"), newProduct);
+    alert("Product added!");
+    // clear
+    nameInput.value = "";
+    priceInput.value = "";
+    descInput.value = "";
+    imageInput.value = "";
+    categoryInput.value = "";
+    linkInput.value = "";
+    quantityInput.value = "";
+    paymentButtonInput.value = "";
+  } catch (err) {
+    console.error("Add product error:", err);
+    alert("Failed to add product.");
+  }
 };
 
-/* ---------- PRODUCTS ---------- */
-function loadProducts() {
-  onSnapshot(collection(db,"products"), snap => {
+/* Realtime load & render */
+function loadProductsRealtime() {
+  productList.innerHTML = "";
+  const col = collection(db, "products");
+  onSnapshot(col, snap => {
     productList.innerHTML = "";
-    snap.forEach(d => renderProduct(d.id, d.data()));
-  });
-}
+    snap.forEach(item => {
+      const p = item.data();
+      const id = item.id;
 
-function renderProduct(id, p) {
-  const div = document.createElement("div");
-  div.className = "product-item";
-
-  div.innerHTML = `
-    <img src="${p.image || ""}">
-    <input class="name" value="${p.name || ""}">
-    <input class="price" type="number" value="${p.price || 0}">
-    <input class="cat" value="${p.category || ""}">
-    <input class="link" value="${p.link || ""}">
-    <input class="qty" type="number" value="${p.quantity || 0}">
-    <textarea class="desc">${p.description || ""}</textarea>
-    <textarea class="pay">${p.paymentButton || ""}</textarea>
-
-    <div class="actions">
-      <button class="btn save">Save</button>
-      <button class="btn danger delete">Delete</button>
-    </div>
-
-    <div class="preview-area">${p.paymentButton || ""}</div>
-  `;
-
-  div.querySelector(".save").onclick = async () => {
-    await updateDoc(doc(db,"products",id), {
-      name: div.querySelector(".name").value,
-      price: Number(div.querySelector(".price").value),
-      description: div.querySelector(".desc").value,
-      category: div.querySelector(".cat").value,
-      link: div.querySelector(".link").value,
-      quantity: Number(div.querySelector(".qty").value),
-      paymentButton: div.querySelector(".pay").value
-    });
-    alert("Saved ✔");
-  };
-
-  div.querySelector(".delete").onclick = async () => {
-    if (confirm("Delete product?")) {
-      await deleteDoc(doc(db,"products",id));
-    }
-  };
-
-  productList.appendChild(div);
-}
-
-/* ---------- ORDERS ---------- */
-function loadOrders() {
-  onSnapshot(collection(db,"orders"), snap => {
-    ordersBox.innerHTML = "";
-
-    snap.forEach(d => {
-      const o = d.data();
       const div = document.createElement("div");
       div.className = "product-item";
 
       div.innerHTML = `
-        <strong>${o.productName}</strong>
-        <div>${o.userEmail}</div>
-        <div>${o.shipping}</div>
-        <div>Order ID: ${o.nowpaymentsOrderId || "-"}</div>
-
-        <select class="status">
-          <option value="pending">Pending</option>
-          <option value="paid">Paid</option>
-          <option value="completed">Completed</option>
-          <option value="cancelled">Cancelled</option>
-        </select>
-
-        <div class="actions">
-          <button class="btn save">Update</button>
-          <button class="btn danger cancel">Cancel</button>
+        <div>
+          <h3>${escapeHtml(p.name || '')}</h3>
+          ${p.image ? `<img src="${escapeAttr(p.image)}" alt="">` : ''}
+        </div>
+        <div class="fields">
+          <label>Price</label>
+          <input class="edit-price" value="${escapeAttr(p.price || '')}">
+          <label>Image</label>
+          <input class="edit-image" value="${escapeAttr(p.image || '')}">
+          <label>Description</label>
+          <textarea class="edit-description">${escapeHtml(p.description || '')}</textarea>
+          <label>Category</label>
+          <input class="edit-category" value="${escapeAttr(p.category || '')}">
+          <label>Link</label>
+          <input class="edit-link" value="${escapeAttr(p.link || '')}">
+          <label>Quantity</label>
+          <input class="edit-quantity" type="number" value="${escapeAttr(p.quantity || 0)}">
+          <label>NOWPayments button HTML or URL</label>
+          <textarea class="edit-payment">${escapeHtml(p.paymentButton || '')}</textarea>
+          <div style="margin-top:8px;">
+            <button class="update-btn">Update</button>
+            <button class="delete-btn btn danger">Delete</button>
+          </div>
+        </div>
+        <div style="min-width:180px;">
+          <div style="margin-bottom:8px;">Preview:</div>
+          <div class="preview-area">${p.paymentButton ? p.paymentButton : ''}</div>
         </div>
       `;
 
-      div.querySelector(".status").value = o.status || "pending";
+      div.querySelector(".update-btn").onclick = async () => {
+        const updated = {
+          price: Number(div.querySelector(".edit-price").value) || 0,
+          image: div.querySelector(".edit-image").value.trim(),
+          description: div.querySelector(".edit-description").value.trim(),
+          category: div.querySelector(".edit-category").value.trim(),
+          link: div.querySelector(".edit-link").value.trim(),
+          quantity: Number(div.querySelector(".edit-quantity").value) || 0,
+          paymentButton: div.querySelector(".edit-payment").value.trim()
+        };
+        try {
+          await updateDoc(doc(db, "products", id), updated);
+          alert("Product updated!");
+        } catch (err) {
+          console.error("Update error", err);
+          alert("Update failed.");
+        }
+      };
 
-      div.querySelector(".save").onclick = () =>
-        updateDoc(doc(db,"orders",d.id), {
-          status: div.querySelector(".status").value
-        });
+      div.querySelector(".delete-btn").onclick = async () => {
+        if (!confirm("Delete product?")) return;
+        try {
+          await deleteDoc(doc(db, "products", id));
+        } catch (err) {
+          console.error("Delete error", err);
+          alert("Delete failed.");
+        }
+      };
 
-      div.querySelector(".cancel").onclick = () =>
-        updateDoc(doc(db,"orders",d.id), { status:"cancelled" });
-
-      ordersBox.appendChild(div);
+      productList.appendChild(div);
     });
   });
 }
+
+/* helpers */
+function escapeHtml(s=''){ return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function escapeAttr(s=''){ return String(s).replace(/"/g,'&quot;'); }
