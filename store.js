@@ -240,7 +240,7 @@ function renderProducts(products){
       <p>${escapeHtml(product.description||'')}</p>
       <div class="stock">Laos: ${qty}</div>
       <div style="margin-top:10px; display:flex; gap:8px;">
-        <button class="btn view" ${product.link ? '' : 'disabled'}>Vaata lisaks</button>
+        <button class="btn view" ${product.link ? '' : 'disabled'}>Osta kohe (Siis kui toode on otsas)</button>
         <button class="btn add" ${qty <= 0 ? 'disabled' : ''}>Lisa korvi</button>
       </div>
     `;
