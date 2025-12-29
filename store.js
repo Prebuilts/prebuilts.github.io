@@ -215,7 +215,7 @@ confirmCheckoutBtn && confirmCheckoutBtn.addEventListener('click', ()=> {
 
 /* My orders button - keep minimal (depends on your orders collection) */
 myOrdersBtn && myOrdersBtn.addEventListener('click', ()=> {
-  alert("Minu tellimused - funktsioon sõltub orders kogust (pole siin implementeeritud).");
+  alert("Hetkel tellimuste menüü ei tööta. Lisame selle funktsiooni tulevikus!");
 });
 
 /* PRODUCTS: realtime */
