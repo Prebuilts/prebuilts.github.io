@@ -111,11 +111,11 @@ function renderCart(){
         payBox.innerHTML = item.paymentButton;
       } catch(e){
         // fallback: if not HTML, show as link
-        const a = document.createElement('a');
-        a.href = String(item.paymentButton);
-        a.target = '_blank';
-        a.rel = 'noreferrer noopener';
-        a.innerText = 'Maksa (NowPayments)';
+        const button = document.createElement('button');
+        button.href = String(item.paymentButton);
+        button.target = '_blank';
+        button.rel = 'noreferrer noopener';
+        button.innerText = 'Maksa (NowPayments)';
         payBox.appendChild(a);
       }
       row.appendChild(payBox);
