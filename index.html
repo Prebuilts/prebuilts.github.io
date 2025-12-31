@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prebuiltid | Kodu</title>
+  <title>Prebuiltid | Home</title>
   <link rel="icon" type="image/x-icon" href="/Images/favicon.ico" />
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -23,10 +23,10 @@
     <h1 id="HH1">Prebuiltid</h1>
     <nav>
       <ul>
-        <li><a href="https://prebuilts.github.io/" class="active">Kodu</a></li>
-        <li><a href="https://prebuilts.github.io/Store">Pood</a></li>
-        <li><a href="https://prebuilts.github.io/">Sotsiaalmeediad</a></li>
-        <li><a href="https://prebuilts.github.io/">Meist</a></li>
+        <li><a href="https://prebuilts.github.io/" class="active">home</a></li>
+        <li><a href="https://prebuilts.github.io/Store">Store</a></li>
+        <li><a href="https://prebuilts.github.io/">Social Media</a></li>
+        <li><a href="https://prebuilts.github.io/">About us</a></li>
         <li id="authLinks">
           <!-- Will be replaced by JS with Login/Logout -->
         </li>
@@ -38,35 +38,35 @@
   <!-- Intro Section -->
   <section id="intro">
     <h2>Lehest</h2>
-    <p>Müüme siin elektroonikat.</p>
+    <p>We sell tech and gaming equipment here.</p>
   </section>
 
   <!-- Article Section -->
   <section class="article-section">
-    <h2>Artikkel</h2>
+    <h2>Article</h2>
     <div class="article-content">
       <img src="Images/IMAGE" alt="Image Preview" class="article-thumb">
-      <p>Nutitelefonide peal meie veebilehe pood hetkel ei tööta. Võimalik, et Androidi peal töötab.</p>
-      <a href="https://prebuilts.github.io/Prebuiltid/" class="see-more-btn">Loe lähemalt</a>
+      <p>Our website store does not currently work on smartphones as well as on Computers.</p>
+      <a href="https://prebuilts.github.io/" class="see-more-btn">Read more</a>
     </div>
   </section>
 
   <!-- Recommended Products -->
   <section class="recommended-products">
-    <h2>Meie soovitame neid tooteid</h2>
+    <h2>We reccomend these products</h2>
     <div class="recommended-grid" id="product-list">
       <!-- Products will load here from JSON -->
     </div>
     <div class="see-more-container">
-      <a href="https://prebuilts.github.io/Prebuiltid/Store" class="see-more-btn">Loe lähemalt</a>
+      <a href="https://prebuilts.github.io/Store" class="see-more-btn">Read more</a>
     </div>
   </section>
 
   <!-- Footer -->
   <footer id="footer">
-    <p>Kõik õigused kaitstud &copy; Prebuiltid 2025</p>
-    <a href="https://www.example.com/privacypolicy">Privaatsus</a>
-    <a href="https://www.example.com/tos">Kasutustingimused</a>
+    <p>All rights reserved &copy; Prebuiltid 2026</p>
+    <a href="https://www.example.com/privacypolicy">Privacy Policy</a>
+    <a href="https://www.example.com/tos">ToS</a>
   </footer>
 
   <!-- Dark Mode Script -->
@@ -104,8 +104,8 @@
     onAuthStateChanged(auth, (user) => {
       if (user) {
         authLinks.innerHTML = `
-          <span style="color:#93c5fd;">Tere, ${user.email}</span>
-          <button id="logoutBtn" class="see-more-btn" style="margin-left:10px;">Logi välja</button>
+          <span style="color:#93c5fd;">Hello, ${user.email}</span>
+          <button id="logoutBtn" class="see-more-btn" style="margin-left:10px;">Log out</button>
         `;
         document.getElementById("logoutBtn").addEventListener("click", () => {
           signOut(auth).then(() => {
@@ -113,7 +113,7 @@
           });
         });
       } else {
-        authLinks.innerHTML = `<a href="login.html">Logi sisse</a>`;
+        authLinks.innerHTML = `<a href="login.html">Log in</a>`;
       }
     });
   </script>
