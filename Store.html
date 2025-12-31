@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Prebuiltid | Pood</title>
+  <title>Prebuiltid | Store</title>
   <link rel="stylesheet" href="store.css" />
 </head>
 <body>
@@ -13,56 +13,56 @@
   <h1 id="HH1">Prebuiltid</h1>
   <nav>
     <ul>
-      <li><a href="index.html">Kodu</a></li>
-      <li><a href="#" class="active">Pood</a></li>
-      <li><a href="#" id="settingsBtn">Seaded</a></li>
-      <li><a href="login.html" id="accountLink">Logi sisse</a></li>
-      <li><a href="#" id="logoutBtn" style="display:none">Logi välja</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="#" class="active">Store</a></li>
+      <li><a href="#" id="settingsBtn">settings</a></li>
+      <li><a href="login.html" id="accountLink">Log in</a></li>
+      <li><a href="#" id="logoutBtn" style="display:none">Log out</a></li>
     </ul>
   </nav>
 </header>
 
 <section class="store-section">
-  <h2>Meie pood</h2>
+  <h2>Our store</h2>
 
   <div class="category-filter" style="align-items:center;">
-    <label for="categorySelect">Filtreeri kategooria järgi:</label>
+    <label for="categorySelect">Filter by:</label>
     <select id="categorySelect">
-      <option value="all">Kõik</option>
-      <option value="gaming-pcs">Mänguriarvutid</option>
-      <option value="consoles">Konsoolid</option>
-      <option value="controllers">Konsooli Puldid</option>
-      <option value="software">Tarkvara</option>
-      <option value="misc">Muu</option>
-      <option value="smartphones">Nutitelefonid</option>
-      <option value="phones">Lauatelefonid</option>
-      <option value="handhelds">Käsikonsoolid</option>
-      <option value="monitors">Monitorid</option>
-      <option value="pcs">Lauaarvutid</option>
-      <option value="gpu">Graafikakaardid</option>
-      <option value="tv">Televiisorid</option>
-      <option value="keyboards">Klaviatuurid</option>
-      <option value="mice">Arvutihiired</option>
-      <option value="headphones">Kõrvaklapid</option>
-      <option value="games">Mängud</option>
-      <option value="routers">Ruuterid</option>
-      <option value="network-switches">Network Switchid</option>
+      <option value="all">All</option>
+      <option value="gaming-pcs">Gaming PC-s</option>
+      <option value="consoles">Consoles</option>
+      <option value="controllers">Game controllers</option>
+      <option value="software">Software</option>
+      <option value="misc">Misc</option>
+      <option value="smartphones">Smartphones</option>
+      <option value="phones">Phones</option>
+      <option value="handhelds">Handheld consoles</option>
+      <option value="monitors">Monitors</option>
+      <option value="pcs">Desktop computers</option>
+      <option value="gpu">Graphics cards</option>
+      <option value="tv">TV</option>
+      <option value="keyboards">Keyboards</option>
+      <option value="mice">Gaming mice</option>
+      <option value="headphones">Headphones</option>
+      <option value="games">Games</option>
+      <option value="routers">Routers</option>
+      <option value="network-switches">Network Switches</option>
     </select>
 
     <label for="sortSelect" style="margin-left:14px;">Sorteeri:</label>
     <select id="sortSelect">
-      <option value="none">Sotreerimata</option>
-      <option value="price-asc">Hind: odavam → kallim</option>
-      <option value="price-desc">Hind: kallim → odavam</option>
-      <option value="name-asc">Nimi: A → Z</option>
-      <option value="name-desc">Nimi: Z → A</option>
-      <option value="newest">Uuemad ees</option>
-      <option value="stock-desc">Laos: palju → vähe</option>
-      <option value="stock-asc">Laos: vähe → palju</option>
+      <option value="none">Filter</option>
+      <option value="price-asc">Price: cheaper → more expensive</option>
+      <option value="price-desc">Price: more expensive → cheaper</option>
+      <option value="name-asc">Name: A → Z</option>
+      <option value="name-desc">Name: Z → A</option>
+      <option value="newest">Newer first</option>
+      <option value="stock-desc">In stock: more → less</option>
+      <option value="stock-asc">In stock: less → more</option>
     </select>
 
     <label for="searchInput" style="margin-left:14px;">Otsi:</label>
-    <input id="searchInput" placeholder="Otsi toote nime järgi" style="padding:8px;border-radius:6px;border:1px solid #d0d7df;">
+    <input id="searchInput" placeholder="Search by name" style="padding:8px;border-radius:6px;border:1px solid #d0d7df;">
   </div>
 
   <!-- 3x3 grid element -->
@@ -70,27 +70,27 @@
 </section>
 
 <!-- Floating Cart Button -->
-<div id="cart-icon" title="Vaata ostukorvi" aria-label="Ostukorv">
+<div id="cart-icon" title="ViewbBasket" aria-label="Basket">
   🛒 <span id="cart-count">0</span>
 </div>
 
 <!-- Slide-out Basket Panel (kept off-screen until opened) -->
-<div id="basket-panel" aria-hidden="true" role="dialog" aria-label="Ostukorv">
+<div id="basket-panel" aria-hidden="true" role="dialog" aria-label="ostukorv">
   <div id="basket-header">
-    <h2>Ostukorv</h2>
-    <button id="close-basket" aria-label="Sulge ostukorv">✖</button>
+    <h2>Basket</h2>
+    <button id="close-basket" aria-label="Close basket">✖</button>
   </div>
 
   <div id="basket-items" aria-live="polite"></div>
 
   <div id="basket-footer">
-    <h3>Kokku: <span id="basket-total">0€</span></h3>
+    <h3>Total: <span id="basket-total">0€</span></h3>
     <div class="basket-actions">
-      <button id="clear-cart-btn">Tühjenda</button>
-      <button id="buy-all-btn">Osta kõik</button>
+      <button id="clear-cart-btn">Empty basket</button>
+      <button id="buy-all-btn">Buy all</button>
     </div>
     <div style="margin-top:10px;">
-      <button id="my-orders-btn">Minu tellimused</button>
+      <button id="my-orders-btn">My orders</button>
     </div>
   </div>
 </div>
@@ -98,14 +98,14 @@
 <!-- DISCLAIMER MODAL (shows before basket on cart click unless accepted) -->
 <div id="disclaimer-modal" class="modal" aria-hidden="true" role="alertdialog" aria-labelledby="disclaimer-title">
   <div class="modal-content">
-    <h2 id="disclaimer-title">Oluline teade</h2>
+    <h2 id="disclaimer-title">Important notice</h2>
     <p style="font-weight:700; margin-top:8px;">
-      Meil on suur valik tooteid. Suurem osa saab tellida Amazonist. Osasid müüme otse ostjatele. Kui ostukorvi tuleb NowPayments-i makseterminal, siis pärast makset saadame selle toote otse teile ja saadame teile emaili (teie poolt meiega jagatud). Ülejäänud juhtudel saate osta toote Amazonist. MEELDIVAID OSTE!
+      We have a large selection of products. Most of them can be ordered from Amazon. Some of them we sell directly to buyers. If the NowPayments payment terminal is added to the shopping cart, then after payment we will send the product directly to you and send you an email (shared with us by you). In other cases, you can buy the product from Amazon. Happy shopping!
     </p>
 
     <div style="margin-top:16px; display:flex; gap:10px; justify-content:flex-end;">
-      <button id="disclaimer-cancel" style="background:#bbb;">Tühista</button>
-      <button id="disclaimer-accept">Olen teadlik ja saan aru</button>
+      <button id="disclaimer-cancel" style="background:#bbb;">Cancel</button>
+      <button id="disclaimer-accept">I understand</button>
     </div>
   </div>
 </div>
@@ -114,11 +114,11 @@
 <div id="checkout-modal" class="modal" aria-hidden="true">
   <div class="modal-content">
     <h3>Oled sa kindel?</h3>
-    <p id="checkout-message">Me saadame teie emaili aadresile kirja (kui on tegu tarkvaralise tootega [Aktiveerimiskood]), kus saadame teile tarkvara koodid vms. Me ei saa tagastada ostetud esemeid, kui te olete sisestanud valed andmed ja teile saadetud email seetõttu jõuab valele aadressile! Füüsiliste esemetega soeses tegeleb teiega Amazon.</p>
+    <p id="checkout-message">We will send an email to your email address (if it is a software product [Activation Code]), where we will send you software codes, etc. We cannot return purchased items if you have entered incorrect information and the email sent to you therefore reaches the wrong address! Amazon will deal with you regarding physical items.</p>
 
     <div style="margin-top:12px; display:flex; gap:10px; justify-content:flex-end;">
-      <button id="cancel-checkout">Tühista</button>
-      <button id="confirm-checkout">Kinnita ostu</button>
+      <button id="cancel-checkout">Cancel</button>
+      <button id="confirm-checkout">Confirm order</button>
     </div>
   </div>
 </div>
@@ -126,10 +126,10 @@
 <!-- Crypto modal (kept for compatibility; payments shown per product inside basket) -->
 <div id="crypto-modal" class="modal" aria-hidden="true">
   <div class="modal-content">
-    <h3>Krüpto</h3>
-    <p>Krüpto makse kuvatakse iga toote all eraldi ostukorvis, kui admin on lisanud NOWPayments embedi.</p>
+    <h3>Crypto</h3>
+    <p>Crypto payment will be displayed separately under each product in the shopping cart if the admin has added the NOWPayments embed.</p>
     <div style="margin-top:12px; display:flex; gap:10px; justify-content:flex-end;">
-      <button id="close-crypto">Sulge</button>
+      <button id="close-crypto">Close</button>
     </div>
   </div>
 </div>
@@ -137,24 +137,24 @@
 <!-- Settings Modal -->
 <div id="settings-modal" class="modal" aria-hidden="true">
   <div class="modal-content">
-    <h3>Seaded</h3>
-    <p>Email: <span id="settings-email">Laen...</span></p>
+    <h3>Settings</h3>
+    <p>Email: <span id="settings-email">Loading...</span></p>
 
-    <label for="settings-address">Aadress</label>
-    <input id="settings-address" placeholder="Näiteks: Tartu mnt 10, Tallinn">
+    <label for="settings-address">Adress</label>
+    <input id="settings-address" placeholder="For example: Tech Street 25-2, Tallinn, Estonia">
 
-    <label for="settings-dpd">DPD pakiautomaat (nimi)</label>
-    <input id="settings-dpd" placeholder="Näiteks: Mustamäe Rimi pakiautomaat">
+    <label for="settings-dpd">DPD parcel machine (name)</label>
+    <input id="settings-dpd" placeholder="For example: Tech street LIDL DPD parcel machine">
 
     <div style="margin-top:12px; display:flex; gap:10px; justify-content:flex-end;">
-      <button id="save-settings">Salvesta</button>
-      <button id="close-settings">Sulge</button>
+      <button id="save-settings">Save</button>
+      <button id="close-settings">Close</button>
     </div>
   </div>
 </div>
 
 <footer id="footer">
-  <p>Kõik õigused kaitstud &copy; Prebuiltid 2025</p>
+  <p>All rights reserved &copy; Prebuiltid 2026</p>
 </footer>
 
 <script type="module" src="store.js"></script>
