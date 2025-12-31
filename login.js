@@ -34,7 +34,7 @@ const emailRegisterBtn = document.getElementById("emailRegister");
 googleLoginBtn.addEventListener("click", async () => {
   try {
     await signInWithPopup(auth, provider);
-    window.location.href = "index.html"; // Redirect after login
+    window.location.href = "https://prebuiltid.github.io/Prebuiltid/"; // Redirect after login
   } catch (error) {
     alert(error.message);
   }
@@ -58,7 +58,7 @@ emailRegisterBtn.addEventListener("click", async () => {
   const password = document.getElementById("password").value;
   try {
     await createUserWithEmailAndPassword(auth, email, password);
-    alert("Konto loodud! Nüüd saad sisse logida!");
+    alert("Account created, you can now log in!");
   } catch (error) {
     alert(error.message);
   }
