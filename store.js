@@ -75,7 +75,7 @@ function renderCart(){
   basketItemsEl.innerHTML = "";
 
   if (!cart.length) {
-    basketItemsEl.innerHTML = "<p>Korv on tühi.</p>";
+    basketItemsEl.innerHTML = "<p>Basket is empty</p>";
     basketTotalEl && (basketTotalEl.innerText = "0€");
     updateCartCount();
     return;
@@ -90,7 +90,7 @@ function renderCart(){
     info.innerHTML = `<h4>${escapeHtml(item.name)}</h4><div class="price">${Number(item.price).toFixed(2)}€</div>`;
 
     const actions = document.createElement('div'); actions.className='actions';
-    const removeBtn = document.createElement('button'); removeBtn.innerText='Eemalda';
+    const removeBtn = document.createElement('button'); removeBtn.innerText='Remove';
     removeBtn.onclick = ()=> {
       cart = cart.filter(c=> c.id !== item.id);
       saveCart(); renderCart();
@@ -115,7 +115,7 @@ function renderCart(){
         a.href = String(item.paymentButton);
         a.target = '_blank';
         a.rel = 'noreferrer noopener';
-        a.innerText = 'Maksa';
+        a.innerText = 'Pay';
         payBox.appendChild(a);
       }
       row.appendChild(payBox);
@@ -132,7 +132,7 @@ function renderCart(){
 window.addToCart = function(product){
   // product must contain id,name,price,image,paymentButton
   if (cart.find(c=> c.id === product.id)) {
-    alert("Seda toodet on juba ostukorvis. Iga toote kohta üks eksemplar.");
+    alert("You already have this product in your cart. You can only have one at a time");
     return;
   }
   // only add one unit per product
@@ -192,14 +192,14 @@ if (disclaimerCancel) {
 
 /* rest of your basket controls */
 clearCartBtn && clearCartBtn.addEventListener('click', ()=> {
-  if (confirm("Tühjendada ostukorv?")) {
+  if (confirm("Empty basket?")) {
     cart = []; saveCart(); renderCart(); updateCartCount();
   }
 });
 
 /* buy all: simply show confirmation modal here (admin buttons inside cart handle crypto) */
 buyAllBtn && buyAllBtn.addEventListener('click', ()=> {
-  if (!cart.length) { alert("Ostukorv on tühi."); return; }
+  if (!cart.length) { alert("Basket is Empty!"); return; }
   checkoutModal.classList.add('show');
 });
 
@@ -207,7 +207,7 @@ buyAllBtn && buyAllBtn.addEventListener('click', ()=> {
 cancelCheckoutBtn && cancelCheckoutBtn.addEventListener('click', ()=> checkoutModal.classList.remove('show'));
 confirmCheckoutBtn && confirmCheckoutBtn.addEventListener('click', ()=> {
   // offline flow: notify and clear cart
-  alert("Tellimus registreeritud. Me võtame teiega ühendust.");
+  alert("Order registered. We will contact you.");
   cart = []; saveCart(); renderCart(); updateCartCount();
   checkoutModal.classList.remove('show');
   basketPanel.classList.remove('open');
@@ -215,7 +215,7 @@ confirmCheckoutBtn && confirmCheckoutBtn.addEventListener('click', ()=> {
 
 /* My orders button - keep minimal (depends on your orders collection) */
 myOrdersBtn && myOrdersBtn.addEventListener('click', ()=> {
-  alert("Hetkel tellimuste menüü ei tööta. Lisame selle funktsiooni tulevikus!");
+  alert("The order menu is currently not working. We will add this feature in the future!");
 });
 
 /* PRODUCTS: realtime */
@@ -238,10 +238,10 @@ function renderProducts(products){
       <h3>${escapeHtml(product.name||'')}</h3>
       <div style="font-weight:700">${Number(product.price||0).toFixed(2)}€</div>
       <p>${escapeHtml(product.description||'')}</p>
-      <div class="stock">Laos: ${qty}</div>
+      <div class="stock">In stock: ${qty}</div>
       <div style="margin-top:10px; display:flex; gap:8px;">
-        <button class="btn view" ${product.link ? '' : 'disabled'}>Osta kohe</button>
-        <button class="btn add" ${qty <= 0 ? 'disabled' : ''}>Lisa korvi</button>
+        <button class="btn view" ${product.link ? '' : 'disabled'}>Buy now</button>
+        <button class="btn add" ${qty <= 0 ? 'disabled' : ''}>Add to basket</button>
       </div>
     `;
 
@@ -293,7 +293,7 @@ settingsBtn && settingsBtn.addEventListener('click', ()=> {
 
   onAuthStateChanged(auth, async (user) => {
     if (!user) {
-      settingsEmail.innerText = "Pole sisse logitud";
+      settingsEmail.innerText = "You are not logged in,  please log in!";
       settingsAddress.value = "";
       settingsDpd.value = "";
       return;
@@ -324,14 +324,14 @@ closeSettingsBtn && closeSettingsBtn.addEventListener('click', ()=> {
 
 saveSettingsBtn && saveSettingsBtn.addEventListener('click', async ()=> {
   const user = auth.currentUser;
-  if (!user) { alert("Palun logige sisse, et salvestada"); return; }
+  if (!user) { alert("Please log in to save settings!"); return; }
   try {
     await setDoc(doc(db,"users",user.uid), { address: settingsAddress.value, dpd: settingsDpd.value }, { merge: true });
-    alert("Seaded salvestatud");
+    alert("Settings saved!");
     settingsModal.classList.remove('show');
   } catch (err) {
     console.error("Save settings error", err);
-    alert("Salvestamisel viga");
+    alert("Saving error");
   }
 });
 
