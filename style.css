@@ -327,7 +327,7 @@ body.dark-mode .add-to-cart:hover {
 #asideleft {
 	width: 20%;
 	float: left;
-	background-color: #A1AAE6;
+	background-color: #F1F3F5;
 	border-radius: 5px;
 	height: 100%;
 	text-align: center;
@@ -337,7 +337,7 @@ body.dark-mode .add-to-cart:hover {
 #asideright {
 	width: 20%;
 	float: right;
-	background-color: #A1AAE6;
+	background-color: #F1F3F5;
 	border-radius: 5px;
 	height: 100%;
 	align-items: center;
