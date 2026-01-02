@@ -325,6 +325,7 @@ body.dark-mode .add-to-cart:hover {
   color: #FF5733; /* Deeper coral */
 }
 #asideleft {
+	display: flex;
 	width: 20%;
 	float: left;
 	background-color: #F1F3F5;
@@ -335,6 +336,7 @@ body.dark-mode .add-to-cart:hover {
 	margin: 10px;
 }
 #asideright {
+	display: flex;
 	width: 20%;
 	float: right;
 	background-color: #F1F3F5;
