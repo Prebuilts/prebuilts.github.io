@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prebuiltid | Kodu</title>
+  <link rel="icon" type="image/x-icon" href="/Images/favicon.ico" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+  <!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YS1Q1904H6"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-YS1Q1904H6');
+</script>
+<body>
+  <!-- Header -->
+  <header id="header">
+    <img src="Images/Prebuiltid.png" alt="Prebuiltid Logo" id="HIcon" />
+    <h1 id="HH1">Prebuiltid</h1>
+    <nav>
+      <ul>
+        <li><a href="https://prebuilts.github.io/Prebuiltid" class="active">Kodu</a></li>
+        <li><a href="https://prebuilts.github.io/Prebuiltid/Store">Pood</a></li>
+        <li><a href="https://prebuilts.github.io/Prebuiltid/">Sotsiaalmeediad</a></li>
+        <li><a href="https://prebuilts.github.io/Prebuiltid/">Meist</a></li>
+        <li id="authLinks">
+          <!-- Will be replaced by JS with Login/Logout -->
+        </li>
+      </ul>
+    </nav>
+    <button id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+  </header>
+
+  <!-- Intro Section -->
+  <section id="intro">
+    <h2>Lehest</h2>
+    <p>Müüme siin elektroonikat.</p>
+  </section>
+
+  <!-- Article Section -->
+  <section class="article-section">
+    <h2>Artikkel</h2>
+    <div class="article-content">
+      <img src="Images/IMAGE" alt="Image Preview" class="article-thumb">
+      <p>Nutitelefonide peal meie veebilehe pood hetkel ei tööta. Võimalik, et Androidi peal töötab.</p>
+      <a href="https://prebuilts.github.io/Prebuiltid/" class="see-more-btn">Loe lähemalt</a>
+    </div>
+  </section>
+
+  <!-- Recommended Products -->
+  <section class="recommended-products">
+    <h2>Meie soovitame neid tooteid</h2>
+    <div class="recommended-grid" id="product-list">
+      <!-- Products will load here from JSON -->
+    </div>
+    <div class="see-more-container">
+      <a href="https://prebuilts.github.io/Prebuiltid/Store" class="see-more-btn">Loe lähemalt</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <p>Kõik õigused kaitstud &copy; Prebuiltid 2025</p>
+    <a href="https://www.example.com/privacypolicy">Privaatsus</a>
+    <a href="https://www.example.com/tos">Kasutustingimused</a>
+  </footer>
+
+  <!-- Dark Mode Script -->
+  <script>
+    const toggleButton = document.getElementById('darkModeToggle');
+    toggleButton.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      toggleButton.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+    });
+  </script>
+
+  <!-- Load Products -->
+  <script src="products.js"></script>
+
+  <!-- Firebase + Auth -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
+      authDomain: "prebuiltid-website.firebaseapp.com",
+      projectId: "prebuiltid-website",
+      storageBucket: "prebuiltid-website.firebasestorage.app",
+      messagingSenderId: "854871585546",
+      appId: "1:854871585546:web:568400979292a0c31740f3",
+      measurementId: "G-YS1Q1904H6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const authLinks = document.getElementById("authLinks");
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        authLinks.innerHTML = `
+          <span style="color:#93c5fd;">Tere, ${user.email}</span>
+          <button id="logoutBtn" class="see-more-btn" style="margin-left:10px;">Logi välja</button>
+        `;
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+          signOut(auth).then(() => {
+            window.location.reload();
+          });
+        });
+      } else {
+        authLinks.innerHTML = `<a href="login.html">Logi sisse</a>`;
+      }
+    });
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Meist | Prebuiltid</title>
+  
+  <!-- ✅ Link to your single CSS file -->
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Your Google Ads script stays here -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9235877052315560"
+   crossorigin="anonymous"></script>
+</head>
+<body>
+  <!-- ✅ Use id="header" to match your CSS -->
+  <header id="header">
+    <img src="Images/Prebuiltid.png" id="HIcon" alt="Viiru Logo" />
+    <h1 id="HH1">Prebuiltid</h1>
+
+  	<nav>
+    <ul>
+      <li><a href="https://prebuilts.github.io/Prebuiltid">Home</a></li>
+      <li><a href="https://prebuilts.github.io/Prebuiltid/Store">Store</a></li>
+      <li><a href="https://prebuilts.github.io/Prebuiltid">Socials</a></li>
+      <li><a class="active" href="https://prebuilts.github.io/Prebuiltid/about">Meist</a></li>
+    </ul>
+  </nav>
+    
+    <!-- ✅ Dark mode toggle button -->
+    <button id="darkModeToggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+  </header>
+
+  <section>
+    <h1>Tähtis info!</h1>
+  </section>
+
+  <section>
+    <p>Meilt ostmiseks saada email meie aadressile: prebuiltid@gmail.com</p>
+  </section>
+
+  <footer id="footer">
+    <h3>&copy; 2025 Prebuiltid</h3>
+    <a href="https://prebuilts.github.io/Prebuiltid">Privaatsus</a> |
+    <a href="https://prebuilts.github.io/Prebuiltid">Tingimused</a>
+  </footer>
+
+  <!-- ✅ Dark mode toggle script at the end -->
+  <script>
+  const toggleButton = document.getElementById('darkModeToggle');
+
+  toggleButton.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+
+    // Switch icons based on mode
+    if (document.body.classList.contains('dark-mode')) {
+      toggleButton.textContent = '☀️'; // Sun icon when dark mode is ON
+    } else {
+      toggleButton.textContent = '🌙'; // Moon icon when dark mode is OFF
+    }
+  });
+</script>
+
+</body>
+</html>
+
+
+

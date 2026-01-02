@@ -1,0 +1,66 @@
+[
+    {
+        "name": "Mänguriarvuti",
+        "price": "399.99€",
+        "description": "Spetsifikatsioonid on kuldse börsi lehel (Vajuta osta kohe)",
+        "image": "https://kb2.img-bcg.eu/kuldne-image/ad/675/506/de681649f5810959fa2408bc1ee12891.jpg?crop=0&watermark=1&format=jpeg",
+        "category": "gaming-pcs",
+        "link": "https://www.kuldnebors.ee/96978368"
+    },
+    {
+        "name": "Xbox 360",
+        "price": "109.99€",
+        "description": "Kaasa tuleb pult ja konsool",
+        "image": "https://kb2.img-bcg.eu/kuldne-image/ad/675/506/c6ac41b8abc3a2250ee987e0d2b164f8.jpg?crop=0&watermark=1&format=jpeg",
+        "category": "consoles",
+        "link": "https://www.kuldnebors.ee/96978423"
+    },
+    {
+        "name": "Playstation 5 Digital",
+        "price": "375€",
+        "description": "Kaasa tuleb pult ja konsool",
+        "image": "https://kb2.img-bcg.eu/kuldne-image/ad/675/506/0c4e392e6530a533841f395412eca200.jpg?crop=0&watermark=1&format=jpeg",
+        "category": "consoles",
+        "link": "https://www.kuldnebors.ee/96978482"
+    },
+    {
+        "name": "Xbox One",
+        "price": "124.99€",
+        "description": "Kaasa tuleb pult ja konsool",
+        "image": "https://kb2.img-bcg.eu/kuldne-image/ad/675/506/a0eafd0f12cdc261108c4f72acad94fa.jpg?crop=0&watermark=1&format=jpeg",
+        "category": "consoles",
+        "link": "https://www.kuldnebors.ee/96978429"
+    },
+    {
+        "name": "Playstation 5 Pult",
+        "price": "55€",
+        "description": "Üks Playstation 5 Pult",
+        "image": "https://kb2.img-bcg.eu/kuldne-image/ad/675/506/d4561b025debc3fe5441f6c33ec786bb.png?crop=0&watermark=1&format=jpeg",
+        "category": "controllers",
+        "link": "https://www.kuldnebors.ee/96978498"
+    },
+    {
+        "name": "Monitor",
+        "price": "120€",
+        "description": "1080p, 60hz",
+        "image": "https://kb2.img-bcg.eu/kuldne-image/ad/675/506/f07f3901043c909a241aa5a592687af7.jpg?crop=0&watermark=1&format=jpeg",
+        "category": "monitors",
+        "link": "https://www.kuldnebors.ee/96971795"
+    },
+    {
+        "name": "Kompaktne Lauaarvuti",
+        "price": "250€",
+        "description": "Spetsifikatsioonid on meie kuldse börsi veebilehel",
+        "image": "https://kb2.img-bcg.eu/kuldne-image/ad/675/506/1a86dbca02a2101f5cee966ec1d36643.jpg?crop=0&watermark=1&format=jpeg",
+        "category": "pcs",
+        "link": "https://www.kuldnebors.ee/85289706"
+    },
+    {
+        "name": "Monitor",
+        "price": "199€",
+        "description": "Spetsifikatsioonid on meie kuldse börsi veebilehel",
+        "image": "https://kb2.img-bcg.eu/kuldne-image/ad/675/506/82ec7edce88c5e212ad2a6776fdab12d.jpg?crop=0&watermark=1&format=jpeg",
+        "category": "monitors",
+        "link": "https://www.kuldnebors.ee/96971793"
+    }
+]
