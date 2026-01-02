@@ -324,3 +324,24 @@ body.dark-mode .add-to-cart:hover {
 #userStatus a:hover {
   color: #FF5733; /* Deeper coral */
 }
+#asideleft {
+	width: 20%;
+	float: left;
+	background-color: #A1AAE6;
+	border-radius: 5px;
+	height: 100%;
+	text-align: center;
+	padding: 10px;
+	margin: 10px;
+}
+#asideright {
+	width: 20%;
+	float: right;
+	background-color: #A1AAE6;
+	border-radius: 5px;
+	height: 100%;
+	align-items: center;
+	text-align: center;
+	padding: 10px;
+	margin: 10px;
+}
