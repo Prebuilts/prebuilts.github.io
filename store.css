@@ -138,3 +138,26 @@ button[disabled] { background:#ddd; color:#777; cursor:not-allowed; }
   #basket-panel.open { right:0; }
   .payment-embed { overflow-wrap: anywhere; }
 }
+#asideleft {
+	display: flex;
+	width: 20%;
+	float: left;
+	background-color: #F1F3F5;
+	border-radius: 5px;
+	height: 100%;
+	text-align: center;
+	padding: 10px;
+	margin: 10px;
+}
+#asideright {
+	display: flex;
+	width: 20%;
+	float: right;
+	background-color: #F1F3F5;
+	border-radius: 5px;
+	height: 100%;
+	align-items: center;
+	text-align: center;
+	padding: 10px;
+	margin: 10px;
+}
