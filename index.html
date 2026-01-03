@@ -149,5 +149,22 @@
       }
     });
   </script>
+  <script>
+  (function () {
+    // Mobile breakpoint (same as your CSS)
+    const isMobile = window.matchMedia("(max-width: 700px)").matches;
+
+    if (!isMobile) return;
+
+    // Remove skyscraper ads safely
+    document.addEventListener("DOMContentLoaded", () => {
+      const leftAd = document.getElementById("asideleft");
+      const rightAd = document.getElementById("asideright");
+
+      if (leftAd) leftAd.remove();
+      if (rightAd) rightAd.remove();
+    });
+  })();
+</script>
 </body>
 </html>
