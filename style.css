@@ -192,3 +192,12 @@ body.dark-mode #footer {
     flex-direction: column;
   }
 }
+/* =====================================================
+   MOBILE: HIDE SKYSCRAPER ADS
+   ===================================================== */
+@media (max-width: 700px) {
+  #asideleft,
+  #asideright {
+    display: none !important;
+  }
+}
