@@ -1,17 +1,16 @@
+/* === GLOBAL RESET === */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 /* === GLOBAL BODY === */
 body {
   font-family: Arial, sans-serif;
   background-color: #F4F4F9;
   color: #333;
   margin: 0;
-  padding: 0;
-  padding-left: 190px;   /* reserve space for left ad */
-  padding-right: 190px;  /* reserve space for right ad */
-  box-sizing: border-box;
-}
-
-*, *::before, *::after {
-  box-sizing: inherit;
+  padding-left: 170px;   /* reserve space for left vertical ad */
+  padding-right: 170px;  /* reserve space for right vertical ad */
 }
 
 /* === CONTENT SECTIONS === */
@@ -46,7 +45,6 @@ p {
 
 #HIcon {
   max-width: 60px;
-  height: auto;
   margin-right: 10px;
 }
 
@@ -68,9 +66,8 @@ nav li a {
   color: #E2E8F0;
   text-decoration: none;
   font-weight: bold;
-  border-radius: 5px;
   padding: 10px 15px;
-  transition: background 0.3s;
+  border-radius: 5px;
 }
 
 nav li a:hover,
@@ -86,32 +83,37 @@ nav li a.active {
   cursor: pointer;
 }
 
-/* === SIDE ADS (DESKTOP) === */
+/* === VERTICAL SIDE ADS (DESKTOP) === */
 #asideleft,
 #asideright {
   position: fixed;
   top: 120px;
-  width: 160px;
+  width: 160px;              /* vertical banner width */
+  height: calc(100vh - 140px);
   background-color: #F1F3F5;
   border-radius: 8px;
-  padding: 10px;
+  padding: 10px 5px;
   text-align: center;
   z-index: 100;
   overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }
 
 #asideleft {
-  left: 10px;
+  left: 5px;
 }
 
 #asideright {
-  right: 10px;
+  right: 5px;
 }
 
 #asideleft iframe,
 #asideright iframe {
-  max-width: 100%;
-  height: auto;
+  width: 100%;
+  height: 100%;
+  max-height: 100%;
   border: none;
 }
 
@@ -146,24 +148,6 @@ nav li a.active {
 .product-box img {
   width: 100%;
   height: auto;
-  border-radius: 5px;
-}
-
-.see-more-container {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.see-more-btn {
-  background-color: #FF6F61;
-  color: #FFF;
-  text-decoration: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-}
-
-.see-more-btn:hover {
-  background-color: #FF5733;
 }
 
 /* === STORE GRID === */
@@ -174,17 +158,6 @@ nav li a.active {
   grid-auto-columns: 300px;
   gap: 20px;
   overflow-x: auto;
-  width: max-content;
-}
-
-.productbox {
-  background: #FFF;
-  border: 1px solid #E2E8F4;
-  border-radius: 10px;
-  padding: 15px;
-  width: 280px;
-  text-align: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 /* === FOOTER === */
@@ -208,11 +181,7 @@ body.dark-mode .product-box {
   background-color: #2C3E50;
 }
 
-body.dark-mode #footer {
-  background-color: #34495E;
-}
-
-/* === TABLET (INLINE ADS) === */
+/* === TABLET: INLINE ADS === */
 @media (max-width: 1024px) {
   body {
     padding-left: 0;
@@ -223,11 +192,15 @@ body.dark-mode #footer {
   #asideright {
     position: relative;
     width: 100%;
-    max-width: 728px;
+    height: auto;
+    max-width: 300px;
     margin: 20px auto;
-    top: auto;
-    left: auto;
-    right: auto;
+  }
+
+  #asideleft iframe,
+  #asideright iframe {
+    height: auto;
+    aspect-ratio: 160 / 600; /* vertical fallback */
   }
 }
 
@@ -235,19 +208,20 @@ body.dark-mode #footer {
 @media (max-width: 700px) {
   nav ul {
     flex-direction: column;
-    gap: 10px;
   }
 
   #asideleft,
   #asideright {
     width: 100%;
-    padding: 8px;
+    max-width: 300px;
     margin: 15px auto;
+    padding: 8px;
   }
 
   #asideleft iframe,
   #asideright iframe {
     width: 100% !important;
+    aspect-ratio: 160 / 600;
     height: auto !important;
   }
 }
