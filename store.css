@@ -31,7 +31,20 @@ nav li a { color:#E2E8F0; text-decoration:none; font-weight:700; padding:8px 12p
 nav li a:hover, nav li a.active { background:#34495E; }
 
 /* === SECTION / CONTAINER === */
-.store-section { max-width:1000px; margin:40px auto; padding:30px; background:#F1F3F5; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
+.store-section { 
+  max-width:1000px; 
+  margin:40px auto; 
+  padding:30px; 
+  background:#F1F3F5; 
+  border-radius:10px; 
+  box-shadow:0 4px 12px rgba(0,0,0,0.1); 
+  position: relative; 
+  z-index: 1;
+
+  /* Space for side ads */
+  margin-left: 190px;  /* 160px ad + 30px gap */
+  margin-right: 190px; /* 160px ad + 30px gap */
+}
 
 /* === FILTER / SORT UI === */
 .category-filter { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin-bottom:16px; }
@@ -132,32 +145,42 @@ button[disabled] { background:#ddd; color:#777; cursor:not-allowed; }
 /* footer */
 #footer { text-align:center; background:#2C3E50; color:#D1D8E0; padding:20px; margin:30px 20px 20px; border-radius:10px; }
 
+/* === SIDE ADS FIX (no overlap) === */
+#asideleft,
+#asideright {
+  position: fixed;
+  top: 90px; /* below header */
+  width: 160px;
+  height: calc(100% - 100px);
+  background-color: #F1F3F5;
+  border-radius: 5px;
+  text-align: center;
+  padding: 10px;
+  z-index: 900;
+  box-sizing: border-box;
+}
+
+/* Side positioning */
+#asideleft { left: 10px; }
+#asideright { right: 10px; }
+
 /* responsive */
+@media (max-width: 900px) {
+  #asideleft,
+  #asideright {
+    display: none;
+  }
+
+  .store-section {
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+  }
+}
+
+/* basket responsive */
 @media (max-width:700px) {
   #basket-panel { width:100%; right:-100%; }
   #basket-panel.open { right:0; }
   .payment-embed { overflow-wrap: anywhere; }
-}
-#asideleft {
-	display: flex;
-	width: 20%;
-	float: left;
-	background-color: #F1F3F5;
-	border-radius: 5px;
-	height: 100%;
-	text-align: center;
-	padding: 10px;
-	margin: 10px;
-}
-#asideright {
-	display: flex;
-	width: 20%;
-	float: right;
-	background-color: #F1F3F5;
-	border-radius: 5px;
-	height: 100%;
-	align-items: center;
-	text-align: center;
-	padding: 10px;
-	margin: 10px;
 }
