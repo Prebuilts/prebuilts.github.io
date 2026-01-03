@@ -193,11 +193,12 @@ body.dark-mode #footer {
   }
 }
 /* =====================================================
-   MOBILE: HIDE SKYSCRAPER ADS
+   DESKTOP-ONLY WRAPPER
+   (HTML controls visibility, CSS handles breakpoint)
    ===================================================== */
 @media (max-width: 700px) {
-  #asideleft,
-  #asideright {
+  .desktop-only {
     display: none !important;
   }
 }
+
