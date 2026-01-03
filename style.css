@@ -1,5 +1,5 @@
 /* =====================================================
-   GLOBAL RESET & VARIABLES
+   VARIABLES & RESET
    ===================================================== */
 :root {
   --header-height: 90px;
@@ -19,49 +19,31 @@ body {
   color: #333;
   margin: 0;
 
-  /* Reserve space for vertical side ads */
+  /* Space for header + side ads */
+  padding-top: var(--header-height);
   padding-left: calc(var(--side-ad-width) + 20px);
   padding-right: calc(var(--side-ad-width) + 20px);
 }
 
 /* =====================================================
-   CONTENT SECTIONS
-   ===================================================== */
-section, .textsection {
-  max-width: 1000px;
-  margin: 40px auto;
-  padding: 30px;
-  background-color: #F1F3F5;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-h1, h2 {
-  color: #1A1A1A;
-  margin: 0;
-}
-
-p {
-  line-height: 1.6;
-}
-
-/* =====================================================
-   HEADER (ALWAYS ABOVE ADS)
+   HEADER — STICKY & ALWAYS ON TOP
    ===================================================== */
 #header {
+  position: sticky;
+  top: 0;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
 
+  height: var(--header-height);
   padding: 15px 30px;
-  min-height: var(--header-height);
 
   background-color: #2C3E50;
   border-bottom: 5px solid #34495E;
 
-  position: relative;
-  z-index: 1000; /* Always above ads */
+  z-index: 9999; /* absolute top layer */
 }
 
 #HIcon {
@@ -87,9 +69,8 @@ nav li a {
   color: #E2E8F0;
   text-decoration: none;
   font-weight: bold;
-  border-radius: 5px;
   padding: 10px 15px;
-  transition: background 0.3s;
+  border-radius: 5px;
 }
 
 nav li a:hover,
@@ -106,28 +87,22 @@ nav li a.active {
 }
 
 /* =====================================================
-   VERTICAL SIDE ADS (DESKTOP)
+   VERTICAL SIDE ADS — NEVER ABOVE HEADER
    ===================================================== */
 #asideleft,
 #asideright {
   position: fixed;
-
-  /* Always below header */
-  top: calc(var(--header-height) + 20px);
+  top: 0; /* header physically blocks this area */
 
   width: var(--side-ad-width);
-  height: calc(100vh - var(--header-height) - 40px);
+  height: 100vh;
 
+  padding-top: var(--header-height);
   background-color: #F1F3F5;
   border-radius: 8px;
-  padding: 10px 5px;
-  text-align: center;
 
-  z-index: 100; /* Lower than header */
-  overflow: hidden;
-
+  z-index: 100; /* lower than header */
   display: flex;
-  align-items: flex-start;
   justify-content: center;
 }
 
@@ -142,66 +117,20 @@ nav li a.active {
 #asideleft iframe,
 #asideright iframe {
   width: 100%;
-  height: 100%;
+  height: calc(100vh - var(--header-height));
   border: none;
 }
 
 /* =====================================================
-   RECOMMENDED PRODUCTS
+   CONTENT SECTIONS
    ===================================================== */
-.recommended-products {
-  max-width: 1200px;
+section, .textsection {
+  max-width: 1000px;
   margin: 40px auto;
-}
-
-.recommended-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-}
-
-.product-box {
-  background: #FFFFFF;
-  border: 1px solid #E2E8F4;
+  padding: 30px;
+  background-color: #F1F3F5;
   border-radius: 10px;
-  padding: 15px;
-  width: 200px;
-  text-align: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease-in-out;
-}
-
-.product-box:hover {
-  transform: scale(1.05);
-}
-
-.product-box img {
-  width: 100%;
-  height: auto;
-  border-radius: 5px;
-}
-
-/* =====================================================
-   STORE GRID
-   ===================================================== */
-#shopgrid {
-  display: grid;
-  grid-auto-flow: column;
-  grid-template-rows: repeat(3, 1fr);
-  grid-auto-columns: 300px;
-  gap: 20px;
-  overflow-x: auto;
-}
-
-.productbox {
-  background: #FFF;
-  border: 1px solid #E2E8F4;
-  border-radius: 10px;
-  padding: 15px;
-  width: 280px;
-  text-align: center;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 /* =====================================================
@@ -224,9 +153,7 @@ body.dark-mode {
   color: #BDC3C7;
 }
 
-body.dark-mode section,
-body.dark-mode .product-box,
-body.dark-mode .productbox {
+body.dark-mode section {
   background-color: #2C3E50;
 }
 
@@ -235,7 +162,7 @@ body.dark-mode #footer {
 }
 
 /* =====================================================
-   TABLET & MOBILE (INLINE ADS)
+   TABLET & MOBILE — INLINE ADS
    ===================================================== */
 @media (max-width: 1024px) {
   body {
@@ -246,13 +173,11 @@ body.dark-mode #footer {
   #asideleft,
   #asideright {
     position: relative;
-    top: auto;
-    left: auto;
-    right: auto;
     height: auto;
     width: 100%;
     max-width: 300px;
     margin: 20px auto;
+    padding-top: 0;
   }
 
   #asideleft iframe,
@@ -265,12 +190,5 @@ body.dark-mode #footer {
 @media (max-width: 700px) {
   nav ul {
     flex-direction: column;
-    gap: 10px;
-  }
-
-  #asideleft,
-  #asideright {
-    padding: 8px;
-    margin: 15px auto;
   }
 }
