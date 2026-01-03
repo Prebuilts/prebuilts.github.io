@@ -192,13 +192,3 @@ body.dark-mode #footer {
     flex-direction: column;
   }
 }
-/* =====================================================
-   DESKTOP-ONLY WRAPPER
-   (HTML controls visibility, CSS handles breakpoint)
-   ===================================================== */
-@media (max-width: 700px) {
-  .desktop-only {
-    display: none !important;
-  }
-}
-
