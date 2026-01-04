@@ -262,3 +262,10 @@ button[disabled] {
     gap:10px;
   }
 }
+/* === FIX BASKET IMAGE OVERSIZE (DESKTOP SAFE) === */
+#basket-panel .basket-item img {
+  width: 80px;
+  max-width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+}
