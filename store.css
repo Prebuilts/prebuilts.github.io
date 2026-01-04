@@ -22,6 +22,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 100;
+  flex-wrap: wrap; /* MOBILE FIX */
 }
 
 #HIcon { max-width: 60px; height: auto; display:block; }
@@ -35,6 +36,7 @@ nav ul {
   margin:0;
   padding:0;
   align-items:center;
+  flex-wrap: wrap; /* MOBILE FIX */
 }
 nav li a {
   color:#E2E8F0;
@@ -43,11 +45,12 @@ nav li a {
   padding:8px 12px;
   border-radius:6px;
   display:inline-block;
+  white-space: nowrap;
 }
 nav li a:hover,
 nav li a.active { background:#34495E; }
 
-/* === MAIN STORE CONTAINER (FIXED) === */
+/* === MAIN STORE CONTAINER === */
 .store-section {
   max-width: 1100px;
   margin: 40px auto;
@@ -58,6 +61,7 @@ nav li a.active { background:#34495E; }
   position: relative;
   z-index: 1;
   box-sizing: border-box;
+  width: calc(100% - 20px); /* MOBILE FIX */
 }
 
 /* === FILTER / SORT === */
@@ -68,9 +72,13 @@ nav li a.active { background:#34495E; }
   flex-wrap:wrap;
   margin-bottom:16px;
 }
-.category-filter label { font-weight:600; }
 
-/* === PRODUCT GRID (FIXED OVERFLOW) === */
+.category-filter select,
+.category-filter input {
+  max-width: 100%;
+}
+
+/* === PRODUCT GRID === */
 #shopgrid,
 .recommended-grid {
   display: grid;
@@ -156,15 +164,6 @@ button[disabled] {
   cursor:pointer;
 }
 
-#cart-count {
-  background:#fff;
-  color:#FF6F61;
-  padding:3px 8px;
-  border-radius:999px;
-  font-weight:800;
-  font-size:13px;
-}
-
 /* === BASKET PANEL === */
 #basket-panel {
   position:fixed;
@@ -186,40 +185,6 @@ button[disabled] {
 #basket-items {
   flex:1;
   overflow-y:auto;
-}
-
-/* === BASKET ITEMS === */
-.basket-item {
-  display:flex;
-  gap:12px;
-  padding:10px;
-  border-radius:8px;
-  border:1px solid #eef2f6;
-  background:#fff;
-  margin-bottom:12px;
-}
-
-.basket-item img {
-  width:80px;
-  height:80px;
-  object-fit:cover;
-  border-radius:6px;
-}
-
-.basket-item .info { flex:1; }
-.basket-item .actions {
-  display:flex;
-  gap:8px;
-  flex-direction:column;
-  align-items:flex-end;
-}
-
-.payment-embed {
-  margin-top:8px;
-  padding:8px;
-  background:#fbfbfb;
-  border:1px dashed #e6e6e6;
-  border-radius:6px;
 }
 
 /* === MODALS === */
@@ -253,7 +218,7 @@ button[disabled] {
   border-radius:10px;
 }
 
-/* === SIDE ADS (FIXED, NO OVERLAP) === */
+/* === SIDE ADS === */
 #asideleft,
 #asideright {
   position: fixed;
@@ -283,4 +248,17 @@ button[disabled] {
     right:-100%;
   }
   #basket-panel.open { right:0; }
+
+  #header {
+    justify-content: center;
+  }
+
+  #header nav {
+    width:100%;
+  }
+
+  nav ul {
+    justify-content:center;
+    gap:10px;
+  }
 }
