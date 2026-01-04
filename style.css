@@ -27,7 +27,7 @@ body {
 }
 
 /* =====================================================
-   HEADER — STICKY
+   HEADER — STRUCTURE FIXED
    ===================================================== */
 #header {
   position: sticky;
@@ -46,6 +46,7 @@ body {
   z-index: 9999;
 }
 
+/* LEFT GROUP: ICON + TITLE */
 #HIcon {
   max-width: 60px;
   margin-right: 10px;
@@ -55,12 +56,19 @@ body {
 #HH1 {
   color: #D1D8E0;
   font-size: 1.6rem;
-  margin: 0 20px 0 0;
+  margin: 0;
   white-space: nowrap;
 }
 
+/* Force icon + title to stay together */
+#HIcon,
+#HH1 {
+  display: inline-flex;
+  align-items: center;
+}
+
 /* =====================================================
-   HAMBURGER MENU (GLOBAL)
+   RIGHT CONTROLS (HAMBURGER + DARK MODE)
    ===================================================== */
 #hamburger {
   background: none;
@@ -68,15 +76,30 @@ body {
   font-size: 2rem;
   color: #E2E8F0;
   cursor: pointer;
-  margin-right: 10px;
+  margin-left: auto;
+}
+
+#darkModeToggle {
+  background: none;
+  border: none;
+  color: #BDC3C7;
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin-left: 10px;
 }
 
 /* =====================================================
-   NAVIGATION (HIDDEN BY DEFAULT)
+   NAVIGATION (OVERLAY STYLE)
    ===================================================== */
 nav {
   display: none;
+  position: absolute;
+  top: var(--header-height);
+  left: 0;
   width: 100%;
+
+  background-color: #2C3E50;
+  border-bottom: 4px solid #34495E;
 }
 
 nav.active {
@@ -86,8 +109,11 @@ nav.active {
 nav ul {
   list-style: none;
   margin: 0;
-  padding: 0;
-  align-items: center;
+  padding: 15px 0;
+
+  display: flex;
+  justify-content: center;
+  gap: 20px;
 }
 
 nav li a {
@@ -96,35 +122,11 @@ nav li a {
   font-weight: bold;
   padding: 10px 15px;
   border-radius: 5px;
-  display: inline-block;
 }
 
 nav li a:hover,
 nav li a.active {
   background-color: #34495E;
-}
-
-/* =====================================================
-   DESKTOP NAV LAYOUT
-   ===================================================== */
-@media (min-width: 701px) {
-  nav.active ul {
-    display: flex;
-    gap: 20px;
-    justify-content: flex-end;
-  }
-}
-
-/* =====================================================
-   DARK MODE BUTTON
-   ===================================================== */
-#darkModeToggle {
-  background: none;
-  border: none;
-  color: #BDC3C7;
-  font-size: 1.5rem;
-  cursor: pointer;
-  flex-shrink: 0;
 }
 
 /* =====================================================
@@ -163,18 +165,18 @@ section,
   width: 100%;
   margin: 40px auto;
   padding: 30px;
+
   background-color: #F1F3F5;
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 /* =====================================================
-   ARTICLE & GRID
+   ARTICLE / GRID
    ===================================================== */
 .article-content img {
   max-width: 100%;
   height: auto;
-  display: block;
 }
 
 .recommended-grid {
@@ -199,10 +201,6 @@ section,
   color: #D1D8E0;
   margin: 0 10px;
   text-decoration: none;
-}
-
-#footer a:hover {
-  text-decoration: underline;
 }
 
 /* =====================================================
@@ -242,28 +240,11 @@ body.dark-mode #footer {
 @media (max-width: 700px) {
 
   body {
-    padding-top: 0;
+    padding-top: var(--header-height);
   }
 
-  #header {
-    height: auto;
-    padding: 12px 16px;
+  nav ul {
     flex-direction: column;
-    align-items: center;
     gap: 10px;
   }
-
-  nav.active ul {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    width: 100%;
-    align-items: center;
-  }
-
-  nav li a {
-    width: 100%;
-    text-align: center;
-  }
 }
-
