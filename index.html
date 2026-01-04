@@ -22,6 +22,18 @@
 
   gtag('config', 'G-YS1Q1904H6');
 </script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const hamburger = document.getElementById("hamburger");
+    const nav = document.querySelector("header nav");
+
+    if (!hamburger || !nav) return;
+
+    hamburger.addEventListener("click", () => {
+      nav.classList.toggle("active");
+    });
+  });
+</script>
 <body>
   <aside id="asideleft">
   	<script>
@@ -51,6 +63,7 @@
   <header id="header">
     <img src="Images/Prebuiltid.png" alt="Prebuiltid Logo" id="HIcon" />
     <h1 id="HH1">Prebuilts</h1>
+	<button id="hamburger" aria-label="Menu">☰</button>
     <nav>
       <ul>
         <li><a href="https://prebuilts.github.io/" class="active">home</a></li>
