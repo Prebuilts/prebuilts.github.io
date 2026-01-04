@@ -285,3 +285,33 @@ body.dark-mode #footer {
     margin-top: 6px;
   }
 }
+/* ===============================
+   MOBILE HAMBURGER MENU (SAFE)
+   =============================== */
+
+#hamburger {
+  display: block;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #E2E8F0;
+  cursor: pointer;
+}
+
+/* Hide nav by default on mobile */
+nav {
+  display: none;
+  width: 100%;
+}
+
+/* Show nav when active */
+nav.active {
+  display: block;
+}
+
+/* Desktop never sees hamburger */
+@media (min-width: 701px) {
+  #hamburger {
+    display: none;
+  }
+}
