@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Best budget gaming CPU on the market | Prebuilts</title>
+
+  <!-- Article stylesheet -->
+  <link rel="stylesheet" href="article-style.css" />
+</head>
+
+<body>
+  <header id="header">
+    <img src="Images/Prebuiltid.png" id="HIcon" alt="Prebuilts Logo" />
+    <h1 id="HH1">Prebuilts</h1>
+
+    <nav>
+      <ul>
+        <li><a href="https://prebuilts.eu">Home</a></li>
+        <li><a href="https://prebuilts.eu/Store">Store</a></li>
+        <li><a class="active" href="#">Articles</a></li>
+      </ul>
+    </nav>
+
+    <button id="darkModeToggle">🌙</button>
+  </header>
+
+  <main class="article-container">
+    <h1 class="article-title">
+      Best budget Gaming Computer CPU to buy in 2026
+    </h1>
+
+    <div class="article-meta">
+      Published January 2026 • Prebuilts Editorial
+    </div>
+
+    <p>
+      New year has come, and currently we gamers are having the hardest time ever to get computer memory. RAM Prices have skyrocketed and every penny is saved. Where can we save money without bottlenecking our computer?
+    </p>
+
+    <div class="article-divider">
+      <strong>Key takeaway:</strong> CPU stands for Central Proccessing Unit and it can also be called just Proccessor
+    </div>
+
+    <h2>The AI Memory Explosion</h2>
+
+    <p>
+      TEXT
+    </p>
+
+    <ul>
+      <li>DDR5 DRAM in unprecedented quantities</li>
+      <li>High-Bandwidth Memory (HBM)</li>
+      <li>Enterprise-grade NVMe SSDs</li>
+    </ul>
+
+    <h2>Why Consumers Feel the Impact</h2>
+
+    <p>
+      Memory manufacturers are prioritizing enterprise customers due to higher
+      margins and long-term contracts. This leaves fewer chips available for
+      consumer devices, driving prices higher.
+    </p>
+
+    <h2>Conclusion</h2>
+
+    <p>
+      Until production capacity expands significantly, elevated RAM and SSD
+      prices are likely to remain. AI infrastructure growth shows no signs of
+      slowing.
+    </p>
+  </main>
+
+  <footer id="footer">
+    <p>&copy; 2026 Prebuilts</p>
+    <a href="#">Privacy Policy</a> |
+    <a href="#">ToS</a>
+  </footer>
+
+  <script>
+    const toggleButton = document.getElementById('darkModeToggle');
+    toggleButton.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      toggleButton.textContent =
+        document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+    });
+  </script>
+</body>
+</html>
