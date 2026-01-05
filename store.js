@@ -240,7 +240,7 @@ function renderProducts(products){
       <p>${escapeHtml(product.description||'')}</p>
       <div class="stock">In stock: ${qty}</div>
       <div style="margin-top:10px; display:flex; gap:8px;">
-        <button class="btn view" ${product.link ? '' : 'disabled'}>Buy now</button>
+        <button class="btn view" ${product.link ? '' : 'disabled'}>Buy from Amazon<i class="fa-brands fa-amazon"></i></button>
         <button class="btn add" ${qty <= 0 ? 'disabled' : ''}>Add to basket</button>
       </div>
     `;
