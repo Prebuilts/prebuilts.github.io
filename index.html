@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prebuilts.eu — Modern Tech Store</title>
+  <title>Prebuilts.eu</title>
 
   <link rel="icon" href="/Images/favicon.ico" />
   <link rel="stylesheet" href="style.css" />
@@ -15,146 +15,64 @@
   <meta name="description" content="Buy quality electronics, tech gadgets, accessories and more. Fast delivery, secure payments and carefully selected products for everyday tech needs.">
   <meta name="keywords" content="prebuilt gaming PC, gaming desktop PC, custom gaming PC, buy gaming PC, gaming PC Europe, Prebuilts.eu, prebuilts europe, europe gaming PCs, online tech shop, electronics store, computer components, gaming laptops, tech gadgets, gaming PC components, high-end gaming PC, affordable gaming PC, gaming PC deals, gaming PC configurator, gaming monitors, gaming accessories, PS5, Xbox, Nintendo, smartphones, computers">
 
-  <!-- Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YS1Q1904H6"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-YS1Q1904H6');
-  </script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const burger = document.getElementById("hamburger");
+  const drawer = document.getElementById("nav-drawer");
+  const overlay = document.getElementById("overlay");
 
-  <!-- Drawer toggle -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const burger = document.getElementById("hamburger");
-      const drawer = document.getElementById("nav-drawer");
-      const overlay = document.getElementById("overlay");
+  burger.onclick = () => {
+    drawer.classList.add("open");
+    overlay.classList.add("show");
+  };
 
-      burger.addEventListener("click", () => {
-        drawer.classList.toggle("open");
-        overlay.classList.toggle("show");
-      });
-
-      overlay.addEventListener("click", () => {
-        drawer.classList.remove("open");
-        overlay.classList.remove("show");
-      });
-    });
-  </script>
+  overlay.onclick = () => {
+    drawer.classList.remove("open");
+    overlay.classList.remove("show");
+  };
+});
+</script>
 </head>
 
 <body>
 
-<!-- Overlay -->
 <div id="overlay"></div>
 
-<!-- Ads -->
-<aside id="asideleft">
-  <script>
-    atOptions = { key:'867f57fc5b6f1ec7ee6b6af33aacdf57', format:'iframe', height:600, width:160 };
-  </script>
-  <script src="https://www.highperformanceformat.com/867f57fc5b6f1ec7ee6b6af33aacdf57/invoke.js"></script>
-</aside>
-
-<aside id="asideright">
-  <script>
-    atOptions = { key:'867f57fc5b6f1ec7ee6b6af33aacdf57', format:'iframe', height:600, width:160 };
-  </script>
-  <script src="https://www.highperformanceformat.com/867f57fc5b6f1ec7ee6b6af33aacdf57/invoke.js"></script>
-</aside>
+<!-- ADS -->
+<aside id="asideleft"></aside>
+<aside id="asideright"></aside>
 
 <!-- HEADER -->
 <header id="header">
   <div class="header-left">
-    <img src="Images/Prebuiltid.png" alt="Logo" id="HIcon" />
+    <img src="Images/Prebuiltid.png" id="HIcon" />
     <h1 id="HH1">Prebuilts</h1>
   </div>
 
-  <div class="header-right">
-    <button id="darkModeToggle" aria-label="Toggle dark mode">🌙</button>
-    <button id="hamburger" aria-label="Open menu">☰</button>
-  </div>
+  <!-- THIS BUTTON IS ALWAYS VISIBLE -->
+  <button id="hamburger" aria-label="Menu">☰</button>
 </header>
 
-<!-- NAV DRAWER -->
+<!-- SLIDE MENU -->
 <nav id="nav-drawer">
   <ul>
-    <li><a href="/" class="active">Home</a></li>
+    <li><a href="/">Home</a></li>
     <li><a href="/Store">Store</a></li>
     <li><a href="/">Social Media</a></li>
-    <li><a href="/">About us</a></li>
+    <li><a href="/">About</a></li>
     <li id="authLinks"></li>
   </ul>
 </nav>
 
-<!-- CONTENT -->
 <section class="hero">
-  <h2>Modern Gaming & Tech Store</h2>
-  <p>Premium gaming PCs, components and accessories — built for performance.</p>
-  <a href="/Store" class="cta">Shop Now</a>
-</section>
-
-<section class="card">
-  <h3>Why Prebuilts?</h3>
-  <p>Carefully selected components, clean builds and transparent pricing.</p>
-</section>
-
-<section class="card">
-  <h3>Latest Tech News</h3>
-  <p>AI data centers are increasing memory and SSD prices worldwide.</p>
-  <a href="/articles/article-1" class="link">Read more →</a>
+  <h2>Modern Tech Store</h2>
+  <p>Gaming PCs, hardware & accessories.</p>
+  <a class="cta" href="/Store">Shop Now</a>
 </section>
 
 <footer id="footer">
-  <p>© 2026 Prebuilts.eu</p>
-  <a href="#">Privacy</a>
-  <a href="#">Terms</a>
-  <a href="https://stats.uptimerobot.com/AHB9YlJVOk">Uptime</a>
+  © 2026 Prebuilts.eu
 </footer>
-
-<!-- Dark mode -->
-<script>
-  const toggle = document.getElementById("darkModeToggle");
-  toggle.onclick = () => {
-    document.body.classList.toggle("dark");
-    toggle.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
-  };
-</script>
-
-<!-- Firebase Auth -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-  import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
-
-  const app = initializeApp({
-    apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
-    authDomain: "prebuiltid-website.firebaseapp.com",
-    projectId: "prebuiltid-website"
-  });
-
-  const auth = getAuth(app);
-  const authLinks = document.getElementById("authLinks");
-
-  onAuthStateChanged(auth, user => {
-    if (user) {
-      authLinks.innerHTML = `
-        <span>Hello, ${user.email}</span>
-        <button id="logoutBtn">Log out</button>
-      `;
-      document.getElementById("logoutBtn").onclick = () => signOut(auth);
-    } else {
-      authLinks.innerHTML = `<a href="login.html">Log in</a>`;
-    }
-  });
-</script>
-
-<script>
-  if (window.innerWidth <= 700) {
-    document.getElementById("asideleft")?.remove();
-    document.getElementById("asideright")?.remove();
-  }
-</script>
 
 </body>
 </html>
