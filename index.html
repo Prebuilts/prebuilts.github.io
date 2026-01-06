@@ -3,21 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Best Gaming PCs and Equipment | Prebuilts.eu</title>
+  <title>Prebuilts.eu — Modern Tech Store</title>
 
-  <link rel="icon" href="/Images/favicon.ico" />
+  <link rel="icon" type="image/x-icon" href="/Images/favicon.ico" />
   <link rel="stylesheet" href="style.css" />
-
-  <meta name="description" content="Buy quality electronics, tech gadgets, accessories and more." />
-  <meta name="keywords" content="prebuilt gaming PC, gaming PC Europe, tech store, electronics shop" />
-
-  <meta name="p:domain_verify" content="b402a362310dc61ee0d9eca61f2d5e91"/>
-  <meta name="msvalidate.01" content="2685190BB3ABCD7007E591C6CA03B20F" />
-  <meta name='admaven-placement' content=Bqjw8rHC8>
 
   <script src="https://kit.fontawesome.com/e68a8b27de.js" crossorigin="anonymous"></script>
 
-  <!-- Google Analytics -->
+  <!-- SEO -->
+  <meta name="description" content="Premium gaming PCs, tech gear and electronics. Modern store, fast delivery, secure checkout." />
+  <meta name="keywords" content="gaming pc, prebuilts, tech store, electronics, gaming europe" />
+
+  <!-- Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-YS1Q1904H6"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -25,147 +22,128 @@
     gtag('js', new Date());
     gtag('config', 'G-YS1Q1904H6');
   </script>
+
+  <!-- Hamburger logic -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const burger = document.getElementById("hamburger");
+      const nav = document.querySelector("nav");
+      if (burger) {
+        burger.addEventListener("click", () => nav.classList.toggle("active"));
+      }
+    });
+  </script>
 </head>
 
 <body>
 
-<!-- SIDE ADS -->
+<!-- SIDE ADS (DESKTOP ONLY) -->
 <aside id="asideleft">
   <script>
-    atOptions = {
-      'key' : '867f57fc5b6f1ec7ee6b6af33aacdf57',
-      'format' : 'iframe',
-      'height' : 600,
-      'width' : 160
-    };
+    atOptions = { key:'867f57fc5b6f1ec7ee6b6af33aacdf57', format:'iframe', height:600, width:160 };
   </script>
   <script src="https://www.highperformanceformat.com/867f57fc5b6f1ec7ee6b6af33aacdf57/invoke.js"></script>
 </aside>
 
 <aside id="asideright">
   <script>
-    atOptions = {
-      'key' : '867f57fc5b6f1ec7ee6b6af33aacdf57',
-      'format' : 'iframe',
-      'height' : 600,
-      'width' : 160
-    };
+    atOptions = { key:'867f57fc5b6f1ec7ee6b6af33aacdf57', format:'iframe', height:600, width:160 };
   </script>
   <script src="https://www.highperformanceformat.com/867f57fc5b6f1ec7ee6b6af33aacdf57/invoke.js"></script>
 </aside>
 
 <!-- HEADER -->
 <header id="header">
-  <div class="header-left">
-    <img src="Images/Prebuiltid.png" alt="Prebuiltid Logo" id="HIcon" />
+  <div class="brand">
+    <img src="Images/Prebuiltid.png" id="HIcon" alt="Prebuilts logo">
     <h1 id="HH1">Prebuilts</h1>
   </div>
 
-  <div class="header-right">
-    <button id="hamburger" aria-label="Menu">☰</button>
-    <button id="darkModeToggle" aria-label="Toggle dark mode">🌙</button>
-  </div>
+  <button id="hamburger" aria-label="Menu">☰</button>
 
   <nav>
     <ul>
-      <li><a href="https://prebuilts.eu/" class="active">Home</a></li>
-      <li><a href="https://prebuilts.eu/Store">Store</a></li>
-      <li><a href="https://prebuilts.eu/">Social Media</a></li>
-      <li><a href="https://prebuilts.eu/">About us</a></li>
+      <li><a href="/" class="active">Home</a></li>
+      <li><a href="/Store">Store</a></li>
+      <li><a href="/">Social</a></li>
+      <li><a href="/">About</a></li>
       <li id="authLinks"></li>
     </ul>
   </nav>
+
+  <button id="darkModeToggle">🌙</button>
 </header>
 
 <!-- HERO -->
 <section class="hero">
-  <h2>Modern Tech & Gaming Store</h2>
-  <p>Gaming PCs, consoles, accessories and electronics — curated for performance.</p>
-  <a href="/Store" class="cta-btn">Shop now</a>
+  <h2>Premium Gaming & Tech</h2>
+  <p>High-performance PCs, components and gear — curated for gamers.</p>
+  <a href="/Store" class="cta">Shop Now</a>
 </section>
 
-<!-- INTRO -->
-<section id="intro">
-  <h2>About us</h2>
-  <p>We sell carefully selected tech and gaming equipment for everyday users and enthusiasts.</p>
+<!-- CONTENT -->
+<section class="card">
+  <h3>Why Prebuilts?</h3>
+  <p>We focus on quality hardware, clean builds and honest pricing. No fluff.</p>
 </section>
-
-<!-- IN-CONTENT AD -->
-<script async data-cfasync="false" src="https://pl28388377.effectivegatecpm.com/38dd75d29699854847861fa8f3173eae/invoke.js"></script>
-<div id="container-38dd75d29699854847861fa8f3173eae"></div>
 
 <!-- ARTICLE -->
-<section class="article-section">
-  <h2>Latest article</h2>
-  <div class="article-content">
-    <p>
-      AI data centers are consuming massive amounts of RAM and SSD chips, forcing manufacturers to prioritize enterprise buyers.
-    </p>
-    <a href="https://prebuilts.eu/articles/article-1" class="see-more-btn">Read more</a>
-  </div>
+<section class="card">
+  <h3>Tech News</h3>
+  <p>AI data centers are consuming massive RAM and SSD supplies, impacting consumer prices worldwide.</p>
+  <a href="/articles/article-1" class="link">Read full article →</a>
 </section>
 
 <!-- FOOTER -->
 <footer id="footer">
-  <p>© 2026 Prebuilts — All rights reserved</p>
-  <a href="#">Privacy Policy</a>
-  <a href="#">ToS</a>
-  <a href="https://stats.uptimerobot.com/AHB9YlJVOk">Site uptime</a>
+  <p>© 2026 Prebuilts.eu</p>
+  <a href="#">Privacy</a>
+  <a href="#">Terms</a>
+  <a href="https://stats.uptimerobot.com/AHB9YlJVOk">Uptime</a>
 </footer>
-
-<!-- HAMBURGER -->
-<script>
-  document.getElementById("hamburger").onclick = () => {
-    document.querySelector("nav").classList.toggle("active");
-  };
-</script>
 
 <!-- DARK MODE -->
 <script>
   const toggle = document.getElementById("darkModeToggle");
   toggle.onclick = () => {
-    document.body.classList.toggle("dark-mode");
-    toggle.textContent = document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
+    document.body.classList.toggle("light");
+    toggle.textContent = document.body.classList.contains("light") ? "🌙" : "☀️";
   };
 </script>
 
 <!-- PRODUCTS -->
 <script src="products.js"></script>
 
-<!-- FIREBASE AUTH (UNCHANGED) -->
+<!-- FIREBASE AUTH -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
   import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-  const firebaseConfig = {
+  const app = initializeApp({
     apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
     authDomain: "prebuiltid-website.firebaseapp.com",
-    projectId: "prebuiltid-website",
-    storageBucket: "prebuiltid-website.firebasestorage.app",
-    messagingSenderId: "854871585546",
-    appId: "1:854871585546:web:568400979292a0c31740f3"
-  };
+    projectId: "prebuiltid-website"
+  });
 
-  const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const authLinks = document.getElementById("authLinks");
 
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(auth, user => {
     if (user) {
       authLinks.innerHTML = `
-        <span class="user-greeting">Hello, ${user.email}</span>
-        <button id="logoutBtn" class="see-more-btn">Log out</button>
+        <span>Hello, ${user.email}</span>
+        <button id="logout">Logout</button>
       `;
-      document.getElementById("logoutBtn").onclick = () => signOut(auth).then(() => location.reload());
+      document.getElementById("logout").onclick = () => signOut(auth);
     } else {
-      authLinks.innerHTML = `<a href="login.html">Log in</a>`;
+      authLinks.innerHTML = `<a href="login.html">Login</a>`;
     }
   });
 </script>
 
-<!-- MOBILE AD REMOVAL (UNCHANGED) -->
+<!-- MOBILE AD REMOVAL -->
 <script>
-  if (window.matchMedia("(max-width: 700px)").matches) {
+  if (window.innerWidth <= 700) {
     document.getElementById("asideleft")?.remove();
     document.getElementById("asideright")?.remove();
   }
