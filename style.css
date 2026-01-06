@@ -1,12 +1,27 @@
 /* =====================================================
-   VARIABLES & RESET
+   VARIABLES
    ===================================================== */
 :root {
-  --header-height: 90px;
+  --header-height: 88px;
   --side-ad-width: 160px;
+
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-muted: #f1f5f9;
+
+  --brand: #2563eb;
+  --brand-dark: #1e40af;
+  --accent: #f97316;
+
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+
+  --radius: 16px;
+  --radius-sm: 10px;
+  --shadow: 0 10px 30px rgba(2,6,23,0.08);
 }
 
-*, *::before, *::after {
+* {
   box-sizing: border-box;
 }
 
@@ -14,82 +29,57 @@
    BODY
    ===================================================== */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #F4F4F9;
-  color: #333;
   margin: 0;
+  font-family: system-ui, sans-serif;
+  background: var(--bg-main);
+  color: var(--text-main);
 
   padding-top: var(--header-height);
   padding-left: calc(var(--side-ad-width) + 20px);
   padding-right: calc(var(--side-ad-width) + 20px);
-
-  overflow-x: hidden;
 }
 
 /* =====================================================
-   HEADER — STRUCTURE FIXED
+   HEADER
    ===================================================== */
 #header {
   position: sticky;
   top: 0;
+  height: var(--header-height);
 
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  height: var(--header-height);
-  padding: 15px 30px;
-
-  background-color: #2C3E50;
-  border-bottom: 5px solid #34495E;
-
+  padding: 0 28px;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
   z-index: 9999;
 }
 
-/* LEFT GROUP: ICON + TITLE */
-#HIcon {
-  max-width: 60px;
-  margin-right: 10px;
-  flex-shrink: 0;
-}
-
-#HH1 {
-  color: #D1D8E0;
-  font-size: 1.6rem;
-  margin: 0;
-  white-space: nowrap;
-}
-
-/* Force icon + title to stay together */
-#HIcon,
-#HH1 {
-  display: inline-flex;
+.header-left {
+  display: flex;
   align-items: center;
+  gap: 10px;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#HIcon {
+  max-width: 52px;
+}
+
+#HH1 {
+  font-size: 1.4rem;
+  margin: 0;
 }
 
 /* =====================================================
-   RIGHT CONTROLS (HAMBURGER + DARK MODE)
-   ===================================================== */
-#hamburger {
-  background: none;
-  border: none;
-  font-size: 2rem;
-  color: #E2E8F0;
-  cursor: pointer;
-  margin-left: auto;
-}
-
-#darkModeToggle {
-  background: none;
-  border: none;
-  color: #BDC3C7;
-  font-size: 1.5rem;
-  cursor: pointer;
-  margin-left: 10px;
-}
-
-/* =====================================================
-   NAVIGATION (OVERLAY STYLE)
+   NAV
    ===================================================== */
 nav {
   display: none;
@@ -97,9 +87,8 @@ nav {
   top: var(--header-height);
   left: 0;
   width: 100%;
-
-  background-color: #2C3E50;
-  border-bottom: 4px solid #34495E;
+  background: #fff;
+  box-shadow: var(--shadow);
 }
 
 nav.active {
@@ -108,25 +97,95 @@ nav.active {
 
 nav ul {
   list-style: none;
-  margin: 0;
-  padding: 15px 0;
-
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 26px;
+  padding: 20px;
+  margin: 0;
 }
 
-nav li a {
-  color: #E2E8F0;
+nav a {
   text-decoration: none;
-  font-weight: bold;
-  padding: 10px 15px;
-  border-radius: 5px;
+  color: var(--text-main);
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 999px;
 }
 
-nav li a:hover,
-nav li a.active {
-  background-color: #34495E;
+nav a:hover,
+nav a.active {
+  background: var(--bg-muted);
+}
+
+/* =====================================================
+   BUTTONS
+   ===================================================== */
+button,
+.cta-btn {
+  background: var(--brand);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 20px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:hover,
+.cta-btn:hover {
+  background: var(--brand-dark);
+}
+
+/* =====================================================
+   HERO
+   ===================================================== */
+.hero {
+  max-width: 1200px;
+  margin: 60px auto;
+  padding: 60px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-dark));
+  color: #fff;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.hero p {
+  opacity: 0.9;
+}
+
+/* =====================================================
+   FEATURE GRID
+   ===================================================== */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.feature-card {
+  background: var(--bg-card);
+  padding: 24px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  font-weight: 600;
+}
+
+/* =====================================================
+   FOOTER
+   ===================================================== */
+#footer {
+  text-align: center;
+  padding: 30px;
+  margin: 40px 20px;
+  background: #fff;
+  border-radius: var(--radius);
+}
+
+#footer a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: var(--text-muted);
 }
 
 /* =====================================================
@@ -135,92 +194,31 @@ nav li a.active {
 #asideleft,
 #asideright {
   position: fixed;
-  top: 0;
+  top: var(--header-height);
   width: var(--side-ad-width);
-  height: 100vh;
-  padding-top: var(--header-height);
-  background-color: #F1F3F5;
-  border-radius: 8px;
-  z-index: 100;
-  display: flex;
-  justify-content: center;
+  height: calc(100vh - var(--header-height));
+  background: var(--bg-muted);
 }
 
 #asideleft { left: 10px; }
 #asideright { right: 10px; }
 
-#asideleft iframe,
-#asideright iframe {
-  width: 100%;
-  height: calc(100vh - var(--header-height));
-  border: none;
-}
-
-/* =====================================================
-   CONTENT SECTIONS
-   ===================================================== */
-section,
-.textsection {
-  max-width: 1000px;
-  width: 100%;
-  margin: 40px auto;
-  padding: 30px;
-
-  background-color: #F1F3F5;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-/* =====================================================
-   ARTICLE / GRID
-   ===================================================== */
-.article-content img {
-  max-width: 100%;
-  height: auto;
-}
-
-.recommended-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
-}
-
-/* =====================================================
-   FOOTER
-   ===================================================== */
-#footer {
-  text-align: center;
-  background-color: #2C3E50;
-  color: #D1D8E0;
-  padding: 20px;
-  margin: 40px 20px 20px;
-  border-radius: 10px;
-}
-
-#footer a {
-  color: #D1D8E0;
-  margin: 0 10px;
-  text-decoration: none;
-}
-
 /* =====================================================
    DARK MODE
    ===================================================== */
 body.dark-mode {
-  background-color: #34495E;
-  color: #BDC3C7;
+  background: #0f172a;
+  color: #e5e7eb;
 }
 
-body.dark-mode section {
-  background-color: #2C3E50;
-}
-
+body.dark-mode #header,
+body.dark-mode section,
 body.dark-mode #footer {
-  background-color: #34495E;
+  background: #1e293b;
 }
 
 /* =====================================================
-   SMALL DESKTOP
+   RESPONSIVE
    ===================================================== */
 @media (max-width: 1200px) {
   body {
@@ -234,17 +232,12 @@ body.dark-mode #footer {
   }
 }
 
-/* =====================================================
-   MOBILE
-   ===================================================== */
 @media (max-width: 700px) {
-
-  body {
-    padding-top: var(--header-height);
-  }
-
   nav ul {
     flex-direction: column;
-    gap: 10px;
+  }
+
+  .hero {
+    padding: 40px 20px;
   }
 }
