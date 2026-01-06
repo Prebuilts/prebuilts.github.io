@@ -5,16 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Prebuilts.eu — Modern Tech Store</title>
 
-  <link rel="icon" type="image/x-icon" href="/Images/favicon.ico" />
+  <link rel="icon" href="/Images/favicon.ico" />
   <link rel="stylesheet" href="style.css" />
 
   <script src="https://kit.fontawesome.com/e68a8b27de.js" crossorigin="anonymous"></script>
 
-  <!-- SEO -->
-  <meta name="description" content="Premium gaming PCs, tech gear and electronics. Modern store, fast delivery, secure checkout." />
-  <meta name="keywords" content="gaming pc, prebuilts, tech store, electronics, gaming europe" />
-
-  <!-- Analytics -->
+  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-YS1Q1904H6"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -23,21 +19,32 @@
     gtag('config', 'G-YS1Q1904H6');
   </script>
 
-  <!-- Hamburger logic -->
+  <!-- Hamburger / Drawer -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const burger = document.getElementById("hamburger");
-      const nav = document.querySelector("nav");
-      if (burger) {
-        burger.addEventListener("click", () => nav.classList.toggle("active"));
-      }
+      const drawer = document.getElementById("nav-drawer");
+      const overlay = document.getElementById("overlay");
+
+      burger.onclick = () => {
+        drawer.classList.toggle("open");
+        overlay.classList.toggle("show");
+      };
+
+      overlay.onclick = () => {
+        drawer.classList.remove("open");
+        overlay.classList.remove("show");
+      };
     });
   </script>
 </head>
 
 <body>
 
-<!-- SIDE ADS (DESKTOP ONLY) -->
+<!-- OVERLAY -->
+<div id="overlay"></div>
+
+<!-- SIDE ADS -->
 <aside id="asideleft">
   <script>
     atOptions = { key:'867f57fc5b6f1ec7ee6b6af33aacdf57', format:'iframe', height:600, width:160 };
@@ -55,46 +62,45 @@
 <!-- HEADER -->
 <header id="header">
   <div class="brand">
-    <img src="Images/Prebuiltid.png" id="HIcon" alt="Prebuilts logo">
+    <img src="Images/Prebuiltid.png" id="HIcon" />
     <h1 id="HH1">Prebuilts</h1>
   </div>
 
-  <button id="hamburger" aria-label="Menu">☰</button>
-
-  <nav>
-    <ul>
-      <li><a href="/" class="active">Home</a></li>
-      <li><a href="/Store">Store</a></li>
-      <li><a href="/">Social</a></li>
-      <li><a href="/">About</a></li>
-      <li id="authLinks"></li>
-    </ul>
-  </nav>
-
-  <button id="darkModeToggle">🌙</button>
+  <div class="header-actions">
+    <button id="darkModeToggle">🌙</button>
+    <button id="hamburger">☰</button>
+  </div>
 </header>
+
+<!-- RIGHT DRAWER NAV -->
+<nav id="nav-drawer">
+  <ul>
+    <li><a href="/" class="active">Home</a></li>
+    <li><a href="/Store">Store</a></li>
+    <li><a href="/">Social</a></li>
+    <li><a href="/">About</a></li>
+    <li id="authLinks"></li>
+  </ul>
+</nav>
 
 <!-- HERO -->
 <section class="hero">
-  <h2>Premium Gaming & Tech</h2>
-  <p>High-performance PCs, components and gear — curated for gamers.</p>
+  <h2>Modern Gaming & Tech Store</h2>
+  <p>High-quality gaming PCs, components and accessories — curated for performance.</p>
   <a href="/Store" class="cta">Shop Now</a>
 </section>
 
-<!-- CONTENT -->
 <section class="card">
   <h3>Why Prebuilts?</h3>
-  <p>We focus on quality hardware, clean builds and honest pricing. No fluff.</p>
+  <p>Premium components, transparent pricing, and clean builds — made for gamers.</p>
 </section>
 
-<!-- ARTICLE -->
 <section class="card">
-  <h3>Tech News</h3>
-  <p>AI data centers are consuming massive RAM and SSD supplies, impacting consumer prices worldwide.</p>
-  <a href="/articles/article-1" class="link">Read full article →</a>
+  <h3>Latest Tech News</h3>
+  <p>AI data centers are driving up memory and SSD prices worldwide.</p>
+  <a href="/articles/article-1" class="link">Read more →</a>
 </section>
 
-<!-- FOOTER -->
 <footer id="footer">
   <p>© 2026 Prebuilts.eu</p>
   <a href="#">Privacy</a>
@@ -106,8 +112,8 @@
 <script>
   const toggle = document.getElementById("darkModeToggle");
   toggle.onclick = () => {
-    document.body.classList.toggle("light");
-    toggle.textContent = document.body.classList.contains("light") ? "🌙" : "☀️";
+    document.body.classList.toggle("dark");
+    toggle.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
   };
 </script>
 
@@ -132,16 +138,15 @@
     if (user) {
       authLinks.innerHTML = `
         <span>Hello, ${user.email}</span>
-        <button id="logout">Logout</button>
+        <button id="logoutBtn">Log out</button>
       `;
-      document.getElementById("logout").onclick = () => signOut(auth);
+      document.getElementById("logoutBtn").onclick = () => signOut(auth);
     } else {
-      authLinks.innerHTML = `<a href="login.html">Login</a>`;
+      authLinks.innerHTML = `<a href="login.html">Log in</a>`;
     }
   });
 </script>
 
-<!-- MOBILE AD REMOVAL -->
 <script>
   if (window.innerWidth <= 700) {
     document.getElementById("asideleft")?.remove();
