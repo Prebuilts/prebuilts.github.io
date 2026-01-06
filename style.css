@@ -158,3 +158,109 @@ body {
     display: none;
   }
 }
+/* ===============================
+   HEADER FIX (DESKTOP + MOBILE)
+   =============================== */
+
+#header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  z-index: 9999;
+}
+
+/* LEFT */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* RIGHT */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ===============================
+   FORCE HAMBURGER (ALWAYS)
+   =============================== */
+
+#hamburger {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+
+  font-size: 1.8rem;
+  line-height: 1;
+
+  background: #ffffff;
+  color: #0f172a;
+
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+
+  cursor: pointer;
+  z-index: 10000;
+}
+
+/* ===============================
+   NAV → RIGHT SIDE DRAWER
+   =============================== */
+
+#header nav {
+  position: fixed;
+  top: 0;
+  right: -320px;
+
+  width: 300px;
+  height: 100vh;
+
+  background: #ffffff;
+  padding: calc(var(--header-height) + 20px) 20px;
+
+  box-shadow: -20px 0 40px rgba(0,0,0,0.15);
+  transition: right 0.3s ease;
+
+  z-index: 9998;
+}
+
+#header nav.active {
+  right: 0;
+}
+
+#header nav ul {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* ===============================
+   DARK MODE SAFE
+   =============================== */
+
+body.dark-mode #header {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode #hamburger {
+  background: #334155;
+  color: #e5e7eb;
+  border-color: #475569;
+}
+
+body.dark-mode #header nav {
+  background: #1e293b;
+}
