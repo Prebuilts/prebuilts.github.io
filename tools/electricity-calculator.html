@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Energy Consumption Calculator | Prebuilts</title>
+
+  <link rel="icon" href="Images/favicon.ico">
+  <link rel="stylesheet" href="energy-calculator.css">
+
+  <script src="https://kit.fontawesome.com/e68a8b27de.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header id="header">
+  <div class="header-left">
+    <img src="Images/Prebuiltid.png" id="HIcon" alt="Prebuilts Logo">
+    <h1 id="HH1">Prebuilts</h1>
+  </div>
+
+  <div class="header-actions">
+    <button id="darkModeToggle" aria-label="Dark mode">🌙</button>
+    <button id="hamburger" aria-label="Menu">☰</button>
+  </div>
+</header>
+
+<!-- SIDE NAV -->
+<nav id="nav">
+  <button id="navClose">✕</button>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="Store.html">Store</a></li>
+    <li><a href="energy-calculator.html" class="active">Energy Calculator</a></li>
+    <li><a href="login.html">Login</a></li>
+  </ul>
+</nav>
+
+<!-- MAIN -->
+<main>
+  <section class="calculator-section reveal">
+    <h2>Energy Consumption Calculator</h2>
+    <p class="subtitle">
+      Calculate electricity usage and cost based on device wattage and usage time.
+    </p>
+
+    <div class="calculator-grid">
+
+      <div class="input-group">
+        <label>Device Wattage (W)</label>
+        <input type="number" id="wattage" placeholder="e.g. 750">
+      </div>
+
+      <div class="input-group">
+        <label>Hours Used Per Day</label>
+        <input type="number" id="hours" placeholder="e.g. 6">
+      </div>
+
+      <div class="input-group">
+        <label>Electricity Price</label>
+        <input type="number" step="0.01" id="price" placeholder="e.g. 0.25">
+      </div>
+
+      <div class="input-group">
+        <label>Currency</label>
+        <select id="currency">
+          <option value="€">€ EUR</option>
+          <option value="$">$ USD</option>
+        </select>
+      </div>
+
+    </div>
+
+    <button class="calculate-btn" onclick="calculateEnergy()">Calculate</button>
+
+    <div id="results" class="results hidden">
+      <h3>Estimated Cost</h3>
+      <p id="daily"></p>
+      <p id="monthly"></p>
+      <p id="yearly"></p>
+    </div>
+  </section>
+</main>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <p>© 2026 Prebuilts</p>
+  <a href="#">Privacy Policy</a> |
+  <a href="#">ToS</a>
+</footer>
+
+<script>
+/* Hamburger */
+const hamburger = document.getElementById("hamburger");
+const nav = document.getElementById("nav");
+const navClose = document.getElementById("navClose");
+
+hamburger.onclick = () => nav.classList.add("active");
+navClose.onclick = () => nav.classList.remove("active");
+
+/* Dark mode */
+const toggleButton = document.getElementById('darkModeToggle');
+toggleButton.onclick = () => {
+  document.body.classList.toggle('dark-mode');
+  toggleButton.textContent =
+    document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+};
+
+/* Calculator */
+function calculateEnergy() {
+  const watts = Number(document.getElementById("wattage").value);
+  const hours = Number(document.getElementById("hours").value);
+  const price = Number(document.getElementById("price").value);
+  const currency = document.getElementById("currency").value;
+
+  if (!watts || !hours || !price) return;
+
+  const kWhPerDay = (watts / 1000) * hours;
+  const dailyCost = kWhPerDay * price;
+  const monthlyCost = dailyCost * 30;
+  const yearlyCost = dailyCost * 365;
+
+  document.getElementById("daily").textContent =
+    `Daily: ${currency}${dailyCost.toFixed(2)}`;
+  document.getElementById("monthly").textContent =
+    `Monthly: ${currency}${monthlyCost.toFixed(2)}`;
+  document.getElementById("yearly").textContent =
+    `Yearly: ${currency}${yearlyCost.toFixed(2)}`;
+
+  document.getElementById("results").classList.remove("hidden");
+}
+
+/* Reveal animation */
+const reveals = document.querySelectorAll(".reveal");
+window.addEventListener("scroll", () => {
+  reveals.forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+      el.classList.add("active");
+    }
+  });
+});
+</script>
+
+</body>
+</html>
