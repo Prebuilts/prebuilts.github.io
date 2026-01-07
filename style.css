@@ -80,6 +80,11 @@ body {
 
 #nav ul { list-style: none; }
 #nav li { margin-bottom: 15px; }
+#nav li a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+}
 
 /* SECTIONS */
 section {
