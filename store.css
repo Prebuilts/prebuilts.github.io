@@ -184,3 +184,165 @@ body {
   opacity: 1;
   transform: none;
 }
+/* =====================================================
+   🔒 PRODUCT CARD LAYOUT FIX (SAFE OVERRIDES)
+   ===================================================== */
+
+/* Lock grid behavior */
+#shopgrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  align-items: stretch;
+}
+
+/* Card structure — DO NOT REORDER */
+.productbox {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+}
+
+/* Image consistency */
+.productbox img {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  background: #f8fafc;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+/* Title */
+.productbox h3 {
+  font-size: 1rem;
+  margin: 8px 0 4px;
+  color: #0f172a;
+}
+
+/* Price */
+.productbox > div {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+/* Description */
+.productbox p {
+  font-size: 0.9rem;
+  color: #475569;
+  flex-grow: 1;
+  margin-bottom: 10px;
+}
+
+/* Stock */
+.productbox .stock {
+  font-size: 0.85rem;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+/* Button row — LOCK POSITION */
+.productbox > div:last-child {
+  display: flex;
+  gap: 8px;
+  margin-top: auto;
+}
+
+/* Buttons — RESTORED STYLE */
+.productbox .btn {
+  flex: 1;
+  padding: 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  border: none;
+  cursor: pointer;
+  transition: background .15s ease, transform .08s ease;
+}
+
+.productbox .btn.view {
+  background: #2563eb;
+  color: #fff;
+}
+
+.productbox .btn.add {
+  background: #16a34a;
+  color: #fff;
+}
+
+.productbox .btn:hover {
+  transform: translateY(-1px);
+}
+
+.productbox .btn:disabled {
+  background: #cbd5f5;
+  color: #64748b;
+  cursor: not-allowed;
+}
+
+/* =====================================================
+   RESPONSIVE — KEEP ORDER
+   ===================================================== */
+
+@media (max-width: 900px) {
+  #shopgrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  #shopgrid {
+    grid-template-columns: 1fr;
+  }
+}
+/* =====================================================
+   FIX AD OVERLAP — SAFE DESKTOP LAYOUT
+   ===================================================== */
+
+/* Only show side ads when there's room */
+@media (min-width: 1300px) {
+  body {
+    padding-left: 200px;   /* 160px ad + spacing */
+    padding-right: 200px;
+  }
+
+  .store-section {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Hide ads on smaller screens */
+@media (max-width: 1299px) {
+  #asideleft,
+  #asideright {
+    display: none;
+  }
+
+  body {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+/* =====================================================
+   FIX BASKET UNDER HEADER
+   ===================================================== */
+
+#basket-panel {
+  top: 90px; /* header height */
+  height: calc(100vh - 90px);
+  z-index: 2000;
+}
+
+/* Mobile — full height still OK */
+@media (max-width: 700px) {
+  #basket-panel {
+    top: 0;
+    height: 100vh;
+  }
+}
