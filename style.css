@@ -186,3 +186,82 @@ body.dark-mode #nav {
     padding-right: 0;
   }
 }
+/* =========================================
+   FEATURED TOOLS GRID
+   ========================================= */
+
+#featured-tools {
+  max-width: 1100px;
+  margin: 80px auto;
+  padding: 30px;
+}
+
+#featured-tools .section-title {
+  font-size: 2rem;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.tool-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.tool-card h3 {
+  margin-top: 0;
+  color: #0f172a;
+}
+
+.tool-card p {
+  color: #475569;
+  margin: 15px 0 25px;
+  line-height: 1.6;
+}
+
+/* Tool button */
+.tool-btn {
+  align-self: flex-start;
+  padding: 10px 22px;
+  background: #2563eb;
+  color: #ffffff;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.tool-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(37,99,235,0.35);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .tools-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Dark mode compatibility */
+body.dark-mode .tool-card {
+  background: #1e293b;
+}
+
+body.dark-mode .tool-card h3 {
+  color: #e5e7eb;
+}
+
+body.dark-mode .tool-card p {
+  color: #cbd5f5;
+}
