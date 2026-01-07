@@ -86,7 +86,7 @@ section {
   max-width: 1100px;
   margin: 60px auto;
   padding: 30px;
-  background: white;
+  background: #edf4fb;
   border-radius: 16px;
 }
 
@@ -94,7 +94,7 @@ section {
 .article-card {
   padding: 30px;
   border-radius: 16px;
-  background: #f1f5f9;
+  background: #edf4fb;
 }
 
 .see-more-btn {
