@@ -3,92 +3,95 @@
 <head>
   <meta charset="UTF-8" />
   <title>AI Is Driving RAM Prices Up | Prebuilts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- Article stylesheet -->
   <link rel="stylesheet" href="article-style.css" />
 </head>
 
 <body>
-  <header id="header">
+
+<header id="header">
+  <div class="header-left">
     <img src="Images/Prebuiltid.png" id="HIcon" alt="Prebuilts Logo" />
     <h1 id="HH1">Prebuilts</h1>
+  </div>
 
-    <nav>
-      <ul>
-        <li><a href="https://prebuilts.eu">Home</a></li>
-        <li><a href="https://prebuilts.eu/Store">Store</a></li>
-        <li><a class="active" href="#">Articles</a></li>
-      </ul>
-    </nav>
-
+  <div class="header-actions">
+    <button id="hamburger" aria-label="Menu">☰</button>
     <button id="darkModeToggle">🌙</button>
-  </header>
+  </div>
+</header>
 
-  <main class="article-container">
-    <h1 class="article-title">
-      AI Data Centers Are Driving RAM and SSD Prices Up
-    </h1>
+<nav id="nav">
+  <button id="navClose">✕</button>
+  <ul>
+    <li><a href="https://prebuilts.eu">Home</a></li>
+    <li><a href="https://prebuilts.eu/Store">Store</a></li>
+    <li><a class="active" href="#">Articles</a></li>
+  </ul>
+</nav>
 
-    <div class="article-meta">
-      Published January 2026 • Prebuilts Editorial
-    </div>
+<main class="article-container reveal">
+  <h1 class="article-title">
+    AI Data Centers Are Driving RAM and SSD Prices Up
+  </h1>
 
-    <p>
-      The rapid expansion of artificial intelligence has triggered an
-      unexpected ripple effect for everyday consumers: rising RAM and SSD
-      prices. As AI infrastructure grows, it is absorbing vast quantities of
-      memory and storage hardware.
-    </p>
+  <div class="article-meta">
+    Published January 2026 • Prebuilts Editorial
+  </div>
 
-    <div class="article-divider">
-      <strong>Key takeaway:</strong> AI servers consume significantly more
-      memory than consumer PCs, tightening global supply.
-    </div>
+  <p>
+    The rapid expansion of artificial intelligence has triggered an unexpected
+    ripple effect for everyday consumers.
+  </p>
 
-    <h2>The AI Memory Explosion</h2>
+  <div class="article-divider">
+    <strong>Key takeaway:</strong> AI servers consume massive memory capacity.
+  </div>
 
-    <p>
-      Modern AI workloads rely heavily on high-capacity, high-speed memory.
-      Training large models requires massive pools of DDR5 RAM, HBM, and
-      enterprise NVMe storage.
-    </p>
+  <h2>The AI Memory Explosion</h2>
+  <p>Modern AI workloads rely heavily on high-speed memory.</p>
 
-    <ul>
-      <li>DDR5 DRAM in unprecedented quantities</li>
-      <li>High-Bandwidth Memory (HBM)</li>
-      <li>Enterprise-grade NVMe SSDs</li>
-    </ul>
+  <ul>
+    <li>DDR5 DRAM</li>
+    <li>HBM</li>
+    <li>Enterprise NVMe</li>
+  </ul>
 
-    <h2>Why Consumers Feel the Impact</h2>
+  <h2>Conclusion</h2>
+  <p>
+    Prices are likely to remain elevated as AI demand grows.
+  </p>
+</main>
 
-    <p>
-      Memory manufacturers are prioritizing enterprise customers due to higher
-      margins and long-term contracts. This leaves fewer chips available for
-      consumer devices, driving prices higher.
-    </p>
+<footer id="footer">
+  <p>&copy; 2026 Prebuilts • <a href="#">Privacy</a> • <a href="#">ToS</a></p>
+</footer>
 
-    <h2>Conclusion</h2>
+<script>
+  const hamburger = document.getElementById("hamburger");
+  const nav = document.getElementById("nav");
+  const navClose = document.getElementById("navClose");
 
-    <p>
-      Until production capacity expands significantly, elevated RAM and SSD
-      prices are likely to remain. AI infrastructure growth shows no signs of
-      slowing.
-    </p>
-  </main>
+  hamburger.addEventListener("click", () => nav.classList.add("active"));
+  navClose.addEventListener("click", () => nav.classList.remove("active"));
 
-  <footer id="footer">
-    <p>&copy; 2026 Prebuilts</p>
-    <a href="#">Privacy Policy</a> |
-    <a href="#">ToS</a>
-  </footer>
+  const toggleButton = document.getElementById("darkModeToggle");
+  toggleButton.addEventListener("click", () => {
+    document.body.classList.toggle("dark-mode");
+    toggleButton.textContent =
+      document.body.classList.contains("dark-mode") ? "☀️" : "🌙";
+  });
 
-  <script>
-    const toggleButton = document.getElementById('darkModeToggle');
-    toggleButton.addEventListener('click', () => {
-      document.body.classList.toggle('dark-mode');
-      toggleButton.textContent =
-        document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+  // Reveal animation
+  window.addEventListener("scroll", () => {
+    document.querySelectorAll(".reveal").forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+        el.classList.add("active");
+      }
     });
-  </script>
+  });
+</script>
+
 </body>
 </html>
