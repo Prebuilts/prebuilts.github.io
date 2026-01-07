@@ -4,186 +4,139 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Store | Prebuilts.eu</title>
+
   <link rel="stylesheet" href="store.css" />
   <script src="https://kit.fontawesome.com/e68a8b27de.js" crossorigin="anonymous"></script>
-  <meta name="description" content="Buy quality electronics, tech gadgets, accessories and more. Fast delivery, secure payments and carefully selected products for everyday tech needs.">
-  <meta name="keywords" content="prebuilt gaming PC, gaming desktop PC, custom gaming PC, buy gaming PC, gaming PC Europe, Prebuilts.eu, prebuilts europe, europe gaming PCs, online tech shop, electronics store, computer components, gaming laptops, tech gadgets, gaming PC components, high-end gaming PC, affordable gaming PC, gaming PC deals, gaming PC configurator, gaming monitors, gaming accessories, PS5, Xbox, Nintendo, smartphones, computers">
-</head>
-<body>
-  <aside id="asideleft">
-	<script>
-  		atOptions = {
-    		'key' : '867f57fc5b6f1ec7ee6b6af33aacdf57',
-   	 		'format' : 'iframe',
-    		'height' : 600,
-    		'width' : 160,
-   			'params' : {}
-  		};
-	</script>
-	<script src="https://www.highperformanceformat.com/867f57fc5b6f1ec7ee6b6af33aacdf57/invoke.js"></script>
-  </aside>
-  <aside id="asideright">
-	<script>
-  		atOptions = {
-    		'key' : '867f57fc5b6f1ec7ee6b6af33aacdf57',
-    		'format' : 'iframe',
-    		'height' : 600,
-    		'width' : 160,
-    		'params' : {}
-  		};
-	</script>
-	<script src="https://www.highperformanceformat.com/867f57fc5b6f1ec7ee6b6af33aacdf57/invoke.js"></script>
-  </aside>
 
+  <meta name="description" content="Buy quality electronics, tech gadgets, accessories and more.">
+  <meta name="keywords" content="gaming PC, electronics store, prebuilts europe">
+</head>
+
+<body>
+
+<!-- SIDE ADS (UNCHANGED) -->
+<aside id="asideleft">
+  <script>
+    atOptions = {
+      'key' : '867f57fc5b6f1ec7ee6b6af33aacdf57',
+      'format' : 'iframe',
+      'height' : 600,
+      'width' : 160,
+      'params' : {}
+    };
+  </script>
+  <script src="https://www.highperformanceformat.com/867f57fc5b6f1ec7ee6b6af33aacdf57/invoke.js"></script>
+</aside>
+
+<aside id="asideright">
+  <script>
+    atOptions = {
+      'key' : '867f57fc5b6f1ec7ee6b6af33aacdf57',
+      'format' : 'iframe',
+      'height' : 600,
+      'width' : 160,
+      'params' : {}
+    };
+  </script>
+  <script src="https://www.highperformanceformat.com/867f57fc5b6f1ec7ee6b6af33aacdf57/invoke.js"></script>
+</aside>
+
+<!-- HEADER -->
 <header id="header">
-  <img src="Images/Prebuiltid.png" alt="Prebuiltid Logo" id="HIcon" />
-  <h1 id="HH1">Prebuilts</h1>
-  <nav>
-    <ul>
-      <li><a href="index.html">Home</a></li>
-      <li><a href="#" class="active">Store</a></li>
-      <li><a href="#" id="settingsBtn">Settings</a></li>
-      <li><a href="login.html" id="accountLink">Log in</a></li>
-      <li><a href="#" id="logoutBtn" style="display:none">Log out</a></li>
-    </ul>
-  </nav>
+  <div class="header-left">
+    <img src="Images/Prebuiltid.png" id="HIcon" alt="Prebuilts Logo" />
+    <h1 id="HH1">Prebuilts</h1>
+  </div>
+
+  <div class="header-actions">
+    <button id="hamburger">☰</button>
+  </div>
 </header>
 
-<section class="store-section">
+<!-- SIDE NAV -->
+<nav id="nav">
+  <button id="navClose">✕</button>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a class="active" href="#">Store</a></li>
+    <li><a href="#" id="settingsBtn">Settings</a></li>
+    <li><a href="login.html" id="accountLink">Log in</a></li>
+    <li><a href="#" id="logoutBtn" style="display:none">Log out</a></li>
+  </ul>
+</nav>
+
+<!-- STORE -->
+<section class="store-section reveal">
   <h2>Our store</h2>
 
-  <div class="category-filter" style="align-items:center;">
-    <label for="categorySelect">Filter by:</label>
+  <div class="category-filter">
+    <label>Filter:</label>
     <select id="categorySelect">
       <option value="all">All</option>
       <option value="gaming-pcs">Gaming PC-s</option>
       <option value="consoles">Consoles</option>
-      <option value="controllers">Game controllers</option>
+      <option value="controllers">Controllers</option>
       <option value="software">Software</option>
       <option value="misc">Misc</option>
       <option value="smartphones">Smartphones</option>
-      <option value="phones">Phones</option>
-      <option value="handhelds">Handheld consoles</option>
       <option value="monitors">Monitors</option>
-      <option value="pcs">Desktop computers</option>
-      <option value="gpu">Graphics cards</option>
-      <option value="tv">TV</option>
-      <option value="keyboards">Keyboards</option>
-      <option value="mice">Gaming mice</option>
-      <option value="headphones">Headphones</option>
-      <option value="games">Games</option>
-      <option value="routers">Routers</option>
-      <option value="network-switches">Network Switches</option>
     </select>
 
-    <label for="sortSelect" style="margin-left:14px;">Filter:</label>
     <select id="sortSelect">
-      <option value="none">Filter</option>
-      <option value="price-asc">Price: cheaper → more expensive</option>
-      <option value="price-desc">Price: more expensive → cheaper</option>
-      <option value="name-asc">Name: A → Z</option>
-      <option value="name-desc">Name: Z → A</option>
-      <option value="newest">Newer first</option>
-      <option value="stock-desc">In stock: more → less</option>
-      <option value="stock-asc">In stock: less → more</option>
+      <option value="none">Sort</option>
+      <option value="price-asc">Price ↑</option>
+      <option value="price-desc">Price ↓</option>
+      <option value="name-asc">A–Z</option>
+      <option value="name-desc">Z–A</option>
     </select>
 
-    <label for="searchInput" style="margin-left:14px;">Search:</label>
-    <input id="searchInput" placeholder="Search by name" style="padding:8px;border-radius:6px;border:1px solid #d0d7df;">
+    <input id="searchInput" placeholder="Search product">
   </div>
 
-  <!-- 3x3 grid element -->
   <div id="shopgrid" class="recommended-grid"></div>
 </section>
 
-<!-- Floating Cart Button -->
-<div id="cart-icon" title="ViewbBasket" aria-label="Basket">
-  🛒 <span id="cart-count">0</span>
-</div>
+<!-- CART -->
+<div id="cart-icon">🛒 <span id="cart-count">0</span></div>
 
-<!-- Slide-out Basket Panel (kept off-screen until opened) -->
-<div id="basket-panel" aria-hidden="true" role="dialog" aria-label="ostukorv">
+<!-- BASKET PANEL -->
+<div id="basket-panel">
   <div id="basket-header">
     <h2>Basket</h2>
-    <button id="close-basket" aria-label="Close basket">✖</button>
+    <button id="close-basket">✖</button>
   </div>
-
-  <div id="basket-items" aria-live="polite"></div>
-
+  <div id="basket-items"></div>
   <div id="basket-footer">
     <h3>Total: <span id="basket-total">0€</span></h3>
-    <div class="basket-actions">
-      <button id="clear-cart-btn">Empty basket</button>
-      <button id="buy-all-btn">Buy all</button>
-    </div>
-    <div style="margin-top:10px;">
-      <button id="my-orders-btn">My orders</button>
-    </div>
+    <button id="clear-cart-btn">Empty basket</button>
+    <button id="buy-all-btn">Buy all</button>
+    <button id="my-orders-btn">My orders</button>
   </div>
 </div>
 
-<!-- DISCLAIMER MODAL (shows before basket on cart click unless accepted) -->
-<div id="disclaimer-modal" class="modal" aria-hidden="true" role="alertdialog" aria-labelledby="disclaimer-title">
-  <div class="modal-content">
-    <h2 id="disclaimer-title">Important notice</h2>
-    <p style="font-weight:700; margin-top:8px;">
-      We have a large selection of products. Most of them can be ordered from Amazon. Some of them we sell directly to buyers. If the NowPayments payment terminal is added to the shopping cart, then after payment we will send the product directly to you and send you an email (shared with us by you). In other cases, you can buy the product from Amazon. Happy shopping!
-    </p>
-
-    <div style="margin-top:16px; display:flex; gap:10px; justify-content:flex-end;">
-      <button id="disclaimer-cancel" style="background:#bbb;">Cancel</button>
-      <button id="disclaimer-accept">I understand</button>
-    </div>
-  </div>
-</div>
-
-<!-- Checkout Confirmation Modal -->
-<div id="checkout-modal" class="modal" aria-hidden="true">
-  <div class="modal-content">
-    <h3>Are you sure?</h3>
-    <p id="checkout-message">We will send an email to your email address (if it is a software product [Activation Code]), where we will send you software codes, etc. We cannot return purchased items if you have entered incorrect information and the email sent to you therefore reaches the wrong address! Amazon will deal with you regarding physical items. DO NOT press "Confirm order" button if you have physical items in your cart as the payment is handled by Amazon. Buy the items from there!</p>
-
-    <div style="margin-top:12px; display:flex; gap:10px; justify-content:flex-end;">
-      <button id="cancel-checkout">Cancel</button>
-      <button id="confirm-checkout">Confirm order</button>
-    </div>
-  </div>
-</div>
-
-<!-- Crypto modal (kept for compatibility; payments shown per product inside basket) -->
-<div id="crypto-modal" class="modal" aria-hidden="true">
-  <div class="modal-content">
-    <h3>Crypto</h3>
-    <p>Crypto payment will be displayed separately under each product in the shopping cart if the admin has added the NOWPayments embed.</p>
-    <div style="margin-top:12px; display:flex; gap:10px; justify-content:flex-end;">
-      <button id="close-crypto">Close</button>
-    </div>
-  </div>
-</div>
-
-<!-- Settings Modal -->
-<div id="settings-modal" class="modal" aria-hidden="true">
-  <div class="modal-content">
-    <h3>Settings</h3>
-    <p>Email: <span id="settings-email">Loading...</span></p>
-
-    <label for="settings-address">Adress</label>
-    <input id="settings-address" placeholder="For example: Tech Street 25-2, Tallinn, Estonia">
-
-    <label for="settings-dpd">DPD parcel machine (name)</label>
-    <input id="settings-dpd" placeholder="For example: Tech street LIDL DPD parcel machine">
-
-    <div style="margin-top:12px; display:flex; gap:10px; justify-content:flex-end;">
-      <button id="save-settings">Save</button>
-      <button id="close-settings">Close</button>
-    </div>
-  </div>
-</div>
+<!-- FOOTER -->
 <footer id="footer">
-  <p>All rights reserved &copy; Prebuilts 2026</p>
+  <p>&copy; 2026 Prebuilts</p>
 </footer>
 
 <script type="module" src="store.js"></script>
-<script src="https://pl28398162.effectivegatecpm.com/21/b9/4e/21b94e10a158b4463cb00f159704c4c9.js"></script>
+
+<script>
+  const hamburger = document.getElementById("hamburger");
+  const nav = document.getElementById("nav");
+  const navClose = document.getElementById("navClose");
+
+  hamburger.onclick = () => nav.classList.add("active");
+  navClose.onclick = () => nav.classList.remove("active");
+
+  window.addEventListener("scroll", () => {
+    document.querySelectorAll(".reveal").forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+        el.classList.add("active");
+      }
+    });
+  });
+</script>
+
 </body>
 </html>
