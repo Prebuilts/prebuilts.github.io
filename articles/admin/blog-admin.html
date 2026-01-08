@@ -1,23 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
   <title>Blog Admin</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="blog-admin.css">
 </head>
 <body>
 
-<section class="admin-panel">
-  <h2>Blog Admin</h2>
+<header id="header">
+  <h2>Admin Panel</h2>
+</header>
 
+<section class="admin">
   <input id="title" placeholder="Title">
-  <input id="excerpt" placeholder="Excerpt">
-  <textarea id="content" placeholder="Content"></textarea>
+  <textarea id="content" placeholder="Markdown content"></textarea>
+
+  <div class="preview">
+    <h4>Preview</h4>
+    <div id="preview"></div>
+  </div>
 
   <button id="publish">Publish</button>
-  <button id="logout">Log out</button>
-
-  <div id="adminPosts"></div>
 </section>
 
 <script type="module" src="blog-admin.js"></script>
