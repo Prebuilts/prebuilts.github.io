@@ -1,83 +1,88 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
-  getFirestore, collection, addDoc, getDocs,
-  updateDoc, deleteDoc, doc, serverTimestamp
+  getFirestore, doc, setDoc, getDoc, deleteDoc, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
-import { getAuth, onAuthStateChanged } from
-  "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+import {
+  getAuth, onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
-const firebaseConfig = { /* YOUR CONFIG */ };
+const ADMIN_UID = "zL2LJWPAiFWFpcdFFh3E7KfDrxi2";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
+  authDomain: "prebuiltid-website.firebaseapp.com",
+  projectId: "prebuiltid-website",
+};
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-let currentId = null;
+const params = new URLSearchParams(location.search);
+const articleId = params.get("id") || crypto.randomUUID();
 
-onAuthStateChanged(auth, user => {
-  if (!user || user.uid !== "zL2LJWPAiFWFpcdFFh3E7KfDrxi2") {
-    alert("Unauthorized");
-    location.href = "/";
+const sectionsEl = document.getElementById("sections");
+
+function addSection(data = {}) {
+  const wrap = document.createElement("div");
+  wrap.innerHTML = `
+    <input placeholder="Section heading" value="${data.heading||""}">
+    <textarea placeholder="Section content">${data.content||""}</textarea>
+  `;
+  sectionsEl.appendChild(wrap);
+}
+
+document.getElementById("addSection").onclick = () => addSection();
+
+onAuthStateChanged(auth, async user => {
+  if (!user || user.uid !== ADMIN_UID) {
+    document.body.innerHTML = "<h2>Access denied</h2>";
+    return;
   }
-  loadArticles();
+
+  const ref = doc(db, "articles", articleId);
+  const snap = await getDoc(ref);
+
+  if (snap.exists()) {
+    const d = snap.data();
+    title.value = d.title;
+    meta.value = d.meta;
+    takeaway.value = d.takeaway;
+    d.sections.forEach(addSection);
+  } else {
+    addSection(); addSection(); addSection();
+  }
 });
 
-const sectionsDiv = document.getElementById("sections");
-
-function sectionBox(data={}) {
-  return `
-    <div class="section-box">
-      <input placeholder="Section heading" value="${data.heading||""}">
-      <textarea placeholder="Section content">${data.content||""}</textarea>
-    </div>
-  `;
-}
-
-document.getElementById("addSection").onclick = () =>
-  sectionsDiv.insertAdjacentHTML("beforeend", sectionBox());
-
-async function loadArticles() {
-  const snap = await getDocs(collection(db,"articles"));
-  const list = document.getElementById("articleList");
-  list.innerHTML = "";
-
-  snap.forEach(d => {
-    const div = document.createElement("div");
-    div.textContent = d.data().title;
-    div.onclick = () => editArticle(d.id, d.data());
-    list.appendChild(div);
-  });
-}
-
-function editArticle(id,data){
-  currentId = id;
-  articleEditor.style.display="block";
-  title.value=data.title;
-  meta.value=data.meta;
-  takeaway.value=data.takeaway;
-  sectionsDiv.innerHTML="";
-  data.sections.forEach(s=>sectionsDiv.insertAdjacentHTML("beforeend",sectionBox(s)));
-}
-
-save.onclick = async ()=>{
-  const sections=[...sectionsDiv.children].map(s=>({
-    heading:s.children[0].value,
-    content:s.children[1].value
+document.getElementById("save").onclick = async () => {
+  const sections = [...sectionsEl.children].map(s => ({
+    heading: s.children[0].value,
+    content: s.children[1].value
   }));
 
-  const payload={ title:title.value, meta:meta.value, takeaway:takeaway.value,
-    sections, updatedAt:serverTimestamp() };
-
-  currentId
-    ? await updateDoc(doc(db,"articles",currentId),payload)
-    : await addDoc(collection(db,"articles"),{...payload,createdAt:serverTimestamp(),published:true});
+  await setDoc(doc(db,"articles",articleId),{
+    title: title.value,
+    meta: meta.value,
+    takeaway: takeaway.value,
+    sections,
+    published: false,
+    updatedAt: serverTimestamp(),
+    createdAt: serverTimestamp()
+  },{merge:true});
 
   alert("Saved");
-  loadArticles();
 };
 
-delete.onclick = async ()=>{
-  if(confirm("Delete article?")){
-    await deleteDoc(doc(db,"articles",currentId));
-    location.reload();
-  }
+document.getElementById("publish").onclick = async () => {
+  await setDoc(doc(db,"articles",articleId),
+    { published:true, updatedAt: serverTimestamp() },
+    { merge:true }
+  );
+  alert("Published");
+};
+
+document.getElementById("delete").onclick = async () => {
+  if (!confirm("Delete article?")) return;
+  await deleteDoc(doc(db,"articles",articleId));
+  location.href = "blog.html";
 };
