@@ -6,6 +6,7 @@ import {
   getAuth, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
 
+/* ===== CONFIG ===== */
 const ADMIN_UID = "zL2LJWPAiFWFpcdFFh3E7KfDrxi2";
 
 const firebaseConfig = {
@@ -18,25 +19,38 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-const params = new URLSearchParams(location.search);
-const articleId = params.get("id") || crypto.randomUUID();
-
+/* ===== DOM ===== */
+const titleEl = document.getElementById("title");
+const metaEl = document.getElementById("meta");
+const takeawayEl = document.getElementById("takeaway");
 const sectionsEl = document.getElementById("sections");
 
-function addSection(data = {}) {
-  const wrap = document.createElement("div");
-  wrap.innerHTML = `
-    <input placeholder="Section heading" value="${data.heading||""}">
-    <textarea placeholder="Section content">${data.content||""}</textarea>
+const addSectionBtn = document.getElementById("addSection");
+const saveBtn = document.getElementById("save");
+const publishBtn = document.getElementById("publish");
+const deleteBtn = document.getElementById("delete");
+
+/* ===== ARTICLE ID ===== */
+const params = new URLSearchParams(location.search);
+const articleId = params.get("id") || Date.now().toString();
+
+/* ===== HELPERS ===== */
+function createSection(heading = "", content = "") {
+  const div = document.createElement("div");
+  div.className = "section";
+  div.innerHTML = `
+    <input placeholder="Section heading" value="${heading}">
+    <textarea placeholder="Section content">${content}</textarea>
+    <button class="remove">Remove section</button>
   `;
-  sectionsEl.appendChild(wrap);
+  div.querySelector(".remove").onclick = () => div.remove();
+  sectionsEl.appendChild(div);
 }
 
-document.getElementById("addSection").onclick = () => addSection();
-
+/* ===== AUTH & LOAD ===== */
 onAuthStateChanged(auth, async user => {
   if (!user || user.uid !== ADMIN_UID) {
-    document.body.innerHTML = "<h2>Access denied</h2>";
+    document.body.innerHTML = "<h2 style='padding:40px'>Access denied</h2>";
     return;
   }
 
@@ -45,35 +59,40 @@ onAuthStateChanged(auth, async user => {
 
   if (snap.exists()) {
     const d = snap.data();
-    title.value = d.title;
-    meta.value = d.meta;
-    takeaway.value = d.takeaway;
-    d.sections.forEach(addSection);
+    titleEl.value = d.title || "";
+    metaEl.value = d.meta || "";
+    takeawayEl.value = d.takeaway || "";
+    (d.sections || []).forEach(s => createSection(s.heading, s.content));
   } else {
-    addSection(); addSection(); addSection();
+    createSection();
+    createSection();
+    createSection();
   }
 });
 
-document.getElementById("save").onclick = async () => {
-  const sections = [...sectionsEl.children].map(s => ({
-    heading: s.children[0].value,
-    content: s.children[1].value
+/* ===== EVENTS ===== */
+addSectionBtn.onclick = () => createSection();
+
+saveBtn.onclick = async () => {
+  const sections = [...sectionsEl.children].map(sec => ({
+    heading: sec.children[0].value,
+    content: sec.children[1].value
   }));
 
   await setDoc(doc(db,"articles",articleId),{
-    title: title.value,
-    meta: meta.value,
-    takeaway: takeaway.value,
+    title: titleEl.value,
+    meta: metaEl.value,
+    takeaway: takeawayEl.value,
     sections,
     published: false,
     updatedAt: serverTimestamp(),
     createdAt: serverTimestamp()
-  },{merge:true});
+  },{ merge:true });
 
   alert("Saved");
 };
 
-document.getElementById("publish").onclick = async () => {
+publishBtn.onclick = async () => {
   await setDoc(doc(db,"articles",articleId),
     { published:true, updatedAt: serverTimestamp() },
     { merge:true }
@@ -81,7 +100,7 @@ document.getElementById("publish").onclick = async () => {
   alert("Published");
 };
 
-document.getElementById("delete").onclick = async () => {
+deleteBtn.onclick = async () => {
   if (!confirm("Delete article?")) return;
   await deleteDoc(doc(db,"articles",articleId));
   location.href = "blog.html";
