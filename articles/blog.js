@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
-import {
-  getFirestore, collection, query, where, orderBy, limit, startAfter, getDocs
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import { getFirestore, collection, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+import { marked } from "https://cdn.jsdelivr.net/npm/marked/+esm";
+import DOMPurify from "https://cdn.jsdelivr.net/npm/dompurify@3.0.6/+esm";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
@@ -13,59 +13,32 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const grid = document.getElementById("blogGrid");
-const sortSelect = document.getElementById("sortSelect");
+const sort = document.getElementById("sort");
 
-let lastDoc = null;
-let loading = false;
-let sortOrder = "desc";
-
-async function loadPosts(reset=false) {
-  if (loading) return;
-  loading = true;
-
-  if (reset) {
-    grid.innerHTML = "";
-    lastDoc = null;
-  }
-
-  let q = query(
-    collection(db,"blog_posts"),
-    where("published","==",true),
-    orderBy("createdAt",sortOrder),
-    limit(6)
-  );
-
-  if (lastDoc) {
-    q = query(q, startAfter(lastDoc));
-  }
-
-  const snap = await getDocs(q);
-  snap.forEach(doc => {
-    const d = doc.data();
-    const card = document.createElement("article");
-    card.className = "blog-card";
-    card.innerHTML = `
-      <h3>${d.title}</h3>
-      <span>${d.createdAt.toDate().toDateString()}</span>
-      <p>${d.excerpt}</p>
-      <a class="read-btn" href="post.html?id=${doc.id}">Read</a>
-    `;
-    grid.appendChild(card);
+function load(order="desc"){
+  grid.innerHTML="";
+  const q = query(collection(db,"blog_posts"), orderBy("createdAt",order));
+  onSnapshot(q,snap=>{
+    grid.innerHTML="";
+    snap.forEach(doc=>{
+      const d = doc.data();
+      const html = DOMPurify.sanitize(marked.parse(d.content||""));
+      const el = document.createElement("div");
+      el.className="post";
+      el.innerHTML=`
+        <h2>${d.title}</h2>
+        <span>${d.createdAt?.toDate().toDateString()}</span>
+        <div class="markdown">${html}</div>
+      `;
+      grid.appendChild(el);
+    });
   });
-
-  lastDoc = snap.docs[snap.docs.length - 1];
-  loading = false;
 }
 
-sortSelect.onchange = () => {
-  sortOrder = sortSelect.value;
-  loadPosts(true);
-};
+load();
 
-window.addEventListener("scroll", () => {
-  if (window.innerHeight + window.scrollY > document.body.offsetHeight - 300) {
-    loadPosts();
-  }
-});
+sort.onchange = ()=> load(sort.value==="new"?"desc":"asc");
 
-loadPosts();
+/* menu */
+hamburger.onclick=()=>nav.classList.add("active");
+navClose.onclick=()=>nav.classList.remove("active");
