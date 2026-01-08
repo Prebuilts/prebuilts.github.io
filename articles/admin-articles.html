@@ -1,40 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Admin Articles | Prebuilts</title>
-  <link rel="stylesheet" href="article-style.css">
+<meta charset="UTF-8">
+<title>Admin – Articles</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="article-style.css">
 </head>
+
 <body>
 
 <header id="header">
   <div class="header-left">
-    <img src="Images/Prebuiltid.png" id="HIcon">
-    <h1 id="HH1">Prebuilts Admin</h1>
+    <h1 id="HH1">Article Admin</h1>
   </div>
 </header>
 
-<section class="admin-box">
-  <h2>Articles</h2>
-  <button id="newArticle">➕ New Article</button>
+<main class="article-container">
 
-  <div id="articleEditor" style="display:none">
-    <input id="title" placeholder="Article title">
-    <input id="meta" placeholder="Meta (date / author)">
-    <textarea id="takeaway" placeholder="Key takeaway"></textarea>
+  <input id="title" placeholder="Article title">
+  <input id="meta" placeholder="Meta / subtitle">
 
-    <h3>Sections</h3>
-    <div id="sections"></div>
-    <button id="addSection">➕ Add Section</button>
+  <div id="sections"></div>
 
-    <div style="margin-top:15px;">
-      <button id="save">💾 Save</button>
-      <button id="delete" class="secondary">🗑 Delete</button>
-    </div>
+  <button id="addSection">+ Add section</button>
+
+  <textarea id="takeaway" placeholder="Key takeaway"></textarea>
+
+  <div style="display:flex;gap:10px;margin-top:20px;">
+    <button id="save">Save</button>
+    <button id="publish">Publish</button>
+    <button id="delete" style="background:#dc2626;">Delete</button>
   </div>
 
-  <div id="articleList"></div>
-</section>
+</main>
 
 <script type="module" src="admin-articles.js"></script>
 </body>
