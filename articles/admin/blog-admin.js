@@ -15,7 +15,7 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 
 onAuthStateChanged(auth,user=>{
-  if(!user) location.href="login.html";
+  if(!user) location.href="https://prebuilts.eu/login.html";
 });
 
 content.oninput=()=>{
