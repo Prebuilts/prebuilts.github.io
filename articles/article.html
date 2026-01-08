@@ -1,23 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Article | Prebuilts</title>
-  <link rel="stylesheet" href="article-style.css">
+<meta charset="UTF-8">
+<title>Article</title>
+<link rel="stylesheet" href="article-style.css">
 </head>
 <body>
 
-<header id="header">
-  <div class="header-left">
-    <img src="Images/Prebuiltid.png" id="HIcon">
-    <h1 id="HH1">Prebuilts</h1>
-  </div>
-</header>
+<main id="article" class="article-container"></main>
 
-<main class="article-container" id="article"></main>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-<footer id="footer">© 2026 Prebuilts</footer>
+const app = initializeApp({
+  apiKey:"AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
+  projectId:"prebuiltid-website"
+});
+const db = getFirestore(app);
 
-<script type="module" src="article.js"></script>
+const id = new URLSearchParams(location.search).get("id");
+const snap = await getDoc(doc(db,"articles",id));
+
+if (!snap.exists()) {
+  article.innerHTML = "<h2>Not found</h2>";
+} else {
+  const a = snap.data();
+  article.innerHTML = `
+    <h1 class="article-title">${a.title}</h1>
+    <div class="article-meta">${a.meta}</div>
+    ${a.sections.map(s=>`
+      <h2>${s.heading}</h2>
+      <p>${s.content}</p>
+    `).join("")}
+    <div class="article-divider">${a.takeaway}</div>
+  `;
+}
+</script>
 </body>
 </html>
