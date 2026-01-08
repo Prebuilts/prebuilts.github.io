@@ -4,37 +4,36 @@
   <meta charset="UTF-8">
   <title>Blog | Prebuilts</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="blog.css">
+  <link rel="stylesheet" href="article-style.css">
 </head>
+
 <body>
 
 <header id="header">
   <div class="header-left">
-    <img src="Images/Prebuiltid.png" id="HIcon">
-    <h1 id="HH1">Prebuilts</h1>
+    <img src="Images/Prebuiltid.png" id="HIcon" alt="Prebuilts">
+    <h1 id="HH1">Prebuilts Blog</h1>
   </div>
-  <button id="hamburger">☰</button>
+
+  <div class="header-actions">
+    <select id="sort" style="padding:8px;border-radius:8px;">
+      <option value="desc">Newest first</option>
+      <option value="asc">Oldest first</option>
+    </select>
+  </div>
 </header>
 
-<nav id="nav">
-  <button id="navClose">✖</button>
-  <ul>
-    <li><a href="index.html">Home</a></li>
-    <li><a href="Store.html">Store</a></li>
-    <li><a class="active">Blog</a></li>
-    <li><a href="blog-admin.html">Admin</a></li>
-  </ul>
-</nav>
+<main style="max-width:1200px;margin:60px auto;padding:0 20px;">
+  <div id="blogGrid" style="
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+    gap:24px;">
+  </div>
+</main>
 
-<section class="toolbar">
-  <label>Sort:</label>
-  <select id="sort">
-    <option value="new">Newest</option>
-    <option value="old">Oldest</option>
-  </select>
-</section>
-
-<section id="blogGrid" class="grid"></section>
+<footer id="footer">
+  © 2026 Prebuilts
+</footer>
 
 <script type="module" src="blog.js"></script>
 </body>
