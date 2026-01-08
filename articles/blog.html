@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Blog | Prebuilts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="blog.css">
+</head>
+
+<body>
+
+<header id="header">
+  <div class="header-left">
+    <img src="Images/Prebuiltid.png" id="HIcon">
+    <h1 id="HH1">Prebuilts</h1>
+  </div>
+
+  <div class="header-actions">
+    <button id="darkModeToggle">🌙</button>
+    <button id="hamburger">☰</button>
+  </div>
+</header>
+
+<nav id="nav">
+  <button id="navClose">✕</button>
+  <ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="Store.html">Store</a></li>
+    <li><a class="active" href="blog.html">Blog</a></li>
+    <li><a href="blog-admin.html">Admin</a></li>
+  </ul>
+</nav>
+
+<main>
+  <section class="blog-header">
+    <h2>Blog</h2>
+    <select id="sortSelect">
+      <option value="desc">Newest → Oldest</option>
+      <option value="asc">Oldest → Newest</option>
+    </select>
+  </section>
+
+  <section id="blogGrid" class="blog-grid"></section>
+</main>
+
+<footer id="footer">
+  <p>© 2026 Prebuilts</p>
+</footer>
+
+<script type="module" src="blog.js"></script>
+</body>
+</html>
