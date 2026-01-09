@@ -265,3 +265,42 @@ body.dark-mode .tool-card h3 {
 body.dark-mode .tool-card p {
   color: #cbd5f5;
 }
+/* =====================================================
+   DESKTOP HAMBURGER MENU VISIBILITY FIX (1300px+)
+   SAFE ADDITION – DOES NOT REMOVE EXISTING CODE
+   ===================================================== */
+
+/* Always show hamburger button on all screen sizes */
+#hamburger {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  visibility: visible !important;
+  opacity: 1 !important;
+  z-index: 10001;
+}
+
+/* Prevent header buttons from shrinking or being pushed away */
+.header-actions {
+  flex-shrink: 0;
+}
+
+/* Keep header content inside visible area on large screens */
+@media (min-width: 1300px) {
+  #header {
+    padding-left: 220px;   /* aligns with body padding */
+    padding-right: 220px;
+  }
+}
+
+/* Ensure header stays above ads and content */
+#header {
+  position: fixed;
+  z-index: 9999;
+}
+
+/* Safety: prevent any accidental overflow clipping */
+#header,
+.header-actions {
+  overflow: visible;
+}
