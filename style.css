@@ -1,72 +1,115 @@
 :root {
   --header-height: 90px;
+  --bg: #f8fafc;
+  --text: #0f172a;
+  --card: #dbe8f5;
+  --primary: #2563eb;
+  --border: #e5e7eb;
 }
 
-/* RESET */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* ===============================
+   RESET
+   =============================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
+/* ===============================
+   BODY
+   =============================== */
 body {
-  font-family: system-ui, sans-serif;
-  background: #f8fafc;
-  color: #0f172a;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
   padding-top: var(--header-height);
+  line-height: 1.7;
+  overflow-x: hidden;
 }
 
-/* HEADER */
+/* ===============================
+   HEADER
+   =============================== */
 #header {
-  height: var(--header-height);
-  background: white;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 20px;
   position: fixed;
   top: 0;
   width: 100%;
+  height: var(--header-height);
+  background: #ffffff;
+  border-bottom: 1px solid var(--border);
   z-index: 9999;
-  border-bottom: 1px solid #e5e7eb;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 24px;
 }
 
+/* LEFT SIDE */
 .header-left {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 
-#HIcon { width: 48px; }
-#HH1 { font-size: 1.5rem; }
+#HIcon {
+  width: 46px;
+  height: auto;
+}
 
+#HH1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* RIGHT ACTIONS */
 .header-actions {
   display: flex;
   gap: 10px;
 }
 
 /* BUTTONS */
-#hamburger, #darkModeToggle {
+#hamburger,
+#darkModeToggle {
   width: 42px;
   height: 42px;
   border-radius: 10px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   background: #f1f5f9;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* SIDE NAV */
+#hamburger {
+  font-size: 1.5rem;
+}
+
+/* ===============================
+   SIDE NAV (RIGHT PANEL)
+   =============================== */
 #nav {
   position: fixed;
   top: 0;
   right: -320px;
   width: 320px;
   height: 100vh;
-  background: white;
-  padding: 80px 20px;
-  transition: right .3s ease;
+
+  background: #ffffff;
+  padding: 90px 24px;
+  transition: right 0.3s ease;
   z-index: 10000;
-  box-shadow: -20px 0 40px rgba(0,0,0,.2);
+
+  box-shadow: -20px 0 40px rgba(0,0,0,0.2);
 }
 
-#nav.active { right: 0; }
+#nav.active {
+  right: 0;
+}
 
 #navClose {
   position: absolute;
@@ -78,128 +121,64 @@ body {
   cursor: pointer;
 }
 
-#nav ul { list-style: none; }
-#nav li { margin-bottom: 15px; }
-#nav li a {
-  text-decoration: none;
-  color: black;
-  font-weight: bold;
+#nav ul {
+  list-style: none;
 }
 
-/* SECTIONS */
+#nav li {
+  margin-bottom: 18px;
+}
+
+#nav a {
+  text-decoration: none;
+  font-size: 1.1rem;
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* ===============================
+   MAIN SECTIONS
+   =============================== */
 section {
   max-width: 1100px;
   margin: 60px auto;
   padding: 30px;
-  background: #dbe8f5;
-  border-radius: 16px;
+  background: var(--card);
+  border-radius: 18px;
 }
 
-/* ARTICLE */
+/* ===============================
+   ARTICLE
+   =============================== */
 .article-card {
   padding: 30px;
   border-radius: 16px;
-  background: #dbe8f5;
+  background: var(--card);
 }
 
 .see-more-btn {
   display: inline-block;
   margin-top: 15px;
-  padding: 10px 20px;
-  background: #2563eb;
-  color: white;
+  padding: 10px 22px;
+  background: var(--primary);
+  color: #ffffff;
   border-radius: 999px;
   text-decoration: none;
+  font-weight: 700;
 }
 
-/* FOOTER */
-#footer {
-  text-align: center;
-  padding: 40px 20px;
-  margin-top: 60px;
-}
-
-/* SIDE ADS */
-#asideleft, #asideright {
-  position: fixed;
-  top: var(--header-height);
-  width: 160px;
-  height: calc(100vh - var(--header-height));
-}
-
-#asideleft { left: 10px; }
-#asideright { right: 10px; }
-
-@media (max-width: 1200px) {
-  #asideleft, #asideright { display: none; }
-}
-
-/* DARK MODE */
-body.dark-mode {
-  background: #0f172a;
-  color: #e5e7eb;
-}
-
-body.dark-mode section,
-body.dark-mode #nav {
-  background: #1e293b;
-}
-
-/* ANIMATION */
-.reveal {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: .6s ease;
-}
-.reveal.active {
-  opacity: 1;
-  transform: none;
-}
-/* =========================================
-   FIX LEFT AD OVERLAP (DESKTOP ONLY)
-   ========================================= */
-
-/* Large screens only */
-@media (min-width: 1300px) {
-
-  body {
-    padding-left: 200px;   /* 160px ad + spacing */
-    padding-right: 200px;
-  }
-
-  section,
-  footer {
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
-
-/* Medium screens – hide ads completely */
-@media (max-width: 1299px) {
-  #asideleft,
-  #asideright {
-    display: none;
-  }
-
-  body {
-    padding-left: 0;
-    padding-right: 0;
-  }
-}
-/* =========================================
-   FEATURED TOOLS GRID
-   ========================================= */
-
+/* ===============================
+   FEATURED TOOLS
+   =============================== */
 #featured-tools {
-  max-width: 1100px;
-  margin: 80px auto;
-  padding: 30px;
+  background: transparent;
+  padding: 0;
 }
 
-#featured-tools .section-title {
+.section-title {
+  text-align: center;
   font-size: 2rem;
   margin-bottom: 30px;
-  text-align: center;
 }
 
 .tools-grid {
@@ -213,130 +192,207 @@ body.dark-mode #nav {
   border-radius: 18px;
   padding: 25px;
   box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
 .tool-card h3 {
-  margin-top: 0;
-  color: #0f172a;
+  margin-bottom: 10px;
 }
 
 .tool-card p {
   color: #475569;
-  margin: 15px 0 25px;
-  line-height: 1.6;
+  margin-bottom: 20px;
 }
 
-/* Tool button */
 .tool-btn {
   align-self: flex-start;
   padding: 10px 22px;
-  background: #2563eb;
+  background: var(--primary);
   color: #ffffff;
   border-radius: 999px;
   font-weight: 700;
   text-decoration: none;
-  transition: transform .15s ease, box-shadow .15s ease;
 }
 
-.tool-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(37,99,235,0.35);
+/* ===============================
+   FOOTER
+   =============================== */
+#footer {
+  text-align: center;
+  padding: 40px 20px;
+  margin-top: 60px;
+  color: #475569;
 }
 
-/* Responsive */
+/* ===============================
+   SIDE ADS
+   =============================== */
+#asideleft,
+#asideright {
+  position: fixed;
+  top: var(--header-height);
+  width: 160px;
+  height: calc(100vh - var(--header-height));
+}
+
+#asideleft { left: 10px; }
+#asideright { right: 10px; }
+
+/* Push content away from ads on large screens */
+@media (min-width: 1300px) {
+  body {
+    padding-left: 200px;
+    padding-right: 200px;
+  }
+}
+
+/* Hide ads on smaller screens */
+@media (max-width: 1299px) {
+  #asideleft,
+  #asideright {
+    display: none;
+  }
+
+  body {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* ===============================
+   ANIMATIONS
+   =============================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: 0.6s ease;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: none;
+}
+
+/* ===============================
+   RESPONSIVE
+   =============================== */
 @media (max-width: 900px) {
   .tools-grid {
     grid-template-columns: 1fr;
   }
 }
 
-/* Dark mode compatibility */
+@media (max-width: 768px) {
+  section {
+    margin: 40px 16px;
+  }
+}
+
+/* ===============================
+   DARK MODE
+   =============================== */
+body.dark-mode {
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+body.dark-mode #header,
+body.dark-mode #nav {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode section,
 body.dark-mode .tool-card {
   background: #1e293b;
 }
 
-body.dark-mode .tool-card h3 {
-  color: #e5e7eb;
+body.dark-mode a {
+  color: #93c5fd;
+}
+/* =========================================
+   HEADER HARD FIX (DESKTOP SAFE)
+   ========================================= */
+
+/* Reset header positioning influence */
+#header {
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
 }
 
-body.dark-mode .tool-card p {
-  color: #cbd5f5;
+/* Inner header layout wrapper (virtual) */
+#header {
+  display: flex;
+  justify-content: center;
 }
-/* =====================================================
-   DESKTOP HAMBURGER MENU VISIBILITY FIX (1300px+)
-   SAFE ADDITION – DOES NOT REMOVE EXISTING CODE
-   ===================================================== */
 
-/* Always show hamburger button on all screen sizes */
+/* Constrain content width like modern sites */
+#header > .header-left,
+#header > .header-actions {
+  position: relative;
+  z-index: 2;
+}
+
+/* Create centered header content */
+#header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Proper header layout */
+#header {
+  padding: 0 24px;
+}
+
+/* Left section */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: auto;
+}
+
+/* Right section */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+/* FORCE hamburger visibility everywhere */
 #hamburger {
-  display: inline-flex !important;
+  display: flex !important;
   align-items: center;
   justify-content: center;
   visibility: visible !important;
   opacity: 1 !important;
-  z-index: 10001;
 }
 
-/* Prevent header buttons from shrinking or being pushed away */
-.header-actions {
-  flex-shrink: 0;
-}
-
-/* Keep header content inside visible area on large screens */
+/* Prevent ads from affecting header */
 @media (min-width: 1300px) {
+  body {
+    padding-left: 200px;
+    padding-right: 200px;
+  }
+
   #header {
-    padding-left: 220px;   /* aligns with body padding */
-    padding-right: 220px;
+    padding-left: 24px;
+    padding-right: 24px;
   }
 }
 
-/* Ensure header stays above ads and content */
-#header {
-  position: fixed;
-  z-index: 9999;
-}
-
-/* Safety: prevent any accidental overflow clipping */
-#header,
-.header-actions {
-  overflow: visible;
-}
-/* =====================================================
-   HEADER ALIGNMENT & VISUAL FIX (SAFE ADDITION)
-   ===================================================== */
-
-/* Reset excessive header padding on large screens */
-@media (min-width: 1300px) {
+/* Mobile safety */
+@media (max-width: 768px) {
   #header {
-    padding-left: 24px !important;
-    padding-right: 24px !important;
+    padding: 0 16px;
   }
-}
-
-/* Center header content visually without moving logo too far */
-#header {
-  box-sizing: border-box;
-}
-
-/* Keep logo + title tight and clean */
-.header-left {
-  margin-left: 0;
-}
-
-/* Prevent header from feeling stretched */
-#header {
-  max-width: 100%;
-}
-
-/* Optional subtle polish */
-#HH1 {
-  letter-spacing: -0.01em;
-}
-
-/* Keep buttons aligned right properly */
-.header-actions {
-  margin-left: auto;
 }
