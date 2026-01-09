@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin – Blog Index</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="article-style.css">
+<style>
+.admin-box {
+  max-width: 700px;
+  margin: 40px auto;
+  background: #dbe8f5;
+  padding: 30px;
+  border-radius: 20px;
+}
+input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1px solid #cbd5f5;
+}
+button {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  background: #2563eb;
+  color: white;
+}
+.post-row {
+  display:flex;
+  gap:10px;
+  align-items:center;
+  margin-top:14px;
+}
+.post-row img {
+  width:60px;
+  height:40px;
+  object-fit:cover;
+  border-radius:6px;
+}
+.post-row button {
+  background:#dc2626;
+}
+</style>
+</head>
+
+<body>
+
+<header id="header">
+  <div class="header-left">
+    <h1 id="HH1">Blog Admin</h1>
+  </div>
+</header>
+
+<div class="admin-box">
+  <h2>Add blog link</h2>
+
+  <input id="title" placeholder="Article title">
+  <input id="image" placeholder="Image URL">
+  <input id="link" placeholder="Article link (GitHub Pages URL)">
+
+  <button id="save">Save</button>
+
+  <hr style="margin:20px 0">
+
+  <div id="list"></div>
+</div>
+
+<script type="module" src="admin-blog.js"></script>
+</body>
+</html>
