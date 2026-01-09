@@ -1,10 +1,11 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
 import {
-  getFirestore, collection, addDoc, deleteDoc, doc, onSnapshot, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+  getFirestore, collection, addDoc, deleteDoc, doc,
+  onSnapshot, serverTimestamp
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 import {
   getAuth, onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js";
 
 const ADMIN_UID = "zL2LJWPAiFWFpcdFFh3E7KfDrxi2";
 
@@ -18,11 +19,11 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-const titleEl = document.getElementById("title");
-const imageEl = document.getElementById("image");
-const linkEl = document.getElementById("link");
-const saveBtn = document.getElementById("save");
-const listEl = document.getElementById("list");
+const title = document.getElementById("title");
+const image = document.getElementById("image");
+const link = document.getElementById("link");
+const save = document.getElementById("save");
+const posts = document.getElementById("posts");
 
 onAuthStateChanged(auth, user => {
   if (!user || user.uid !== ADMIN_UID) {
@@ -33,35 +34,35 @@ onAuthStateChanged(auth, user => {
   const ref = collection(db, "blogIndex");
 
   onSnapshot(ref, snap => {
-    listEl.innerHTML = "";
+    posts.innerHTML = "";
     snap.forEach(d => {
       const p = d.data();
       const row = document.createElement("div");
-      row.className = "post-row";
+      row.className = "admin-row";
       row.innerHTML = `
-        <img src="${p.image}">
+        <img src="${p.image || ''}">
         <div style="flex:1">${p.title}</div>
         <button>Delete</button>
       `;
       row.querySelector("button").onclick = () =>
-        deleteDoc(doc(db,"blogIndex",d.id));
-      listEl.appendChild(row);
+        deleteDoc(doc(db, "blogIndex", d.id));
+      posts.appendChild(row);
     });
   });
 
-  saveBtn.onclick = async () => {
-    if (!titleEl.value || !linkEl.value) {
-      alert("Title and link required");
+  save.onclick = async () => {
+    if (!title.value || !link.value) {
+      alert("Title & link required");
       return;
     }
 
-    await addDoc(ref,{
-      title: titleEl.value,
-      image: imageEl.value,
-      link: linkEl.value,
+    await addDoc(ref, {
+      title: title.value,
+      image: image.value,
+      link: link.value,
       createdAt: serverTimestamp()
     });
 
-    titleEl.value = imageEl.value = linkEl.value = "";
+    title.value = image.value = link.value = "";
   };
 });
