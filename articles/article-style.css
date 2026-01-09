@@ -1,29 +1,40 @@
 :root {
   --header-height: 90px;
-  --accent: #2563eb;
-  --bg-soft: #dbe8f5;
 }
 
-/* RESET */
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* ===============================
+   RESET
+   =============================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-/* BODY */
+/* ===============================
+   BODY
+   =============================== */
 body {
   font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   background: #f8fafc;
   color: #0f172a;
   padding-top: var(--header-height);
   line-height: 1.7;
+  overflow-x: hidden;
 }
 
-/* HEADER */
+/* ===============================
+   HEADER
+   =============================== */
 #header {
   height: var(--header-height);
-  background: white;
+  background: #ffffff;
   border-bottom: 1px solid #e5e7eb;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
+
   padding: 0 24px;
   position: fixed;
   top: 0;
@@ -37,48 +48,119 @@ body {
   gap: 10px;
 }
 
-#HIcon { width: 48px; }
-#HH1 { font-size: 1.5rem; font-weight: 700; }
+#HIcon {
+  width: 48px;
+}
 
-/* BUTTONS */
-button {
-  padding: 10px 14px;
+#HH1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* ===============================
+   HEADER ACTIONS
+   =============================== */
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+#hamburger,
+#darkModeToggle {
+  width: 42px;
+  height: 42px;
   border-radius: 10px;
+  border: 1px solid #e5e7eb;
+  background: #f1f5f9;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: background .2s ease, transform .2s ease;
+}
+
+#hamburger:hover,
+#darkModeToggle:hover {
+  background: #e2e8f0;
+  transform: translateY(-1px);
+}
+
+/* ===============================
+   SIDE NAV (RIGHT PANEL)
+   =============================== */
+#nav {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 320px;
+  height: 100vh;
+
+  background: #ffffff;
+  padding: 90px 24px;
+  transition: right .3s ease;
+
+  z-index: 10000;
+  box-shadow: -20px 0 40px rgba(0,0,0,.2);
+}
+
+#nav.active {
+  right: 0;
+}
+
+#navClose {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  background: none;
   border: none;
-  background: var(--accent);
-  color: white;
-  font-weight: 600;
+  font-size: 1.5rem;
   cursor: pointer;
 }
 
-button.secondary {
-  background: #e5e7eb;
-  color: #0f172a;
+#nav ul {
+  list-style: none;
 }
 
-/* ARTICLE */
+#nav li {
+  margin-bottom: 18px;
+}
+
+#nav a {
+  text-decoration: none;
+  font-size: 1.1rem;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+#nav a.active {
+  color: #2563eb;
+}
+
+/* ===============================
+   ARTICLE
+   =============================== */
 .article-container {
   max-width: 900px;
   margin: 60px auto;
   padding: 40px;
-  background: var(--bg-soft);
+
+  background: #dbe8f5;
   border-radius: 20px;
 }
 
 .article-title {
   font-size: 2.4rem;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .article-meta {
   font-size: 0.95rem;
   color: #475569;
-  margin-bottom: 25px;
+  margin-bottom: 30px;
 }
 
 .article-container h2 {
-  margin-top: 35px;
-  margin-bottom: 12px;
+  margin-top: 40px;
+  margin-bottom: 15px;
 }
 
 .article-container p {
@@ -86,43 +168,74 @@ button.secondary {
   font-size: 1.05rem;
 }
 
+.article-container ul {
+  margin: 20px 0 30px 20px;
+}
+
 .article-divider {
   margin: 30px 0;
   padding: 18px;
-  background: rgba(37,99,235,.08);
-  border-left: 5px solid var(--accent);
-  border-radius: 12px;
+  background: rgba(37, 99, 235, 0.08);
+  border-left: 5px solid #2563eb;
+  border-radius: 10px;
 }
 
-/* ADMIN PANEL */
-.admin-box {
-  max-width: 900px;
-  margin: 40px auto;
-  background: white;
-  padding: 25px;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.08);
-}
-
-.admin-box input,
-.admin-box textarea {
-  width: 100%;
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #d1d5db;
-  margin-bottom: 12px;
-}
-
-.section-box {
-  background: #f1f5f9;
-  padding: 15px;
-  border-radius: 12px;
-  margin-bottom: 12px;
-}
-
-/* FOOTER */
+/* ===============================
+   FOOTER
+   =============================== */
 #footer {
   text-align: center;
-  padding: 40px;
+  padding: 40px 20px;
+  margin-top: 60px;
   color: #475569;
+}
+
+/* ===============================
+   DARK MODE
+   =============================== */
+body.dark-mode {
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+body.dark-mode #header,
+body.dark-mode #nav {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .article-container {
+  background: #1e293b;
+}
+
+body.dark-mode a {
+  color: #93c5fd;
+}
+
+/* ===============================
+   ANIMATION
+   =============================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: .6s ease;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: none;
+}
+
+/* ===============================
+   RESPONSIVE
+   =============================== */
+@media (max-width: 768px) {
+  .article-container {
+    margin: 40px 16px;
+    padding: 30px;
+  }
+
+  .article-title {
+    font-size: 2rem;
+  }
 }
