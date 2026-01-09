@@ -304,3 +304,39 @@ body.dark-mode .tool-card p {
 .header-actions {
   overflow: visible;
 }
+/* =====================================================
+   HEADER ALIGNMENT & VISUAL FIX (SAFE ADDITION)
+   ===================================================== */
+
+/* Reset excessive header padding on large screens */
+@media (min-width: 1300px) {
+  #header {
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+}
+
+/* Center header content visually without moving logo too far */
+#header {
+  box-sizing: border-box;
+}
+
+/* Keep logo + title tight and clean */
+.header-left {
+  margin-left: 0;
+}
+
+/* Prevent header from feeling stretched */
+#header {
+  max-width: 100%;
+}
+
+/* Optional subtle polish */
+#HH1 {
+  letter-spacing: -0.01em;
+}
+
+/* Keep buttons aligned right properly */
+.header-actions {
+  margin-left: auto;
+}
