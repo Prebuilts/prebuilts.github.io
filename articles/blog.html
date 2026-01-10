@@ -2,51 +2,33 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Blog | Prebuilts</title>
+  <title>Blog | Prebuilts.eu</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="/style.css">
-</head>
 
+  <link rel="stylesheet" href="style.css">
+  <script src="https://kit.fontawesome.com/e68a8b27de.js" crossorigin="anonymous"></script>
+</head>
 <body>
 
 <header id="header">
   <div class="header-left">
-    <img src="/Images/Prebuiltid.png" id="HIcon">
-    <h1 id="HH1">Prebuilts</h1>
-  </div>
-  <div class="header-actions">
-    <button id="hamburger">☰</button>
+    <h1>Prebuilts Blog</h1>
   </div>
 </header>
 
-<nav id="nav">
-  <button id="navClose">✕</button>
-  <ul>
-    <li><a href="/">Home</a></li>
-    <li><a href="/Store">Store</a></li>
-    <li><a class="active" href="#">Blog</a></li>
-  </ul>
-</nav>
+<main style="max-width:1100px;margin:120px auto 60px;padding:20px">
+  <section class="blog-section">
+    <h2>Latest posts</h2>
 
-<section class="store-section">
-  <h2>Blog posts</h2>
+    <!-- ✅ REQUIRED ELEMENT -->
+    <div id="blog-grid" class="blog-grid"></div>
+  </section>
+</main>
 
-  <select id="sortSelect">
-    <option value="newest">Newest first</option>
-    <option value="oldest">Oldest first</option>
-  </select>
-
-  <div id="blogGrid" class="tools-grid"></div>
-</section>
-
-<footer id="footer">© Prebuilts</footer>
+<footer id="footer">
+  <p>© 2026 Prebuilts</p>
+</footer>
 
 <script type="module" src="blog.js"></script>
-
-<script>
-  hamburger.onclick = () => nav.classList.add("active");
-  navClose.onclick = () => nav.classList.remove("active");
-</script>
-
 </body>
 </html>
