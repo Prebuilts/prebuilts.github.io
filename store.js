@@ -78,7 +78,7 @@ closeBasketBtn.addEventListener("click", closeBasket);
 function renderBasket() {
   basketItems.innerHTML = "";
 
-  if (cart.length === 0) {
+  if (!cart.length) {
     basketItems.innerHTML = "<p>Your basket is empty</p>";
     basketTotal.textContent = "0€";
     updateCartCount();
@@ -90,7 +90,7 @@ function renderBasket() {
     row.className = "basket-item";
 
     row.innerHTML = `
-      <img src="${escapeAttr(item.image)}">
+      <img src="${escapeAttr(item.image || "")}">
       <div class="info">
         <h4>${escapeHtml(item.name)}</h4>
         <div class="price">${Number(item.price).toFixed(2)}€</div>
@@ -100,6 +100,7 @@ function renderBasket() {
       </div>
     `;
 
+    // Remove button
     row.querySelector("button").onclick = () => {
       cart = cart.filter(p => p.id !== item.id);
       saveCart();
@@ -107,21 +108,23 @@ function renderBasket() {
       updateCartCount();
     };
 
+    // 🔥 PAYMENT EMBED (FIX)
+    if (item.paymentButton) {
+      const payBox = document.createElement("div");
+      payBox.className = "payment-embed";
+
+      // Insert trusted admin HTML (iframe / embed)
+      payBox.innerHTML = item.paymentButton;
+
+      row.appendChild(payBox);
+    }
+
     basketItems.appendChild(row);
   });
 
   basketTotal.textContent = calculateTotal().toFixed(2) + "€";
   updateCartCount();
 }
-
-clearCartBtn.addEventListener("click", () => {
-  if (!cart.length) return;
-  if (!confirm("Empty basket?")) return;
-  cart = [];
-  saveCart();
-  renderBasket();
-  updateCartCount();
-});
 
 /* ===============================
    ADD TO CART
