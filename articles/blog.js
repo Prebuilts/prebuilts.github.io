@@ -1,14 +1,12 @@
-// blog.js (cached Firestore blog loader)
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
-  initializeFirestore,
-  persistentLocalCache,
+  getFirestore,
   collection,
-  getDocs
+  getDocs,
+  query,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-/* FIREBASE CONFIG (same project) */
 const firebaseConfig = {
   apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
   authDomain: "prebuiltid-website.firebaseapp.com",
@@ -16,76 +14,73 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-/* 🔹 Firestore with offline cache */
-const db = initializeFirestore(app, {
-  localCache: persistentLocalCache()
-});
+const grid = document.getElementById("blogGrid");
+const sortSelect = document.getElementById("sortSelect");
 
-/* DOM */
-const blogGrid = document.getElementById("blogGrid");
+const CACHE_KEY = "blog_cache_v1";
+const CACHE_TIME = 10 * 60 * 1000; // 10 min
 
-/* CACHE SETTINGS */
-const BLOG_CACHE_KEY = "blog_cache_v1";
-const BLOG_CACHE_TTL = 1000 * 60 * 10; // 10 minutes
+let posts = [];
 
-let allPosts = [];
-
-/* 🔹 LOAD BLOG POSTS WITH CACHE */
-async function loadBlogPosts() {
-  const cached = localStorage.getItem(BLOG_CACHE_KEY);
-
+/* ===============================
+   LOAD BLOG POSTS (CACHED)
+   =============================== */
+async function loadPosts() {
+  const cached = localStorage.getItem(CACHE_KEY);
   if (cached) {
-    try {
-      const { data, time } = JSON.parse(cached);
-      if (Date.now() - time < BLOG_CACHE_TTL) {
-        allPosts = data;
-        renderPosts(allPosts);
-        return;
-      }
-    } catch(e){}
+    const data = JSON.parse(cached);
+    if (Date.now() - data.time < CACHE_TIME) {
+      posts = data.posts;
+      render();
+      return;
+    }
   }
 
-  const snap = await getDocs(collection(db, "blog"));
-  allPosts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  const q = query(collection(db, "blogPosts"), orderBy("createdAt", "desc"));
+  const snap = await getDocs(q);
 
-  localStorage.setItem(BLOG_CACHE_KEY, JSON.stringify({
-    data: allPosts,
-    time: Date.now()
-  }));
+  posts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-  renderPosts(allPosts);
+  localStorage.setItem(
+    CACHE_KEY,
+    JSON.stringify({ time: Date.now(), posts })
+  );
+
+  render();
 }
 
-/* 🔹 RENDER BLOG LIST */
-function renderPosts(posts) {
-  if (!blogGrid) return;
-  blogGrid.innerHTML = "";
+/* ===============================
+   RENDER
+   =============================== */
+function render() {
+  grid.innerHTML = "";
 
-  posts.forEach(post => {
-    const card = document.createElement("article");
-    card.className = "blog-card";
+  posts.forEach(p => {
+    const card = document.createElement("div");
+    card.className = "tool-card";
+
     card.innerHTML = `
-      <img src="${escapeAttr(post.image || '')}" alt="">
-      <h3>${escapeHtml(post.title || '')}</h3>
-      <p>${escapeHtml(post.excerpt || '')}</p>
-      <a href="${escapeAttr(post.link)}" class="read-more">
-        Read more →
-      </a>
+      <img src="${p.image || ""}" style="width:100%;border-radius:12px">
+      <h3>${p.title}</h3>
+      <a class="tool-btn" href="${p.url}">Read article</a>
     `;
-    blogGrid.appendChild(card);
+
+    grid.appendChild(card);
   });
 }
 
-/* 🔹 HELPERS */
-function escapeHtml(s='') {
-  return String(s).replace(/[&<>"']/g, c =>
-    ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])
-  );
-}
-function escapeAttr(s='') {
-  return String(s).replace(/"/g,'&quot;');
-}
+/* ===============================
+   SORTING
+   =============================== */
+sortSelect.onchange = () => {
+  if (sortSelect.value === "oldest") {
+    posts.sort((a, b) => a.createdAt - b.createdAt);
+  } else {
+    posts.sort((a, b) => b.createdAt - a.createdAt);
+  }
+  render();
+};
 
-/* INIT */
-loadBlogPosts();
+loadPosts();
