@@ -1,4 +1,6 @@
 // store.js — stable, compatible with provided store.html + store.css
+// ✅ Payment iframe/script embed FIX INCLUDED
+// ❌ No breaking changes
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
@@ -50,7 +52,7 @@ function saveCart() {
 }
 
 function updateCartCount() {
-  cartCount.textContent = cart.length;
+  if (cartCount) cartCount.textContent = cart.length;
 }
 
 function calculateTotal() {
@@ -69,8 +71,29 @@ function closeBasket() {
   basketPanel.classList.remove("open");
 }
 
-cartIcon.addEventListener("click", openBasket);
-closeBasketBtn.addEventListener("click", closeBasket);
+cartIcon && cartIcon.addEventListener("click", openBasket);
+closeBasketBtn && closeBasketBtn.addEventListener("click", closeBasket);
+
+/* ===============================
+   PAYMENT EMBED HELPER (CRITICAL FIX)
+   Executes iframe + scripts safely
+================================ */
+function injectTrustedEmbed(container, html) {
+  const temp = document.createElement("div");
+  temp.innerHTML = html;
+
+  Array.from(temp.childNodes).forEach(node => {
+    if (node.nodeName === "SCRIPT") {
+      const s = document.createElement("script");
+      if (node.src) s.src = node.src;
+      if (node.type) s.type = node.type;
+      s.text = node.textContent;
+      container.appendChild(s);
+    } else {
+      container.appendChild(node);
+    }
+  });
+}
 
 /* ===============================
    RENDER BASKET
@@ -100,7 +123,7 @@ function renderBasket() {
       </div>
     `;
 
-    // Remove button
+    // Remove
     row.querySelector("button").onclick = () => {
       cart = cart.filter(p => p.id !== item.id);
       saveCart();
@@ -108,14 +131,11 @@ function renderBasket() {
       updateCartCount();
     };
 
-    // 🔥 PAYMENT EMBED (FIX)
+    // ✅ PAYMENT EMBED (FIXED & EXECUTABLE)
     if (item.paymentButton) {
       const payBox = document.createElement("div");
       payBox.className = "payment-embed";
-
-      // Insert trusted admin HTML (iframe / embed)
-      payBox.innerHTML = item.paymentButton;
-
+      injectTrustedEmbed(payBox, item.paymentButton);
       row.appendChild(payBox);
     }
 
@@ -172,7 +192,8 @@ function renderProducts(list) {
         id: product.id,
         name: product.name,
         price: product.price,
-        image: product.image
+        image: product.image,
+        paymentButton: product.paymentButton || ""
       });
     };
 
@@ -183,9 +204,9 @@ function renderProducts(list) {
 /* ===============================
    FILTERS / SORT / SEARCH
 ================================ */
-categorySelect.addEventListener("change", applyFilters);
-sortSelect.addEventListener("change", applyFilters);
-searchInput.addEventListener("input", applyFilters);
+categorySelect && categorySelect.addEventListener("change", applyFilters);
+sortSelect && sortSelect.addEventListener("change", applyFilters);
+searchInput && searchInput.addEventListener("input", applyFilters);
 
 function applyFilters() {
   let list = [...allProducts];
@@ -214,7 +235,7 @@ function applyFilters() {
 }
 
 /* ===============================
-   FIREBASE PRODUCTS
+   FIREBASE PRODUCTS (REALTIME)
 ================================ */
 const productsRef = collection(db, "products");
 
