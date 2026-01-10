@@ -1,13 +1,15 @@
-console.log("✅ blog.js loaded");
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import {
   getFirestore,
   collection,
-  getDocs
+  getDocs,
+  query,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-console.log("✅ Firebase imports OK");
+/* ==========================
+   FIREBASE INIT
+========================== */
 
 const firebaseConfig = {
   apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
@@ -16,42 +18,77 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-console.log("✅ Firebase initialized");
-
 const db = getFirestore(app);
-console.log("✅ Firestore connected");
 
-const grid = document.getElementById("blogGrid");
+/* ==========================
+   ELEMENT
+========================== */
 
-if (!grid) {
-  console.error("❌ blogGrid NOT FOUND in HTML");
-} else {
-  console.log("✅ blogGrid found");
+const blogGrid = document.getElementById("blog-grid");
+const CACHE_KEY = "blogIndexCache";
+const CACHE_TIME = 5 * 60 * 1000; // 5 minutes
+
+/* ==========================
+   LOAD BLOG POSTS
+========================== */
+
+async function loadBlogPosts() {
+  // 🔹 Try cache first
+  const cached = localStorage.getItem(CACHE_KEY);
+  if (cached) {
+    const parsed = JSON.parse(cached);
+    if (Date.now() - parsed.time < CACHE_TIME) {
+      renderPosts(parsed.data);
+      return;
+    }
+  }
+
+  // 🔹 Fetch from Firestore
+  const q = query(
+    collection(db, "blogIndex"),
+    orderBy("createdAt", "desc")
+  );
+
+  const snap = await getDocs(q);
+
+  const posts = [];
+  snap.forEach(doc => {
+    posts.push({ id: doc.id, ...doc.data() });
+  });
+
+  // 🔹 Save cache
+  localStorage.setItem(
+    CACHE_KEY,
+    JSON.stringify({ time: Date.now(), data: posts })
+  );
+
+  renderPosts(posts);
 }
 
-async function load() {
-  console.log("⏳ Fetching blogPosts…");
+/* ==========================
+   RENDER
+========================== */
 
-  const snap = await getDocs(collection(db, "blogPosts"));
+function renderPosts(posts) {
+  blogGrid.innerHTML = "";
 
-  console.log("📦 Documents found:", snap.size);
-
-  if (snap.empty) {
-    grid.innerHTML = "<p>No blog posts found.</p>";
+  if (!posts.length) {
+    blogGrid.innerHTML = "<p>No posts yet.</p>";
     return;
   }
 
-  snap.forEach(doc => {
-    const d = doc.data();
-    console.log("➡ Post:", d);
+  posts.forEach(post => {
+    const card = document.createElement("div");
+    card.className = "blog-card";
 
-    const div = document.createElement("div");
-    div.innerHTML = `
-      <h3>${d.title}</h3>
-      <a href="${d.url}">Read</a>
+    card.innerHTML = `
+      <img src="${post.image || '/Images/placeholder.jpg'}" alt="">
+      <h3>${post.title}</h3>
+      <a href="${post.url}" class="read-btn">Read →</a>
     `;
-    grid.appendChild(div);
+
+    blogGrid.appendChild(card);
   });
 }
 
-load();
+loadBlogPosts();
