@@ -4,31 +4,34 @@ import {
   collection,
   getDocs,
   query,
-  orderBy
+  orderBy,
+  enableIndexedDbPersistence
 } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
-/* FIREBASE CONFIG (SAME AS STORE) */
+/* FIREBASE CONFIG */
 const firebaseConfig = {
   apiKey: "AIzaSyBkbXzURYKixz4R28OYMUOueA9ysG3Q1Lo",
   authDomain: "prebuiltid-website.firebaseapp.com",
-  projectId: "prebuiltid-website",
+  projectId: "prebuiltid-website"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-/* DOM */
-const blogGrid = document.getElementById("blog-grid");
+/* ENABLE OFFLINE CACHE (SAFE) */
+enableIndexedDbPersistence(db).catch(() => {
+  console.warn("Firestore persistence not available");
+});
 
-if (!blogGrid) {
-  console.error("❌ #blog-grid missing from blog.html");
-  throw new Error("Missing blog-grid element");
+/* DOM */
+const grid = document.getElementById("postsGrid");
+
+if (!grid) {
+  console.error("postsGrid element not found");
 }
 
 /* LOAD POSTS */
 async function loadBlogPosts() {
-  blogGrid.innerHTML = "<p>Loading posts...</p>";
-
   try {
     const q = query(
       collection(db, "blogIndex"),
@@ -38,51 +41,61 @@ async function loadBlogPosts() {
     const snap = await getDocs(q);
 
     if (snap.empty) {
-      blogGrid.innerHTML = "<p>No blog posts yet.</p>";
+      grid.innerHTML = "<p>No blog posts yet.</p>";
       return;
     }
 
-    const posts = snap.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
-
-    renderPosts(posts);
+    renderPosts(snap.docs.map(d => ({ id: d.id, ...d.data() })));
   } catch (err) {
-    console.error("❌ Blog load error:", err);
-    blogGrid.innerHTML = "<p>Error loading blog posts.</p>";
+    console.error("Blog load error:", err);
+    grid.innerHTML = "<p>Failed to load posts.</p>";
   }
 }
 
 /* RENDER */
 function renderPosts(posts) {
-  blogGrid.innerHTML = "";
+  grid.innerHTML = "";
 
   posts.forEach(post => {
-    const card = document.createElement("article");
-    card.className = "blog-card";
+    if (!post.title || !post.link) {
+      console.warn("Skipping invalid post:", post);
+      return;
+    }
+
+    const card = document.createElement("div");
+    card.className = "post";
 
     card.innerHTML = `
-      <img src="${escapeAttr(post.image || "")}" alt="">
-      <h3>${escapeHtml(post.title || "Untitled")}</h3>
-      <p>${escapeHtml(post.excerpt || "")}</p>
-      <a href="${escapeAttr(post.link || "#")}" class="read-more">
-        Read →
-      </a>
+      <h2>${escapeHtml(post.title)}</h2>
+      ${post.createdAt ? `<span>${formatDate(post.createdAt)}</span>` : ""}
+      ${post.image ? `<img src="${escapeAttr(post.image)}" style="width:100%;border-radius:12px;margin:10px 0;">` : ""}
+      <div style="margin-top:10px;">
+        <button class="open-post">Read article →</button>
+      </div>
     `;
 
-    blogGrid.appendChild(card);
+    card.querySelector(".open-post").onclick = () => {
+      window.location.href = post.link;
+    };
+
+    grid.appendChild(card);
   });
 }
 
 /* HELPERS */
-function escapeHtml(s = "") {
-  return String(s).replace(/[&<>"']/g, c =>
-    ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[c])
+function formatDate(ts) {
+  if (!ts?.seconds) return "";
+  return new Date(ts.seconds * 1000).toLocaleDateString();
+}
+
+function escapeHtml(str = "") {
+  return str.replace(/[&<>"']/g, m =>
+    ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;" }[m])
   );
 }
-function escapeAttr(s = "") {
-  return String(s).replace(/"/g, "&quot;");
+
+function escapeAttr(str = "") {
+  return str.replace(/"/g, "&quot;");
 }
 
 /* INIT */
