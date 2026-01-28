@@ -1,0 +1,159 @@
+:root {
+  --header-height: 90px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, sans-serif;
+  background: #f8fafc;
+  color: #0f172a;
+  padding-top: var(--header-height);
+}
+
+/* HEADER */
+#header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: var(--header-height);
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  border-bottom: 1px solid #e5e7eb;
+  z-index: 999;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#HIcon { width: 48px; }
+#HH1 { font-size: 1.5rem; }
+
+#hamburger {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  border: 1px solid #e5e7eb;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+/* NAV */
+#nav {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 320px;
+  height: 100vh;
+  background: white;
+  padding: 90px 20px;
+  transition: .3s;
+  box-shadow: -20px 0 40px rgba(0,0,0,.2);
+  z-index: 1000;
+}
+
+#nav.active { right: 0; }
+
+#navClose {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+}
+
+#nav ul { list-style: none; }
+#nav li { margin-bottom: 18px; }
+
+#nav a {
+  text-decoration: none;
+  font-size: 1.1rem;
+  color: #0f172a;
+  font-weight: 600;
+}
+
+/* MAIN */
+.calculator-container {
+  max-width: 700px;
+  margin: 60px auto;
+  padding: 20px;
+}
+
+.subtitle {
+  color: #475569;
+  margin-bottom: 20px;
+}
+
+.calc-box {
+  background: #dbe8f5;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.1);
+}
+
+.calc-box label {
+  display: block;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.calc-box input {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  border-radius: 10px;
+  border: 1px solid #cbd5f5;
+  font-size: 1rem;
+}
+
+.calc-box button {
+  width: 100%;
+  margin-top: 20px;
+  padding: 14px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.results {
+  margin-top: 20px;
+  background: white;
+  padding: 20px;
+  border-radius: 14px;
+}
+
+.results div {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+}
+
+.hidden { display: none; }
+
+/* FOOTER */
+#footer {
+  text-align: center;
+  padding: 40px 20px;
+  margin-top: 60px;
+}
+
+/* ANIM */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: .6s ease;
+}
+.reveal.active {
+  opacity: 1;
+  transform: none;
+}
