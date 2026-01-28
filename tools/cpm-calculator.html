@@ -1,46 +1,113 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>CPM Earnings Calculator</title>
-    <link rel="stylesheet" href="cpm-calculator.css" />
-    <meta name="description" content="Website's earnings calculator using CPM">
-    <meta name="keywords" content="prebuilt gaming PC, gaming desktop PC, custom gaming PC, buy gaming PC, gaming PC Europe, Prebuilts.eu, prebuilts europe, europe gaming PCs, online tech shop, electronics store, computer components, gaming laptops, tech gadgets, gaming PC components, high-end gaming PC, affordable gaming PC, gaming PC deals, gaming PC configurator, gaming monitors, gaming accessories, PS5, Xbox, Nintendo, smartphones, computers, tutorials, tech tutorials, online tools, calculator, tool, online calculator, news, online power bill calculator, tax calculator, CPM calculator, ad revenue calculator">
-    <meta name="monetag" content="1f7da93f17251f1ce433a3b1f23d5b4f">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://prebuilts.eu/tools/cpm-calculator.html">
-    <meta name="language" content="en">
-    <meta name="geo.region" content="EE">
-    <meta name="geo.placename" content="Estonia">
-  </head>
-  <script>(function(s){s.dataset.zone='10430312',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-  <script>(function(s){s.dataset.zone='10430293',s.src='https://gizokraijaw.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-  <body>
-    <header class="header">
-      <h1>CPM Earnings Calculator</h1>
-      <p>Estimate your ad revenue instantly</p>
-    </header>
-    <main class="calculator">
-      <div class="field">
-        <label>Daily Visitors</label>
-        <input type="number" id="visitors" placeholder="e.g. 10000" />
-      </div>
-      <div class="field">
-        <label>Ads per Page</label>
-        <input type="number" id="ads" value="1" />
-      </div>
-      <div class="field">
-        <label>Average CPM (€)</label>
-        <input type="number" id="cpm" step="0.01" placeholder="e.g. 3.50" />
-      </div>
-      <button id="calculate">Calculate Earnings</button>
-      <div class="results" id="results">
-        <div><strong>Daily:</strong> <span id="daily">0€</span></div>
-        <div><strong>Monthly:</strong> <span id="monthly">0€</span></div>
-        <div><strong>Yearly:</strong> <span id="yearly">0€</span></div>
-      </div>
-    </main>
-    <script src="cpm-calculator.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ads CPM Earnings Calculator | Prebuilts.eu</title>
+
+  <link rel="stylesheet" href="ads-calculator.css">
+  <link rel="icon" href="/Images/favicon.ico">
+
+  <meta name="description" content="Calculate ad earnings using CPM. Estimate daily, monthly and yearly revenue based on traffic and CPM rates.">
+  <meta name="keywords" content="CPM calculator, ad earnings calculator, ads revenue, monetag, adsterra, publisher earnings">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://prebuilts.eu/tools/cpm-calculator.html">
+  <meta name="language" content="en">
+  <meta name="geo.region" content="EE">
+  <meta name="geo.placename" content="Estonia">
+  <!-- Hamburger -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const hamburger = document.getElementById("hamburger");
+      const nav = document.getElementById("nav");
+      const closeBtn = document.getElementById("navClose");
+
+      hamburger.onclick = () => nav.classList.add("active");
+      closeBtn.onclick = () => nav.classList.remove("active");
+    });
+  </script>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header id="header">
+  <div class="header-left">
+    <img src="/Images/Prebuiltid.png" id="HIcon" alt="Logo">
+    <h1 id="HH1">Prebuilts</h1>
+  </div>
+
+  <button id="hamburger">☰</button>
+</header>
+
+<!-- SIDE NAV -->
+<nav id="nav">
+  <button id="navClose">✕</button>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/Store">Store</a></li>
+    <li><a href="/articles/blog">Blog</a></li>
+    <li><a href="/tools">Tools</a></li>
+    <li><a href="/about">About us</a></li>
+  </ul>
+</nav>
+
+<!-- MAIN -->
+<main class="calculator-container reveal">
+
+  <h2>Ads CPM Earnings Calculator</h2>
+  <p class="subtitle">
+    Estimate your advertising revenue based on traffic and CPM rates.
+  </p>
+
+  <div class="calc-box">
+
+    <label>
+      Daily Page Views
+      <input type="number" id="views" placeholder="e.g. 10000">
+    </label>
+
+    <label>
+      CPM (Cost per 1000 impressions)
+      <input type="number" id="cpm" placeholder="e.g. 3.5">
+    </label>
+
+    <label>
+      Ads per page
+      <input type="number" id="ads" value="1">
+    </label>
+
+    <button id="calculateBtn">Calculate Earnings</button>
+
+    <div id="results" class="results hidden">
+      <div><strong>Daily:</strong> <span id="daily">$0.00</span></div>
+      <div><strong>Monthly:</strong> <span id="monthly">$0.00</span></div>
+      <div><strong>Yearly:</strong> <span id="yearly">$0.00</span></div>
+    </div>
+
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <p>© 2026 Prebuilts.eu</p>
+</footer>
+
+<script src="ads-calculator.js"></script>
+
+<!-- REVEAL -->
+<script>
+  const reveal = () => {
+    document.querySelectorAll(".reveal").forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight - 80) {
+        el.classList.add("active");
+      }
+    });
+  };
+  window.addEventListener("scroll", reveal);
+  reveal();
+</script>
+
+</body>
 </html>
