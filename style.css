@@ -396,3 +396,7 @@ body.dark-mode a {
     padding: 0 16px;
   }
 }
+#featured-pcs img {
+  height: 180px;
+  object-fit: cover;
+}
