@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tools Hub | Prebuilts.eu</title>
+
+  <link rel="icon" href="Images/favicon.ico">
+  <link rel="stylesheet" href="tools-hub.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="header">
+  <div class="header-left">
+    <img src="Images/Prebuiltid.png" id="HIcon" alt="Prebuilts Logo">
+    <h1 id="HH1">Prebuilts</h1>
+  </div>
+
+  <div class="header-actions">
+    <button id="darkModeToggle">🌙</button>
+    <button id="hamburger">☰</button>
+  </div>
+</header>
+
+<!-- SIDE NAV -->
+<nav id="nav">
+  <button id="navClose">✕</button>
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/Store">Store</a></li>
+    <li><a href="/tools-hub" class="active">Tools Hub</a></li>
+  </ul>
+</nav>
+
+<!-- MAIN -->
+<main>
+
+  <section class="hero">
+    <h2>Browse Online Tools</h2>
+    <p>Explore calculators and utilities by category.</p>
+
+    <select id="categoryFilter">
+      <option value="all">All Categories</option>
+      <option value="finance">Finance</option>
+      <option value="tech">Tech</option>
+      <option value="security">Security</option>
+      <option value="utilities">Utilities</option>
+    </select>
+  </section>
+
+  <section class="tools-section">
+    <div id="toolsGrid" class="tools-grid"></div>
+    <div id="loader" class="loader">Loading more tools...</div>
+  </section>
+
+</main>
+
+<footer id="footer">
+  <p>© 2026 Prebuilts</p>
+</footer>
+
+<script>
+/* ================================
+   TOOL DATABASE (EASY TO EDIT)
+================================ */
+const tools = [
+  {
+    title: "Energy Consumption Calculator",
+    description: "Calculate electricity usage and cost.",
+    category: "utilities",
+    link: "https://prebuilts.eu/tools/energy-calculator"
+  },
+  {
+    title: "Website CPM Calculator",
+    description: "Estimate ad revenue earnings.",
+    category: "finance",
+    link: "https://prebuilts.eu/tools/cpm-calculator"
+  },
+  {
+    title: "Password Generator",
+    description: "Generate secure passwords instantly.",
+    category: "security",
+    link: "https://prebuilts.eu/tools/password-generator"
+  }
+];
+
+/* Duplicate tools for demo infinite scroll */
+for (let i = 0; i < 20; i++) {
+  tools.push(...tools.slice(0, 3));
+}
+
+/* ================================
+   RENDER LOGIC
+================================ */
+const grid = document.getElementById("toolsGrid");
+const loader = document.getElementById("loader");
+const filter = document.getElementById("categoryFilter");
+
+let visibleCount = 0;
+const LOAD_STEP = 6;
+
+function renderTools(reset = false) {
+  if (reset) {
+    grid.innerHTML = "";
+    visibleCount = 0;
+  }
+
+  const category = filter.value;
+  const filtered = category === "all"
+    ? tools
+    : tools.filter(t => t.category === category);
+
+  const slice = filtered.slice(visibleCount, visibleCount + LOAD_STEP);
+
+  slice.forEach(tool => {
+    const card = document.createElement("div");
+    card.className = "tool-card";
+    card.innerHTML = `
+      <h3>${tool.title}</h3>
+      <p>${tool.description}</p>
+      <a href="${tool.link}" class="tool-btn">Open Tool</a>
+    `;
+    grid.appendChild(card);
+  });
+
+  visibleCount += LOAD_STEP;
+
+  if (visibleCount >= filtered.length) {
+    loader.style.display = "none";
+  } else {
+    loader.style.display = "block";
+  }
+}
+
+/* Infinite Scroll */
+window.addEventListener("scroll", () => {
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) {
+    renderTools();
+  }
+});
+
+/* Category filter */
+filter.addEventListener("change", () => {
+  renderTools(true);
+});
+
+/* Initial load */
+renderTools();
+
+/* Hamburger */
+document.getElementById("hamburger").onclick = () =>
+  document.getElementById("nav").classList.add("active");
+
+document.getElementById("navClose").onclick = () =>
+  document.getElementById("nav").classList.remove("active");
+
+/* Dark mode */
+document.getElementById("darkModeToggle").onclick = () =>
+  document.body.classList.toggle("dark-mode");
+
+</script>
+
+</body>
+</html>
