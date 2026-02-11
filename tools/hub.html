@@ -27,13 +27,12 @@
 <nav id="nav">
   <button id="navClose">✕</button>
   <ul>
-    <li><a href="/">Home</a></li>
-    <li><a href="/Store">Store</a></li>
-    <li><a href="/tools-hub" class="active">Tools Hub</a></li>
+    <li><a href="https://prebuilts.eu/">Home</a></li>
+    <li><a href="https://prebuilts.eu/Store">Store</a></li>
+    <li><a href="https://prebuilts.eu/tools/hub" class="active">Tools Hub</a></li>
   </ul>
 </nav>
 
-<!-- MAIN -->
 <main>
 
   <section class="hero">
@@ -62,7 +61,7 @@
 
 <script>
 /* ================================
-   TOOL DATABASE (EASY TO EDIT)
+   TOOL DATABASE (NO DUPLICATES)
 ================================ */
 const tools = [
   {
@@ -85,11 +84,6 @@ const tools = [
   }
 ];
 
-/* Duplicate tools for demo infinite scroll */
-for (let i = 0; i < 20; i++) {
-  tools.push(...tools.slice(0, 3));
-}
-
 /* ================================
    RENDER LOGIC
 ================================ */
@@ -100,16 +94,20 @@ const filter = document.getElementById("categoryFilter");
 let visibleCount = 0;
 const LOAD_STEP = 6;
 
+function getFilteredTools() {
+  const category = filter.value;
+  return category === "all"
+    ? tools
+    : tools.filter(t => t.category === category);
+}
+
 function renderTools(reset = false) {
+  const filtered = getFilteredTools();
+
   if (reset) {
     grid.innerHTML = "";
     visibleCount = 0;
   }
-
-  const category = filter.value;
-  const filtered = category === "all"
-    ? tools
-    : tools.filter(t => t.category === category);
 
   const slice = filtered.slice(visibleCount, visibleCount + LOAD_STEP);
 
@@ -126,11 +124,8 @@ function renderTools(reset = false) {
 
   visibleCount += LOAD_STEP;
 
-  if (visibleCount >= filtered.length) {
-    loader.style.display = "none";
-  } else {
-    loader.style.display = "block";
-  }
+  loader.style.display =
+    visibleCount >= filtered.length ? "none" : "block";
 }
 
 /* Infinite Scroll */
@@ -146,19 +141,31 @@ filter.addEventListener("change", () => {
 });
 
 /* Initial load */
-renderTools();
+renderTools(true);
 
-/* Hamburger */
-document.getElementById("hamburger").onclick = () =>
-  document.getElementById("nav").classList.add("active");
+/* ================================
+   HEADER CONTROLS (FIXED)
+================================ */
+document.addEventListener("DOMContentLoaded", () => {
 
-document.getElementById("navClose").onclick = () =>
-  document.getElementById("nav").classList.remove("active");
+  const hamburger = document.getElementById("hamburger");
+  const nav = document.getElementById("nav");
+  const navClose = document.getElementById("navClose");
 
-/* Dark mode */
-document.getElementById("darkModeToggle").onclick = () =>
-  document.body.classList.toggle("dark-mode");
+  hamburger.addEventListener("click", () => {
+    nav.classList.add("active");
+  });
 
+  navClose.addEventListener("click", () => {
+    nav.classList.remove("active");
+  });
+
+  document.getElementById("darkModeToggle")
+    .addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+    });
+
+});
 </script>
 
 </body>
