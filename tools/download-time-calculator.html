@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Download Time Calculator | Prebuilts.eu</title>
+
+  <meta name="description" content="Calculate how long a file will take to download based on file size and internet speed. Supports MB, GB, TB and Mbps, Gbps speeds.">
+  <meta name="keywords" content="download time calculator, internet speed calculator, file download estimator, mbps to mb, gb download time, how long to download file">
+  <meta name="robots" content="index, follow">
+
+  <link rel="icon" href="https://prebuilts.eu/Images/favicon.ico">
+  <link rel="stylesheet" href="download-time.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Download Time Calculator",
+    "url": "https://prebuilts.eu/download-time-calculator.html",
+    "applicationCategory": "UtilityApplication",
+    "description": "Calculate estimated download time based on internet speed and file size."
+  }
+  </script>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-left">
+    <img src="https://prebuilts.eu/Images/Prebuiltid.png" id="HIcon" alt="Prebuilts.eu Logo">
+    <h1 id="HH1">Prebuilts</h1>
+  </div>
+</header>
+
+<main>
+
+  <section class="calculator-section">
+    <h2>Download Time Calculator</h2>
+    <p class="subtitle">
+      Estimate how long a file will take to download based on your internet speed.
+    </p>
+
+    <div class="grid">
+
+      <div class="input-group">
+        <label>File Size</label>
+        <div class="input-row">
+          <input type="number" id="fileSize" placeholder="e.g. 20">
+          <select id="fileUnit">
+            <option value="MB">MB</option>
+            <option value="GB">GB</option>
+            <option value="TB">TB</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Download Speed</label>
+        <div class="input-row">
+          <input type="number" id="speed" placeholder="e.g. 100">
+          <select id="speedUnit">
+            <option value="Mbps">Mbps</option>
+            <option value="Gbps">Gbps</option>
+            <option value="MBps">MB/s</option>
+            <option value="GBps">GB/s</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+
+    <button class="calculate-btn" onclick="calculateDownload()">Calculate</button>
+
+    <div id="resultBox" class="result hidden">
+      <h3>Estimated Download Time</h3>
+      <p id="resultTime"></p>
+    </div>
+
+  </section>
+
+</main>
+
+<footer id="footer">
+  <p>© 2026 Prebuilts</p>
+</footer>
+
+<script>
+function calculateDownload() {
+
+  let fileSize = Number(document.getElementById("fileSize").value);
+  let fileUnit = document.getElementById("fileUnit").value;
+
+  let speed = Number(document.getElementById("speed").value);
+  let speedUnit = document.getElementById("speedUnit").value;
+
+  if (!fileSize || !speed) return;
+
+  /* Convert file size to MB */
+  if (fileUnit === "GB") fileSize *= 1024;
+  if (fileUnit === "TB") fileSize *= 1024 * 1024;
+
+  /* Convert speed to MB/s */
+  if (speedUnit === "Mbps") speed = speed / 8;
+  if (speedUnit === "Gbps") speed = (speed * 1024) / 8;
+  if (speedUnit === "GBps") speed = speed * 1024;
+
+  /* Calculate seconds */
+  let seconds = fileSize / speed;
+
+  let result;
+
+  if (seconds < 60) {
+    result = seconds.toFixed(1) + " seconds";
+  } else if (seconds < 3600) {
+    result = (seconds / 60).toFixed(2) + " minutes";
+  } else if (seconds < 86400) {
+    result = (seconds / 3600).toFixed(2) + " hours";
+  } else {
+    result = (seconds / 86400).toFixed(2) + " days";
+  }
+
+  document.getElementById("resultTime").textContent = result;
+  document.getElementById("resultBox").classList.remove("hidden");
+}
+</script>
+
+</body>
+</html>
