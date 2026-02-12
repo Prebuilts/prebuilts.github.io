@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Internet Speed Converter | Mbps, MB/s, GB, TB Converter | Prebuilts.eu</title>
+
+  <meta name="description" content="Convert internet speeds and data units instantly. Convert Mbps to MB/s, GB to TB, KB to MB and more. Supports decimal and binary units. Free online internet speed converter.">
+  <meta name="keywords" content="internet speed converter, Mbps to MBps, MB to GB, TB to GB, data size converter, bandwidth converter, mbps to gbps calculator">
+  <meta name="robots" content="index, follow">
+
+  <link rel="icon" href="https://prebuilts.eu/Images/favicon.ico">
+  <link rel="stylesheet" href="internet-speed.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Internet Speed Converter",
+    "url": "https://prebuilts.eu/internet-speed-converter.html",
+    "applicationCategory": "UtilityApplication",
+    "description": "Convert internet speeds and digital storage units including Mbps, MB/s, GB, TB, KB and binary units."
+  }
+  </script>
+</head>
+<body>
+
+<header id="header">
+  <div class="header-left">
+    <img src="https://prebuilts.eu/Images/Prebuiltid.png" id="HIcon" alt="Prebuilts.eu Logo">
+    <h1 id="HH1">Prebuilts</h1>
+  </div>
+</header>
+
+<main>
+
+<section class="converter-section">
+  <h2>Internet Speed & Data Converter</h2>
+  <p class="subtitle">
+    Convert Mbps, MB/s, GB, TB, KB and binary units instantly.
+  </p>
+
+  <div class="converter-box">
+
+    <div class="input-row">
+      <input type="number" id="inputValue" placeholder="Enter value">
+      <select id="inputUnit"></select>
+    </div>
+
+    <div class="divider">⇅</div>
+
+    <div class="input-row">
+      <input type="number" id="outputValue" readonly>
+      <select id="outputUnit"></select>
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+
+<footer id="footer">
+  <p>© 2026 Prebuilts</p>
+</footer>
+
+<script>
+
+/* All supported units */
+const units = {
+  b: 1,
+  Kb: 1000,
+  Mb: 1000**2,
+  Gb: 1000**3,
+  Tb: 1000**4,
+
+  B: 8,
+  KB: 8 * 1000,
+  MB: 8 * 1000**2,
+  GB: 8 * 1000**3,
+  TB: 8 * 1000**4,
+
+  Kib: 1024,
+  Mib: 1024**2,
+  Gib: 1024**3,
+  Tib: 1024**4,
+
+  KiB: 8 * 1024,
+  MiB: 8 * 1024**2,
+  GiB: 8 * 1024**3,
+  TiB: 8 * 1024**4
+};
+
+const inputUnit = document.getElementById("inputUnit");
+const outputUnit = document.getElementById("outputUnit");
+const inputValue = document.getElementById("inputValue");
+const outputValue = document.getElementById("outputValue");
+
+/* Populate dropdowns */
+Object.keys(units).forEach(unit => {
+  let option1 = new Option(unit, unit);
+  let option2 = new Option(unit, unit);
+  inputUnit.add(option1);
+  outputUnit.add(option2);
+});
+
+inputUnit.value = "Mbps";
+outputUnit.value = "MB";
+
+/* Add missing Mbps definition */
+units["Mbps"] = units["Mb"];
+units["Gbps"] = units["Gb"];
+
+function convert() {
+  let value = parseFloat(inputValue.value);
+  if (isNaN(value)) {
+    outputValue.value = "";
+    return;
+  }
+
+  let inFactor = units[inputUnit.value];
+  let outFactor = units[outputUnit.value];
+
+  let bits = value * inFactor;
+  let result = bits / outFactor;
+
+  outputValue.value = result.toFixed(6);
+}
+
+inputValue.addEventListener("input", convert);
+inputUnit.addEventListener("change", convert);
+outputUnit.addEventListener("change", convert);
+
+</script>
+
+</body>
+</html>
