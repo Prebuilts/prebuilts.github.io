@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Interest Calculator – Loan & Investment Calculator | Prebuilts</title>
+
+<meta name="description" content="Free advanced interest calculator. Calculate loan payments, compound interest, ROI, reverse interest percentage and investment growth instantly.">
+<meta name="keywords" content="interest calculator, loan calculator, compound interest, ROI calculator, investment calculator, finance calculator online">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://prebuilts.eu/tools/interest-calculator">
+
+<link rel="stylesheet" href="interest-calculator.css">
+
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "WebApplication",
+ "name": "Interest Calculator",
+ "applicationCategory": "FinanceApplication",
+ "operatingSystem": "All",
+ "description": "Advanced loan and compound interest calculator with ROI and reverse interest calculation.",
+ "offers": {
+   "@type": "Offer",
+   "price": "0",
+   "priceCurrency": "EUR"
+ }
+}
+</script>
+
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+    <div class="logo">Prebuilts Tools</div>
+    <nav class="nav" id="navMenu">
+        <a href="https://prebuilts.eu/">Home</a>
+        <a href="https://prebuilts.eu/tools/hub">Tools</a>
+        <a href="https://prebuilts.eu/blog">Blog</a>
+        <a href="https://prebuilts.eu/Store">Store</a>
+    </nav>
+    <div class="hamburger" id="hamburger">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mobile-nav" id="mobileNav">
+    <a href="https://prebuilts.eu/">Home</a>
+    <a href="https://prebuilts.eu/tools/hub">Tools</a>
+    <a href="https://prebuilts.eu/blog">Blog</a>
+    <a href="https://prebuilts.eu/Store">Contact</a>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="container">
+
+<h1>Interest Calculator</h1>
+<p class="subtitle">Loan • Investment • Compound • Reverse Interest</p>
+
+<div class="tabs">
+    <button onclick="showTab('loan')">Loan</button>
+    <button onclick="showTab('investment')">Investment</button>
+    <button onclick="showTab('reverse')">Reverse %</button>
+</div>
+
+<!-- LOAN -->
+<div id="loan" class="tab active">
+    <input type="number" id="loanAmount" placeholder="Loan Amount">
+    <input type="number" id="loanRate" placeholder="Interest Rate (%)">
+    <input type="number" id="loanYears" placeholder="Loan Term (Years)">
+    <button onclick="calculateLoan()">Calculate Loan</button>
+    <div class="result" id="loanResult"></div>
+</div>
+
+<!-- INVESTMENT -->
+<div id="investment" class="tab">
+    <input type="number" id="investAmount" placeholder="Initial Investment">
+    <input type="number" id="investRate" placeholder="Interest Rate (%)">
+    <input type="number" id="investYears" placeholder="Years">
+    <select id="compoundFreq">
+        <option value="1">Yearly</option>
+        <option value="4">Quarterly</option>
+        <option value="12">Monthly</option>
+        <option value="365">Daily</option>
+    </select>
+    <button onclick="calculateInvestment()">Calculate Investment</button>
+    <div class="result" id="investResult"></div>
+</div>
+
+<!-- REVERSE -->
+<div id="reverse" class="tab">
+    <input type="number" id="reversePrincipal" placeholder="Starting Amount">
+    <input type="number" id="reverseFinal" placeholder="Final Amount">
+    <input type="number" id="reverseYears" placeholder="Years">
+    <button onclick="calculateReverse()">Calculate Percentage</button>
+    <div class="result" id="reverseResult"></div>
+</div>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+    <div>© 2026 Prebuilts.eu</div>
+    <div class="footer-links">
+        <a href="https://prebuilts.eu/privacy-policy">Privacy Policy</a>
+        <a href="https://prebuilts.eu/">Terms</a>
+    </div>
+</footer>
+
+<script>
+const hamburger = document.getElementById("hamburger");
+const mobileNav = document.getElementById("mobileNav");
+
+hamburger.addEventListener("click", () => {
+    hamburger.classList.toggle("active");
+    mobileNav.classList.toggle("active");
+});
+
+function showTab(tab) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(tab).classList.add('active');
+}
+
+function calculateLoan() {
+    const P = parseFloat(document.getElementById('loanAmount').value);
+    const r = parseFloat(document.getElementById('loanRate').value) / 100 / 12;
+    const n = parseFloat(document.getElementById('loanYears').value) * 12;
+
+    const monthly = (P * r) / (1 - Math.pow(1 + r, -n));
+    const total = monthly * n;
+    const interest = total - P;
+
+    document.getElementById('loanResult').innerHTML =
+        `Monthly Payment: €${monthly.toFixed(2)}<br>
+         Total Payment: €${total.toFixed(2)}<br>
+         Total Interest: €${interest.toFixed(2)}`;
+}
+
+function calculateInvestment() {
+    const P = parseFloat(document.getElementById('investAmount').value);
+    const r = parseFloat(document.getElementById('investRate').value) / 100;
+    const t = parseFloat(document.getElementById('investYears').value);
+    const n = parseInt(document.getElementById('compoundFreq').value);
+
+    const A = P * Math.pow((1 + r/n), n*t);
+    const interest = A - P;
+
+    document.getElementById('investResult').innerHTML =
+        `Final Amount: €${A.toFixed(2)}<br>
+         Total Interest Earned: €${interest.toFixed(2)}`;
+}
+
+function calculateReverse() {
+    const P = parseFloat(document.getElementById('reversePrincipal').value);
+    const A = parseFloat(document.getElementById('reverseFinal').value);
+    const t = parseFloat(document.getElementById('reverseYears').value);
+
+    const rate = (Math.pow(A/P, 1/t) - 1) * 100;
+
+    document.getElementById('reverseResult').innerHTML =
+        `Average Annual Interest Rate: ${rate.toFixed(2)}%`;
+}
+</script>
+
+</body>
+</html>
