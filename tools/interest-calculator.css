@@ -1,3 +1,4 @@
+/* ===== GLOBAL RESET ===== */
 * {
     margin: 0;
     padding: 0;
@@ -5,18 +6,20 @@
 }
 
 body {
-    font-family: system-ui, sans-serif;
-    background: #0f172a;
-    color: #f1f5f9;
+    font-family: system-ui, -apple-system, sans-serif;
+    background: #f1f5f9;
+    color: #0f172a;
+    line-height: 1.6;
 }
 
-/* HEADER */
+/* ===== HEADER ===== */
 .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 40px;
-    background: #1e293b;
+    padding: 18px 40px;
+    background: white;
+    border-bottom: 1px solid #e2e8f0;
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -29,19 +32,20 @@ body {
 
 .nav {
     display: flex;
-    gap: 25px;
+    gap: 30px;
 }
 
 .nav a {
     text-decoration: none;
-    color: #cbd5e1;
+    color: #334155;
+    font-weight: 500;
 }
 
 .nav a:hover {
-    color: #38bdf8;
+    color: #2563eb;
 }
 
-/* Hamburger */
+/* ===== HAMBURGER ===== */
 .hamburger {
     display: none;
     flex-direction: column;
@@ -52,36 +56,40 @@ body {
 .hamburger span {
     width: 25px;
     height: 3px;
-    background: white;
+    background: #0f172a;
     transition: 0.3s;
 }
 
+/* ===== MOBILE NAV ===== */
 .mobile-nav {
     display: none;
     flex-direction: column;
-    background: #1e293b;
-    padding: 20px;
+    background: white;
+    padding: 20px 40px;
+    border-bottom: 1px solid #e2e8f0;
 }
 
 .mobile-nav a {
-    padding: 10px 0;
+    padding: 12px 0;
     text-decoration: none;
-    color: #cbd5e1;
+    color: #334155;
+    font-weight: 500;
 }
 
 .mobile-nav.active {
     display: flex;
 }
 
-/* MAIN */
+/* ===== MAIN CONTAINER ===== */
 .container {
-    max-width: 700px;
-    margin: 60px auto;
+    max-width: 750px;
+    margin: 80px auto;
     padding: 40px;
-    background: #1e293b;
+    background: #dbeafe;
     border-radius: 20px;
 }
 
+/* ===== TITLES ===== */
 h1 {
     text-align: center;
     margin-bottom: 10px;
@@ -90,25 +98,33 @@ h1 {
 .subtitle {
     text-align: center;
     margin-bottom: 30px;
-    color: #94a3b8;
+    color: #475569;
 }
 
+/* ===== TABS ===== */
 .tabs {
     display: flex;
     gap: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
 .tabs button {
     flex: 1;
-    padding: 10px;
-    border-radius: 10px;
+    padding: 12px;
+    border-radius: 12px;
     border: none;
     background: #2563eb;
     color: white;
+    font-weight: 600;
     cursor: pointer;
+    transition: 0.2s;
 }
 
+.tabs button:hover {
+    background: #1d4ed8;
+}
+
+/* ===== FORM ===== */
 .tab {
     display: none;
 }
@@ -119,37 +135,46 @@ h1 {
 
 input, select {
     width: 100%;
-    padding: 12px;
+    padding: 14px;
     margin-bottom: 15px;
-    border-radius: 8px;
-    border: none;
+    border-radius: 12px;
+    border: 1px solid #cbd5e1;
+    font-size: 1rem;
 }
 
 button {
     width: 100%;
-    padding: 12px;
-    border-radius: 8px;
+    padding: 14px;
+    border-radius: 12px;
     border: none;
-    background: #3b82f6;
+    background: #1e40af;
     color: white;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
+    transition: 0.2s;
 }
 
+button:hover {
+    background: #1d4ed8;
+}
+
+/* ===== RESULT CARD ===== */
 .result {
     margin-top: 20px;
     padding: 20px;
-    background: #0f172a;
-    border-left: 4px solid #3b82f6;
-    border-radius: 10px;
+    background: rgba(37, 99, 235, 0.15);
+    border-left: 5px solid #2563eb;
+    border-radius: 12px;
+    font-weight: 600;
 }
 
-/* FOOTER */
+/* ===== FOOTER ===== */
 .footer {
-    background: #1e293b;
-    padding: 25px;
+    margin-top: 80px;
+    padding: 30px;
     text-align: center;
-    margin-top: 60px;
+    background: white;
+    border-top: 1px solid #e2e8f0;
 }
 
 .footer-links {
@@ -157,17 +182,18 @@ button {
 }
 
 .footer-links a {
-    margin: 0 10px;
+    margin: 0 12px;
     text-decoration: none;
-    color: #94a3b8;
+    color: #64748b;
 }
 
 .footer-links a:hover {
-    color: #38bdf8;
+    color: #2563eb;
 }
 
-/* RESPONSIVE */
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
+
     .nav {
         display: none;
     }
@@ -177,7 +203,7 @@ button {
     }
 
     .container {
-        margin: 30px 15px;
+        margin: 40px 15px;
         padding: 25px;
     }
 }
