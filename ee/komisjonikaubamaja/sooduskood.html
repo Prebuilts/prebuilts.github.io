@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Komisjonikaubamaja Kupong – +3 Päeva Garantiid | Prebuilts.eu</title>
+
+<meta name="description" content="Kasuta meie kupongikoodi Komisjonikaubamajas ja saa igale ostule tasuta 3 päeva lisagarantiid. Vaata kuidas kupongi kasutada.">
+
+<meta name="keywords" content="komisjonikaubamaja kupong, komisjonikaubamaja sooduskood, komisjonikaubamaja garantii, kasutatud elektroonika tallinn, komisjonikaubamaja garantii pikendus, komisjonikaubamaja, kasutatud elektroonika müük eesti">
+
+<meta name="robots" content="index, follow">
+<meta name="language" content="et">
+<link rel="canonical" href="https://prebuilts.eu/ee/komisjonikaubamaja/sooduskood">
+
+<link rel="icon" href="https://prebuilts.eu/Images/favicon.ico">
+<link rel="stylesheet" href="komisjonikaubamaja-kupong.css">
+
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="header">
+<div class="header-left">
+<img src="Images/Prebuiltid.png" id="HIcon">
+<h1 id="HH1">Prebuilts</h1>
+</div>
+
+<div class="header-actions">
+<button id="darkModeToggle">🌙</button>
+<button id="hamburger">☰</button>
+</div>
+</header>
+
+<!-- NAV -->
+<nav id="nav">
+<button id="navClose">✕</button>
+<ul>
+<li><a href="https://prebuilts.eu/">Home</a></li>
+<li><a href="https://prebuilts.eu/Store">Store</a></li>
+<li><a href="https://prebuilts.eu/blog">Blog</a></li>
+<li><a href="https://prebuilts.eu/tools/hub">Tools</a></li>
+<li><a href="https://prebuilts.eu/">About</a></li>
+</ul>
+</nav>
+
+
+<!-- MAIN -->
+<main>
+
+<section class="page-container reveal">
+
+<h1 class="page-title">
+Komisjonikaubamaja Kupong
+</h1>
+
+<p class="intro">
+Prebuilts.eu koostöös <strong>Komisjonikaubamajaga</strong> pakume erikupongi,
+mis annab sulle <strong>tasuta +3 päeva lisagarantiid</strong> ükskõik millise
+toote ostmisel.
+</p>
+
+<div class="highlight-box">
+
+<h2>Kupongikood</h2>
+
+<div class="coupon">
+PREBUILTS
+</div>
+
+<p class="coupon-desc">
+Näita seda koodi kassas või ütle müüjale ja saad oma ostule
+<strong>3 päeva lisagarantiid tasuta.</strong>
+</p>
+
+</div>
+
+</section>
+
+
+<!-- HOW TO REDEEM -->
+<section class="page-container reveal">
+
+<h2>Kuidas kupongi kasutada</h2>
+
+<ol class="steps">
+
+<li>
+Mine Komisjonikaubamaja poodi ja vali välja toode mida soovid osta.
+</li>
+
+<li>
+Enne maksmist ütle kassas kupongikood
+<strong>"PREBUILTS"</strong>.
+</li>
+
+<li>
+Müüja lisab sinu ostule
+<strong>+3 päeva lisagarantiid</strong>.
+</li>
+
+<li>
+Naudi oma ostu koos pikema garantiiga.
+</li>
+
+</ol>
+
+</section>
+
+
+<!-- CONTACT INFO -->
+<section class="page-container reveal">
+
+<h2>Komisjonikaubamaja Kontakt</h2>
+
+<div class="contact-box">
+
+<p>
+<strong>Aadress:</strong><br>
+Kadaka tee 56a, 12915 Tallinn
+</p>
+
+<p>
+<strong>Telefon:</strong><br>
++372 564 0383
+</p>
+
+<p>
+<strong>Email:</strong><br>
+info@komisjonikaubamaja.ee
+</p>
+
+<p>
+<strong>Lahtiolekuajad:</strong><br>
+E-L: 10:00-18:00
+P: Suletud
+</p>
+
+</div>
+
+</section>
+
+</main>
+
+
+<!-- FOOTER -->
+<footer id="footer">
+<p>© 2026 Prebuilts</p>
+
+<a href="https://prebuilts.eu/privacy-policy">Privacy Policy</a>
+<a href="#">Terms of Service</a>
+
+</footer>
+
+
+<script>
+
+/* Hamburger */
+
+const hamburger = document.getElementById("hamburger");
+const nav = document.getElementById("nav");
+const navClose = document.getElementById("navClose");
+
+hamburger.onclick = () => nav.classList.add("active");
+navClose.onclick = () => nav.classList.remove("active");
+
+
+/* Dark mode */
+
+document.getElementById("darkModeToggle").onclick = () => {
+document.body.classList.toggle("dark-mode");
+};
+
+
+/* Reveal animation */
+
+const reveals = document.querySelectorAll(".reveal");
+
+function reveal() {
+
+reveals.forEach(el => {
+
+if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+
+el.classList.add("active");
+
+}
+
+});
+
+}
+
+window.addEventListener("scroll", reveal);
+reveal();
+
+</script>
+
+</body>
+</html>
