@@ -1,0 +1,199 @@
+:root{
+--header-height:90px;
+}
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+}
+
+body{
+font-family:system-ui;
+background:#f8fafc;
+color:#0f172a;
+padding-top:var(--header-height);
+line-height:1.7;
+}
+
+/* HEADER */
+
+#header{
+height:var(--header-height);
+background:#ffffff;
+border-bottom:1px solid #e5e7eb;
+
+display:flex;
+align-items:center;
+justify-content:space-between;
+
+padding:0 24px;
+position:fixed;
+top:0;
+width:100%;
+z-index:9999;
+}
+
+.header-left{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+#HIcon{
+width:48px;
+}
+
+#HH1{
+font-size:1.5rem;
+font-weight:700;
+}
+
+.header-actions{
+display:flex;
+gap:10px;
+}
+
+#hamburger,
+#darkModeToggle{
+width:42px;
+height:42px;
+border-radius:10px;
+border:1px solid #e5e7eb;
+background:#f1f5f9;
+font-size:1.4rem;
+cursor:pointer;
+}
+
+/* NAV */
+
+#nav{
+position:fixed;
+top:0;
+right:-320px;
+width:320px;
+height:100vh;
+
+background:#ffffff;
+padding:90px 24px;
+transition:right .3s ease;
+
+z-index:10000;
+box-shadow:-20px 0 40px rgba(0,0,0,.2);
+}
+
+#nav.active{
+right:0;
+}
+
+#navClose{
+position:absolute;
+top:20px;
+right:20px;
+font-size:1.5rem;
+background:none;
+border:none;
+cursor:pointer;
+}
+
+#nav ul{
+list-style:none;
+}
+
+#nav li{
+margin-bottom:18px;
+}
+
+#nav a{
+text-decoration:none;
+font-size:1.1rem;
+color:#0f172a;
+font-weight:600;
+}
+
+/* ARTICLE */
+
+.article-container{
+max-width:900px;
+margin:60px auto;
+padding:40px;
+
+background:#dbe8f5;
+border-radius:20px;
+}
+
+.article-title{
+font-size:2.3rem;
+margin-bottom:10px;
+}
+
+.article-meta{
+font-size:.9rem;
+color:#475569;
+margin-bottom:30px;
+}
+
+.article-container h2{
+margin-top:40px;
+margin-bottom:15px;
+}
+
+.article-container p{
+margin-bottom:18px;
+}
+
+.article-container ul{
+margin:20px 0 20px 20px;
+}
+
+/* INFO BOX */
+
+.info-box{
+background:white;
+padding:20px;
+border-radius:12px;
+margin-bottom:20px;
+}
+
+/* FOOTER */
+
+#footer{
+text-align:center;
+padding:40px 20px;
+margin-top:60px;
+color:#475569;
+}
+
+/* DARK MODE */
+
+body.dark-mode{
+background:#0f172a;
+color:#e5e7eb;
+}
+
+body.dark-mode #header,
+body.dark-mode #nav{
+background:#1e293b;
+}
+
+body.dark-mode .article-container{
+background:#1e293b;
+}
+
+body.dark-mode .info-box{
+background:#0f172a;
+border:1px solid #334155;
+}
+
+/* REVEAL */
+
+.reveal{
+opacity:0;
+transform:translateY(40px);
+transition:.6s ease;
+}
+
+.reveal.active{
+opacity:1;
+transform:none;
+}
