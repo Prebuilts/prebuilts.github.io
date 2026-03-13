@@ -102,7 +102,7 @@ function renderBasket() {
   basketItems.innerHTML = "";
 
   if (!cart.length) {
-    basketItems.innerHTML = "<p>Your basket is empty</p>";
+    basketItems.innerHTML = "<p>Teie ostukorv on tühi!</p>";
     basketTotal.textContent = "0€";
     updateCartCount();
     return;
@@ -119,7 +119,7 @@ function renderBasket() {
         <div class="price">${Number(item.price).toFixed(2)}€</div>
       </div>
       <div class="actions">
-        <button>Remove</button>
+        <button>Eemalda</button>
       </div>
     `;
 
@@ -151,7 +151,7 @@ function renderBasket() {
 ================================ */
 function addToCart(product) {
   if (cart.find(p => p.id === product.id)) {
-    alert("This product is already in your basket.");
+    alert("See toode on juba ostukorvis!");
     return;
   }
 
@@ -176,9 +176,9 @@ function renderProducts(list) {
       <h3>${escapeHtml(product.name)}</h3>
       <div>${Number(product.price).toFixed(2)}€</div>
       <p>${escapeHtml(product.description || "")}</p>
-      <div class="stock">In stock: ${product.quantity || 0}</div>
+      <div class="stock">Laoseis: ${product.quantity || 0}</div>
       <div>
-        <button class="btn view">Buy from Amazon <i class="fa-brands fa-amazon"></i></button>
+        <button class="btn view">Osta komisjonikaubamajast <i class="fa-solid fa-store"></i></button>
         <button class="btn add">Add to basket</button>
       </div>
     `;
