@@ -53,6 +53,150 @@
 
   gtag('config', 'G-70DYN0DHBH');
 </script>
+
+
+<style>
+#storePopup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.55);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:99999;
+backdrop-filter:blur(6px);
+}
+
+.store-popup-box{
+background:#ffffff;
+padding:40px;
+border-radius:18px;
+text-align:center;
+max-width:520px;
+width:90%;
+box-shadow:0 25px 60px rgba(0,0,0,0.35);
+animation:storePopupAnim .35s ease;
+font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+}
+
+@keyframes storePopupAnim{
+from{
+opacity:0;
+transform:translateY(25px);
+}
+to{
+opacity:1;
+transform:none;
+}
+}
+
+.store-popup-box h2{
+margin-bottom:15px;
+font-size:1.6rem;
+}
+
+.store-popup-box p{
+color:#475569;
+margin-bottom:30px;
+line-height:1.6;
+}
+
+.popup-buttons{
+display:flex;
+gap:12px;
+justify-content:center;
+flex-wrap:wrap;
+}
+
+.popup-buttons button{
+padding:12px 24px;
+border:none;
+border-radius:10px;
+font-size:1rem;
+font-weight:600;
+cursor:pointer;
+transition:.2s;
+}
+
+#storePopupButton{
+background:#2563eb;
+color:white;
+}
+
+#couponButton{
+background:#16a34a;
+color:white;
+}
+
+.popup-buttons button:hover{
+transform:scale(1.05);
+box-shadow:0 8px 20px rgba(0,0,0,0.25);
+}
+</style>
+
+
+<div id="storePopup">
+
+<div class="store-popup-box">
+
+<h2>Oluline teave</h2>
+
+<p>
+Koostöös Komisjonikaubamajaga pakume me teile kupongikoodi mis annab teile Komisjonikaubamajas 7 PÄEVA LISAGARANTIID! Rohkem infot saab alloleva nupu juurest!
+</p>
+
+<div class="popup-buttons">
+
+<button id="storePopupButton">Sain aru</button>
+
+<button id="couponButton">
+Vaata Komisjonikaubamaja sooduskoodi
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+function getSessionCookie(name){
+const cookies=document.cookie.split(";")
+for(let cookie of cookies){
+const [key,value]=cookie.trim().split("=")
+if(key===name) return value
+}
+return null
+}
+
+function setSessionCookie(name,value){
+document.cookie=name+"="+value+"; path=/"
+}
+
+if(!getSessionCookie("store_popup_seen")){
+document.getElementById("storePopup").style.display="flex"
+}
+
+document.getElementById("storePopupButton").onclick=function(){
+
+setSessionCookie("store_popup_seen","yes")
+document.getElementById("storePopup").style.display="none"
+
+}
+
+document.getElementById("couponButton").onclick=function(){
+
+setSessionCookie("store_popup_seen","yes")
+window.location.href="https://prebuilts.eu/ee/komisjonikaubamaja/sooduskood"
+
+}
+
+</script>
 <body>
 
 <!-- HEADER -->
