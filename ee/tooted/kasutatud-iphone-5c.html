@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="et">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Kasutatud Iphone 5c | Prebuilts.eu Pood</title>
+
+<meta name="description" content="Kasutatud Iphone 5 müük, osta kasutatud Iphone soodsalt. Igale tootele kehtib garantii">
+<meta name="keywords" content="kasutatud iphone 5c, kasutatud iphone, komisjonikaubamaja, kasutatud elektroonika">
+
+<meta name="robots" content="index, follow">
+
+<link rel="icon" href="https://prebuilts.eu/Images/favicon.ico">
+<link rel="stylesheet" href="product.css">
+
+<!-- Product SEO -->
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org/",
+ "@type": "Product",
+ "name": "Iphone 5c",
+ "image": [
+   "https://ss20.ee/wp-content/uploads/2021/05/Iphone5S-ss20.jpg"
+ ],
+ "description": "Kasutatud Iphone 5",
+ "brand": {
+   "@type": "Brand",
+   "name": "Apple"
+ }
+}
+</script>
+
+</head>
+
+<body>
+
+<header id="header">
+
+<div class="header-left">
+<img src="/Images/Prebuiltid.png" id="HIcon">
+<h2 id="HH1">Prebuilts</h2>
+</div>
+
+<div class="header-actions">
+<button id="darkModeToggle">🌙</button>
+<button id="hamburger">☰</button>
+</div>
+
+</header>
+
+
+<nav id="nav">
+
+<button id="navClose">✕</button>
+
+<ul>
+<li><a href="https://prebuilts.eu/ee/koduleht">Kodu</a></li>
+<li><a href="https://prebuilts.eu/ee/pood">Pood</a></li>
+<li><a href="https://prebuilts.eu/tools/hub">Online tööriistad</a></li>
+<li><a href="https://prebuilts.eu/blog">Artiklid</a></li>
+</ul>
+
+</nav>
+
+
+<main>
+
+<section class="product-container reveal">
+
+<div class="product-grid">
+
+<div class="product-image">
+
+<img src="https://ss20.ee/wp-content/uploads/2021/05/Iphone5S-ss20.jpg" alt="Kasutatud Iphone 6">
+
+</div>
+
+<div class="product-info">
+
+<h1>Kasutatud Iphone 5c</h1>
+
+<p class="price">€99</p>
+
+<p class="short-desc">
+Kasutatud Iphone 5c
+</p>
+
+<a href="https://prebuilts.eu/ee/pood" class="buy-button">
+Osta
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<section class="product-container reveal">
+
+<h2>Toote kirjeldus</h2>
+
+<p>
+
+Kasutatud Iphone 5c. Eri värvi mudelid.
+
+</p>
+
+</section>
+
+
+
+<section class="product-container reveal">
+
+<h2>Spetsifikatsioonid</h2>
+
+<table class="specs">
+
+<tr>
+<td>Brand</td>
+<td>Apple</td>
+</tr>
+
+<tr>
+<td>Mudel</td>
+<td>Iphone 5c</td>
+</tr>
+
+<tr>
+<td>Seisukord</td>
+<td>Kasutatud</td>
+</tr>
+
+<tr>
+<td>Garantii</td>
+<td>30 päeva</td>
+</tr>
+
+</table>
+
+</section>
+
+
+</main>
+
+
+<footer id="footer">
+
+<p>© 2026 Prebuilts</p>
+
+<a href="https://prebuilts.eu/privacy-policy">Privaatsus ja andmete töötlemine</a>
+<a href="#">Teenusetingimused</a>
+
+</footer>
+
+
+<script>
+
+/* NAV */
+
+const hamburger = document.getElementById("hamburger")
+const nav = document.getElementById("nav")
+const navClose = document.getElementById("navClose")
+
+hamburger.onclick = () => nav.classList.add("active")
+navClose.onclick = () => nav.classList.remove("active")
+
+/* DARK MODE */
+
+document.getElementById("darkModeToggle").onclick = () => {
+document.body.classList.toggle("dark-mode")
+}
+
+/* REVEAL */
+
+const reveals = document.querySelectorAll(".reveal")
+
+window.addEventListener("scroll", () => {
+
+reveals.forEach(el => {
+
+if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+
+el.classList.add("active")
+
+}
+
+})
+
+})
+
+</script>
+
+</body>
+</html>
