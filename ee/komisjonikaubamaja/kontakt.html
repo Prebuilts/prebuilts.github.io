@@ -178,20 +178,20 @@ function setSessionCookie(name,value){
 document.cookie=name+"="+value+"; path=/"
 }
 
-if(!getSessionCookie("store_popup_seen")){
+if(!getSessionCookie("komisjon_popup_seen")){
 document.getElementById("storePopup").style.display="flex"
 }
 
 document.getElementById("storePopupButton").onclick=function(){
 
-setSessionCookie("store_popup_seen","yes")
+setSessionCookie("komisjon_popup_seen","yes")
 document.getElementById("storePopup").style.display="none"
 
 }
 
 document.getElementById("couponButton").onclick=function(){
 
-setSessionCookie("store_popup_seen","yes")
+setSessionCookie("komisjon_popup_seen","yes")
 window.location.href="https://prebuilts.eu/ee/komisjonikaubamaja/sooduskood"
 
 }
