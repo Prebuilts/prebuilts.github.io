@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="et">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Product Name | Prebuilts Store</title>
+
+<meta name="description" content="Product description here">
+<meta name="keywords" content="product name, electronics, gaming, computer parts">
+
+<meta name="robots" content="index, follow">
+
+<link rel="icon" href="/Images/favicon.ico">
+<link rel="stylesheet" href="/css/product.css">
+
+<!-- Product SEO -->
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org/",
+ "@type": "Product",
+ "name": "Product Name",
+ "image": [
+   "https://prebuilts.eu/images/product.jpg"
+ ],
+ "description": "Product description",
+ "brand": {
+   "@type": "Brand",
+   "name": "Brand Name"
+ }
+}
+</script>
+
+</head>
+
+<body>
+
+<header id="header">
+
+<div class="header-left">
+<img src="/Images/Prebuiltid.png" id="HIcon">
+<h1 id="HH1">Prebuilts</h1>
+</div>
+
+<div class="header-actions">
+<button id="darkModeToggle">🌙</button>
+<button id="hamburger">☰</button>
+</div>
+
+</header>
+
+
+<nav id="nav">
+
+<button id="navClose">✕</button>
+
+<ul>
+<li><a href="/">Home</a></li>
+<li><a href="/Store">Store</a></li>
+<li><a href="/tools">Tools</a></li>
+<li><a href="/blog">Articles</a></li>
+</ul>
+
+</nav>
+
+
+<main>
+
+<section class="product-container reveal">
+
+<div class="product-grid">
+
+<div class="product-image">
+
+<img src="/images/product.jpg" alt="Product Name">
+
+</div>
+
+<div class="product-info">
+
+<h1>Product Name</h1>
+
+<p class="price">€199</p>
+
+<p class="short-desc">
+Short description of the product goes here.
+</p>
+
+<a href="#" class="buy-button">
+Buy Product
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<section class="product-container reveal">
+
+<h2>Product Description</h2>
+
+<p>
+
+Full product description here. You can write multiple paragraphs explaining features, condition, specifications and more.
+
+</p>
+
+</section>
+
+
+
+<section class="product-container reveal">
+
+<h2>Specifications</h2>
+
+<table class="specs">
+
+<tr>
+<td>Brand</td>
+<td>Example Brand</td>
+</tr>
+
+<tr>
+<td>Model</td>
+<td>Example Model</td>
+</tr>
+
+<tr>
+<td>Condition</td>
+<td>Used</td>
+</tr>
+
+<tr>
+<td>Warranty</td>
+<td>30 Days</td>
+</tr>
+
+</table>
+
+</section>
+
+
+</main>
+
+
+<footer id="footer">
+
+<p>© 2026 Prebuilts</p>
+
+<a href="/privacy">Privacy Policy</a>
+<a href="/tos">Terms</a>
+
+</footer>
+
+
+<script>
+
+/* NAV */
+
+const hamburger = document.getElementById("hamburger")
+const nav = document.getElementById("nav")
+const navClose = document.getElementById("navClose")
+
+hamburger.onclick = () => nav.classList.add("active")
+navClose.onclick = () => nav.classList.remove("active")
+
+/* DARK MODE */
+
+document.getElementById("darkModeToggle").onclick = () => {
+document.body.classList.toggle("dark-mode")
+}
+
+/* REVEAL */
+
+const reveals = document.querySelectorAll(".reveal")
+
+window.addEventListener("scroll", () => {
+
+reveals.forEach(el => {
+
+if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+
+el.classList.add("active")
+
+}
+
+})
+
+})
+
+</script>
+
+</body>
+</html>
