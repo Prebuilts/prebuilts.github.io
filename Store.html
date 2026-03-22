@@ -31,6 +31,87 @@
   </script>
   <script>(function(s){s.dataset.zone='10592969',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
   <script>(function(s){s.dataset.zone='10453490',s.src='https://gizokraijaw.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+  <!-- MAINTENANCE POPUP (NON-CLOSABLE) -->
+
+<style>
+/* Disable scroll */
+body {
+overflow: hidden !important;
+}
+
+/* Overlay */
+#maintenancePopup {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+
+background: rgba(0,0,0,0.6);
+backdrop-filter: blur(8px);
+
+display: flex;
+align-items: center;
+justify-content: center;
+
+z-index: 999999;
+}
+
+/* Popup box */
+.maintenance-box {
+background: #ffffff;
+padding: 50px;
+border-radius: 20px;
+text-align: center;
+max-width: 500px;
+width: 90%;
+
+box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+
+font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+
+animation: popupFade .4s ease;
+}
+
+@keyframes popupFade {
+from {
+opacity: 0;
+transform: translateY(30px);
+}
+to {
+opacity: 1;
+transform: none;
+}
+}
+
+.maintenance-box h2 {
+font-size: 1.8rem;
+margin-bottom: 15px;
+}
+
+.maintenance-box p {
+color: #475569;
+font-size: 1.05rem;
+line-height: 1.6;
+}
+</style>
+
+
+<div id="maintenancePopup">
+
+<div class="maintenance-box">
+
+<h2>Page Under Maintenance</h2>
+
+<p>
+This store page is currently under maintenance.<br><br>
+Some features may not work correctly or may be temporarily unavailable.
+Please check back later.
+</p>
+
+</div>
+
+</div>
 <body>
 
 <!-- SIDE ADS (UNCHANGED) -->
