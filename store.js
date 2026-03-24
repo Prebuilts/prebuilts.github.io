@@ -178,7 +178,7 @@ function renderProducts(list) {
       <p>${escapeHtml(product.description || "")}</p>
       <div class="stock">Laoseis: ${product.quantity || 0}</div>
       <div>
-        <button class="btn view">Osta otse e-poest<i class="fa-solid fa-store"></i></button>
+        <button class="btn view">Tooteinfo<i class="fa-regular fa-circle-info"></i></i></button>
         <button class="btn add">Lisa ostukorvi</button>
       </div>
     `;
