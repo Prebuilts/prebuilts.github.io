@@ -1,0 +1,402 @@
+:root {
+  --header-height: 90px;
+  --bg: #f8fafc;
+  --text: #0f172a;
+  --card: #dbe8f5;
+  --primary: #2563eb;
+  --border: #e5e7eb;
+}
+
+/* ===============================
+   RESET
+   =============================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ===============================
+   BODY
+   =============================== */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  padding-top: var(--header-height);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+/* ===============================
+   HEADER
+   =============================== */
+#header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: var(--header-height);
+  background: #ffffff;
+  border-bottom: 1px solid var(--border);
+  z-index: 9999;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 24px;
+}
+
+/* LEFT SIDE */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#HIcon {
+  width: 46px;
+  height: auto;
+}
+
+#HH1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+/* RIGHT ACTIONS */
+.header-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* BUTTONS */
+#hamburger,
+#darkModeToggle {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #f1f5f9;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#hamburger {
+  font-size: 1.5rem;
+}
+
+/* ===============================
+   SIDE NAV (RIGHT PANEL)
+   =============================== */
+#nav {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 320px;
+  height: 100vh;
+
+  background: #ffffff;
+  padding: 90px 24px;
+  transition: right 0.3s ease;
+  z-index: 10000;
+
+  box-shadow: -20px 0 40px rgba(0,0,0,0.2);
+}
+
+#nav.active {
+  right: 0;
+}
+
+#navClose {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+#nav ul {
+  list-style: none;
+}
+
+#nav li {
+  margin-bottom: 18px;
+}
+
+#nav a {
+  text-decoration: none;
+  font-size: 1.1rem;
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* ===============================
+   MAIN SECTIONS
+   =============================== */
+section {
+  max-width: 1100px;
+  margin: 60px auto;
+  padding: 30px;
+  background: var(--card);
+  border-radius: 18px;
+}
+
+/* ===============================
+   ARTICLE
+   =============================== */
+.article-card {
+  padding: 30px;
+  border-radius: 16px;
+  background: var(--card);
+}
+
+.see-more-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 22px;
+  background: var(--primary);
+  color: #ffffff;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+/* ===============================
+   FEATURED TOOLS
+   =============================== */
+#featured-tools {
+  background: transparent;
+  padding: 0;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+}
+
+.tool-card {
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.tool-card h3 {
+  margin-bottom: 10px;
+}
+
+.tool-card p {
+  color: #475569;
+  margin-bottom: 20px;
+}
+
+.tool-btn {
+  align-self: flex-start;
+  padding: 10px 22px;
+  background: var(--primary);
+  color: #ffffff;
+  border-radius: 999px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* ===============================
+   FOOTER
+   =============================== */
+#footer {
+  text-align: center;
+  padding: 40px 20px;
+  margin-top: 60px;
+  color: #475569;
+}
+
+/* ===============================
+   SIDE ADS
+   =============================== */
+#asideleft,
+#asideright {
+  position: fixed;
+  top: var(--header-height);
+  width: 160px;
+  height: calc(100vh - var(--header-height));
+}
+
+#asideleft { left: 10px; }
+#asideright { right: 10px; }
+
+/* Push content away from ads on large screens */
+@media (min-width: 1300px) {
+  body {
+    padding-left: 200px;
+    padding-right: 200px;
+  }
+}
+
+/* Hide ads on smaller screens */
+@media (max-width: 1299px) {
+  #asideleft,
+  #asideright {
+    display: none;
+  }
+
+  body {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* ===============================
+   ANIMATIONS
+   =============================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: 0.6s ease;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: none;
+}
+
+/* ===============================
+   RESPONSIVE
+   =============================== */
+@media (max-width: 900px) {
+  .tools-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  section {
+    margin: 40px 16px;
+  }
+}
+
+/* ===============================
+   DARK MODE
+   =============================== */
+body.dark-mode {
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+body.dark-mode #header,
+body.dark-mode #nav {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode section,
+body.dark-mode .tool-card {
+  background: #1e293b;
+}
+
+body.dark-mode a {
+  color: #93c5fd;
+}
+/* =========================================
+   HEADER HARD FIX (DESKTOP SAFE)
+   ========================================= */
+
+/* Reset header positioning influence */
+#header {
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+}
+
+/* Inner header layout wrapper (virtual) */
+#header {
+  display: flex;
+  justify-content: center;
+}
+
+/* Constrain content width like modern sites */
+#header > .header-left,
+#header > .header-actions {
+  position: relative;
+  z-index: 2;
+}
+
+/* Create centered header content */
+#header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Proper header layout */
+#header {
+  padding: 0 24px;
+}
+
+/* Left section */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: auto;
+}
+
+/* Right section */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: auto;
+}
+
+/* FORCE hamburger visibility everywhere */
+#hamburger {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Prevent ads from affecting header */
+@media (min-width: 1300px) {
+  body {
+    padding-left: 200px;
+    padding-right: 200px;
+  }
+
+  #header {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+/* Mobile safety */
+@media (max-width: 768px) {
+  #header {
+    padding: 0 16px;
+  }
+}
+#featured-pcs img {
+  height: 180px;
+  object-fit: cover;
+}
