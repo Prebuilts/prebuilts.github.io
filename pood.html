@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Kasutatud elektroonika pood. Osta uut ja kasutatud elektroonikat | Prebuilts.eu</title>
+
+  <link rel="stylesheet" href="https://prebuilts.eu/store.css" />
+  <script src="https://kit.fontawesome.com/e68a8b27de.js" crossorigin="anonymous"></script>
+  <link rel="icon" href="https://prebuilts.eu/Images/favicon.ico">
+  <link rel="canonical" href="https://prebuilts.eu/pood">
+  <meta name="language" content="et">
+  <meta name="geo.region" content="EE">
+  <meta name="geo.placename" content="Estonia">
+
+  <meta name="p:domain_verify" content="b402a362310dc61ee0d9eca61f2d5e91"/>
+  <meta name="p:domain_verify" content="b402a362310dc61ee0d9eca61f2d5e91"/>
+  <meta name="msvalidate.01" content="2685190BB3ABCD7007E591C6CA03B20F" />
+  <meta name='admaven-placement' content=Bqjw8rHC8>
+  <script src="https://kit.fontawesome.com/e68a8b27de.js" crossorigin="anonymous"></script>
+  <meta name="description" content= "Uue ja kasutatud elektroonika müük. Osta lauaarvuteid, telefone, laptope, mängukonsoole ja muud kasutatud elektroonikat">
+  <meta name="keywords" content="kasutatud elektroonika, kasutatud elektroonika müük, komisjonikaubamaja">
+  <meta name="monetag" content="1f7da93f17251f1ce433a3b1f23d5b4f">
+<meta name="google-adsense-account" content="ca-pub-5355726667828193">
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org/",
+  "@type": "WebSite",
+  "name": "Prebuilts.eu",
+  "url": "https://prebuilts.eu/pood",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "{search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+</head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-70DYN0DHBH"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-70DYN0DHBH');
+  </script>
+<!-- STORE INFO POPUP -->
+
+<style>
+#storePopup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.55);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:99999;
+backdrop-filter:blur(6px);
+}
+
+.store-popup-box{
+background:#ffffff;
+padding:40px;
+border-radius:18px;
+text-align:center;
+max-width:520px;
+width:90%;
+box-shadow:0 25px 60px rgba(0,0,0,0.35);
+animation:storePopupAnim .35s ease;
+font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+}
+
+@keyframes storePopupAnim{
+from{
+opacity:0;
+transform:translateY(25px);
+}
+to{
+opacity:1;
+transform:none;
+}
+}
+
+.store-popup-box h2{
+margin-bottom:15px;
+font-size:1.6rem;
+}
+
+.store-popup-box p{
+color:#475569;
+margin-bottom:30px;
+line-height:1.6;
+}
+
+.popup-buttons{
+display:flex;
+gap:12px;
+justify-content:center;
+flex-wrap:wrap;
+}
+
+.popup-buttons button{
+padding:12px 24px;
+border:none;
+border-radius:10px;
+font-size:1rem;
+font-weight:600;
+cursor:pointer;
+transition:.2s;
+}
+
+#storePopupButton{
+background:#2563eb;
+color:white;
+}
+
+#couponButton{
+background:#16a34a;
+color:white;
+}
+
+.popup-buttons button:hover{
+transform:scale(1.05);
+box-shadow:0 8px 20px rgba(0,0,0,0.25);
+}
+</style>
+
+
+<div id="storePopup">
+
+<div class="store-popup-box">
+
+<h2>Oluline teave</h2>
+
+<p>
+Sellel lehel on ülevaade meie toodete valikust.
+Igal tootel on 14 päevane garantii (Vaata teenusetingimusi!)
+Toodete kohta saab lisainfot küsida, kui saadate meile emaili aadressile: sales@prebuilts.eu
+</p>
+
+<div class="popup-buttons">
+
+<button id="storePopupButton">Sain aru</button>
+
+<button id="couponButton">
+Vaata meie veebilehe teenusetingimusi
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+function getSessionCookie(name){
+const cookies=document.cookie.split(";")
+for(let cookie of cookies){
+const [key,value]=cookie.trim().split("=")
+if(key===name) return value
+}
+return null
+}
+
+function setSessionCookie(name,value){
+document.cookie=name+"="+value+"; path=/"
+}
+
+if(!getSessionCookie("store_popup_seen")){
+document.getElementById("storePopup").style.display="flex"
+}
+
+document.getElementById("storePopupButton").onclick=function(){
+
+setSessionCookie("store_popup_seen","yes")
+document.getElementById("storePopup").style.display="none"
+
+}
+
+document.getElementById("couponButton").onclick=function(){
+
+setSessionCookie("store_popup_seen","yes")
+window.location.href="https://prebuilts.eu/ee/teenusetingimused"
+
+}
+
+</script>
+
+
+
+<body>
+
+<!-- SIDE ADS (UNCHANGED) -->
+<!--<aside id="asideleft">
+  <script>
+    atOptions = {
+      'key' : '867f57fc5b6f1ec7ee6b6af33aacdf57',
+      'format' : 'iframe',
+      'height' : 600,
+      'width' : 160,
+      'params' : {}
+    };
+  </script>
+  <script src="https://www.highperformanceformat.com/867f57fc5b6f1ec7ee6b6af33aacdf57/invoke.js"></script>
+</aside>
+
+<aside id="asideright">
+  <script>
+    atOptions = {
+      'key' : '867f57fc5b6f1ec7ee6b6af33aacdf57',
+      'format' : 'iframe',
+      'height' : 600,
+      'width' : 160,
+      'params' : {}
+    };
+  </script>
+  <script src="https://www.highperformanceformat.com/867f57fc5b6f1ec7ee6b6af33aacdf57/invoke.js"></script>
+</aside>-->
+
+<!-- HEADER -->
+<header id="header">
+  <div class="header-left">
+    <img src="Images/Prebuiltid.png" id="HIcon" alt="Prebuilts Logo" />
+    <h2 id="HH1">Prebuilts</h2>
+  </div>
+
+  <div class="header-actions">
+    <button id="hamburger">☰</button>
+  </div>
+</header>
+
+<!-- SIDE NAV -->
+<nav id="nav">
+  <button id="navClose">✕</button>
+  <ul>
+    <li><a href="https://prebuilts.eu/">Kodu</a></li>
+    <li><a class="active" href="#">Pood</a></li>
+    <li><a href="https://prebuilts.eu/blog">Blogi</a></li>
+    <li><a href="#" id="settingsBtn">Seaded</a></li>
+    <li><a href="https://prebuilts.eu/login" id="accountLink">Logi sisse</a></li>
+    <li><a href="#" id="logoutBtn" style="display:none">Logi välja</a></li>
+  </ul>
+</nav>
+
+<!-- STORE -->
+<section class="store-section reveal">
+  <h1>Meie uue ja kasutatud elektroonika pood</h1>
+
+  <div class="category-filter">
+    <label>Filtreeri:</label>
+    <select id="categorySelect">
+      <option value="all">Kõik</option>
+      <option value="gaming-pcs">Gaming PC-d</option>
+      <option value="consoles">Konsoolid</option>
+      <option value="laptops">Laptopid</option>
+      <option value="tablets">Tahvelarvutid</option>
+      <option value="keyboards">Klaviatuurid</option>
+      <option value="mice">Arvutihiired</option>
+      <option value="headphones">Kõrvaklapid</option>
+      <option value="controllers">Mängupuldid</option>
+      <option value="software">Tarkvara</option>
+      <option value="smartphones">Nutitelefonid</option>
+      <option value="monitors">Monitorid</option>
+      <option value="misc">Muu</option>
+    </select>
+
+    <select id="sortSelect">
+      <option value="none">Sorteeri</option>
+      <option value="price-asc">Hind ↑</option>
+      <option value="price-desc">Hind ↓</option>
+      <option value="name-asc">A–Z</option>
+      <option value="name-desc">Z–A</option>
+    </select>
+
+    <input id="searchInput" placeholder="Otsi toodet">
+  </div>
+
+  <div id="shopgrid" class="recommended-grid"></div>
+</section>
+
+<!-- CART -->
+<div id="cart-icon">🛒 <span id="cart-count">0</span></div>
+
+<!-- BASKET PANEL -->
+<div id="basket-panel">
+  <div id="basket-header">
+    <h2>Ostukorv</h2>
+    <p>OSTMISEKS SAATKE MEILE EMAIL: <b>sales@prebuilts.eu</b></p>
+    <button id="close-basket">✖</button>
+  </div>
+  <div id="basket-items"></div>
+  <div id="basket-footer">
+    <h3>Kokku: <span id="basket-total">0€</span></h3>
+    <button id="clear-cart-btn">Tühjenda ostukorv</button>
+    <button id="buy-all-btn">Osta kõik</button>
+    <button id="my-orders-btn">Minu ostud</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer id="footer">
+  <p>&copy; 2026 Prebuilts</p>
+</footer>
+
+<script type="module" src="https://prebuilts.eu/store.js"></script>
+
+<script>
+  const hamburger = document.getElementById("hamburger");
+  const nav = document.getElementById("nav");
+  const navClose = document.getElementById("navClose");
+
+  hamburger.onclick = () => nav.classList.add("active");
+  navClose.onclick = () => nav.classList.remove("active");
+
+  window.addEventListener("scroll", () => {
+    document.querySelectorAll(".reveal").forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+        el.classList.add("active");
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
