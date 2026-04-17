@@ -501,7 +501,6 @@ body {
 }
 
 #close-basket {
-  flex: 1;
   background: #e5e7eb;
   color: #0f172a;
   border: none;
@@ -509,6 +508,7 @@ body {
   border-radius: 999px;
   font-weight: 700;
   cursor: pointer;
+  float: right;
 }
 
 /* =====================================
