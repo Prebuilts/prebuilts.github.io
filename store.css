@@ -500,6 +500,17 @@ body {
   cursor: pointer;
 }
 
+#close-basket {
+  flex: 1;
+  background: #e5e7eb;
+  color: #0f172a;
+  border: none;
+  padding: 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
 /* =====================================
    MOBILE SAFETY
    ===================================== */
