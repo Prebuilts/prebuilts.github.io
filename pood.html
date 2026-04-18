@@ -54,69 +54,62 @@
     <h2>Prebuilts</h2>
   </div>
 
-  <input id="searchInput" placeholder="🔍 Otsi tooteid..." />
-
   <div class="header-actions">
+    <input id="searchInput" placeholder="🔍 Otsi..." />
     <button id="hamburger">☰</button>
   </div>
 </header>
 
-<!-- HERO -->
+<!-- SIDE NAV (RESTORED) -->
+<nav id="nav">
+  <button id="navClose">✕</button>
+  <ul>
+    <li><a href="/">Kodu</a></li>
+    <li><a class="active">Pood</a></li>
+    <li><a href="/blog">Blogi</a></li>
+  </ul>
+</nav>
+
+<!-- HERO (IMPROVED) -->
 <section class="hero">
-  <h1>Ehitatud jõudluseks ⚡</h1>
-  <p>Soodsad gaming PC-d, laptopid ja elektroonika Eestis</p>
-  <button onclick="document.querySelector('.store-layout').scrollIntoView({behavior:'smooth'})">
-    Vaata tooteid
-  </button>
+  <div class="hero-inner">
+    <h1>Soodsad Prebuilt mänguriarvutid</h1>
+    <p>Gaming PC-d, laptopid ja elektroonika Eestis</p>
+    <button onclick="document.querySelector('.store-section').scrollIntoView({behavior:'smooth'})">
+      Sirvi tooteid
+    </button>
+  </div>
 </section>
 
-<!-- TRUST BAR -->
-<div class="trust">
-  <div>🚚 Kiire tarne</div>
-  <div>💳 Turvaline makse</div>
-  <div>Valikut igast hinnaklassist</div>
-</div>
-
 <!-- STORE -->
-<div class="store-layout">
+<section class="store-section">
 
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <h3>Filtrid</h3>
-
+  <!-- FILTER BAR -->
+  <div class="category-filter">
     <select id="categorySelect">
-      <option value="all">Kõik kategooriad</option>
+      <option value="all">Kõik</option>
       <option value="gaming-pcs">Gaming PC</option>
-      <option value="consoles">Konsoolid</option>
       <option value="laptops">Laptopid</option>
-      <option value="smartphones">Telefonid</option>
+      <option value="consoles">Konsoolid</option>
     </select>
 
     <select id="sortSelect">
       <option value="none">Sorteeri</option>
       <option value="price-asc">Hind ↑</option>
       <option value="price-desc">Hind ↓</option>
-      <option value="name-asc">A–Z</option>
-      <option value="name-desc">Z–A</option>
     </select>
 
-  </aside>
+    <input id="searchInput" placeholder="Otsi toodet">
+  </div>
 
-  <!-- PRODUCTS -->
-  <main>
-    <div class="topbar">
-      <h2>Tooted</h2>
-    </div>
+  <div id="shopgrid"></div>
 
-    <div id="shopgrid"></div>
-  </main>
-
-</div>
+</section>
 
 <!-- CART -->
 <div id="cart-icon">🛒 <span id="cart-count">0</span></div>
 
-<!-- BASKET -->
+<!-- BASKET (UNCHANGED STRUCTURE) -->
 <div id="basket-panel">
   <div id="basket-header">
     <button id="close-basket">✖</button>
@@ -137,7 +130,6 @@
   </div>
 </div>
 
-<!-- FOOTER -->
 <footer id="footer">
   <p>&copy; 2026 Prebuilts</p>
 </footer>
@@ -146,7 +138,11 @@
 
 <script>
 const hamburger = document.getElementById("hamburger");
-hamburger.onclick = () => document.body.classList.toggle("nav-open");
+const nav = document.getElementById("nav");
+const navClose = document.getElementById("navClose");
+
+hamburger.onclick = () => nav.classList.add("active");
+navClose.onclick = () => nav.classList.remove("active");
 </script>
 
 </body>
