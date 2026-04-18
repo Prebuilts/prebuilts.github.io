@@ -191,83 +191,51 @@ window.location.href="https://prebuilts.eu/teenusetingimused"
 }
 
 </script>
-
-
-
 <body>
-
-<!-- SIDE ADS (UNCHANGED) -->
-<!--<aside id="asideleft">
-  <script>
-    atOptions = {
-      'key' : '867f57fc5b6f1ec7ee6b6af33aacdf57',
-      'format' : 'iframe',
-      'height' : 600,
-      'width' : 160,
-      'params' : {}
-    };
-  </script>
-  <script src="https://www.highperformanceformat.com/867f57fc5b6f1ec7ee6b6af33aacdf57/invoke.js"></script>
-</aside>
-
-<aside id="asideright">
-  <script>
-    atOptions = {
-      'key' : '867f57fc5b6f1ec7ee6b6af33aacdf57',
-      'format' : 'iframe',
-      'height' : 600,
-      'width' : 160,
-      'params' : {}
-    };
-  </script>
-  <script src="https://www.highperformanceformat.com/867f57fc5b6f1ec7ee6b6af33aacdf57/invoke.js"></script>
-</aside>-->
 
 <!-- HEADER -->
 <header id="header">
   <div class="header-left">
-    <img src="Images/Prebuiltid.png" id="HIcon" alt="Prebuilts Logo" />
-    <h2 id="HH1">Prebuilts</h2>
+    <img src="Images/Prebuiltid.png" id="HIcon">
+    <h2>Prebuilts</h2>
   </div>
+
+  <input id="searchInput" placeholder="🔍 Otsi tooteid..." />
 
   <div class="header-actions">
     <button id="hamburger">☰</button>
   </div>
 </header>
 
-<!-- SIDE NAV -->
-<nav id="nav">
-  <button id="navClose">✕</button>
-  <ul>
-    <li><a href="https://prebuilts.eu/">Kodu</a></li>
-    <li><a class="active" href="#">Pood</a></li>
-    <li><a href="https://prebuilts.eu/blog">Blogi</a></li>
-    <li><a href="#" id="settingsBtn">Seaded</a></li>
-    <li><a href="https://prebuilts.eu/login" id="accountLink">Logi sisse</a></li>
-    <li><a href="#" id="logoutBtn" style="display:none">Logi välja</a></li>
-  </ul>
-</nav>
+<!-- HERO -->
+<section class="hero">
+  <h1>Ehitatud jõudluseks ⚡</h1>
+  <p>Soodsad gaming PC-d, laptopid ja elektroonika Eestis</p>
+  <button onclick="document.querySelector('.store-layout').scrollIntoView({behavior:'smooth'})">
+    Vaata tooteid
+  </button>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust">
+  <div>🚚 Kiire tarne</div>
+  <div>💳 Turvaline makse</div>
+  <div>Valikut igast hinnaklassist</div>
+</div>
 
 <!-- STORE -->
-<section class="store-section reveal">
-  <h1>Meie elektroonika pood</h1>
+<div class="store-layout">
 
-  <div class="category-filter">
-    <label>Filtreeri:</label>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <h3>Filtrid</h3>
+
     <select id="categorySelect">
-      <option value="all">Kõik</option>
-      <option value="gaming-pcs">Gaming PC-d</option>
+      <option value="all">Kõik kategooriad</option>
+      <option value="gaming-pcs">Gaming PC</option>
       <option value="consoles">Konsoolid</option>
       <option value="laptops">Laptopid</option>
-      <option value="tablets">Tahvelarvutid</option>
-      <option value="keyboards">Klaviatuurid</option>
-      <option value="mice">Arvutihiired</option>
-      <option value="headphones">Kõrvaklapid</option>
-      <option value="controllers">Mängupuldid</option>
-      <option value="software">Tarkvara</option>
-      <option value="smartphones">Nutitelefonid</option>
-      <option value="monitors">Monitorid</option>
-      <option value="misc">Muu</option>
+      <option value="smartphones">Telefonid</option>
     </select>
 
     <select id="sortSelect">
@@ -278,26 +246,39 @@ window.location.href="https://prebuilts.eu/teenusetingimused"
       <option value="name-desc">Z–A</option>
     </select>
 
-    <input id="searchInput" placeholder="Otsi toodet">
-  </div>
+  </aside>
 
-  <div id="shopgrid" class="recommended-grid"></div>
-</section>
+  <!-- PRODUCTS -->
+  <main>
+    <div class="topbar">
+      <h2>Tooted</h2>
+    </div>
+
+    <div id="shopgrid"></div>
+  </main>
+
+</div>
 
 <!-- CART -->
 <div id="cart-icon">🛒 <span id="cart-count">0</span></div>
 
-<!-- BASKET PANEL -->
+<!-- BASKET -->
 <div id="basket-panel">
   <div id="basket-header">
     <button id="close-basket">✖</button>
     <h2>Ostukorv</h2>
   </div>
+
   <div id="basket-items"></div>
+
   <div id="basket-footer">
     <h3>Kokku: <span id="basket-total">0€</span></h3>
-    <button id="clear-cart-btn">Tühjenda ostukorv</button>
-    <button id="buy-all-btn">Osta kõik</button>
+
+    <div class="basket-actions">
+      <button id="clear-cart-btn">Tühjenda</button>
+      <button id="buy-all-btn">Osta</button>
+    </div>
+
     <button id="my-orders-btn">Minu ostud</button>
   </div>
 </div>
@@ -310,20 +291,8 @@ window.location.href="https://prebuilts.eu/teenusetingimused"
 <script type="module" src="https://prebuilts.eu/store.js"></script>
 
 <script>
-  const hamburger = document.getElementById("hamburger");
-  const nav = document.getElementById("nav");
-  const navClose = document.getElementById("navClose");
-
-  hamburger.onclick = () => nav.classList.add("active");
-  navClose.onclick = () => nav.classList.remove("active");
-
-  window.addEventListener("scroll", () => {
-    document.querySelectorAll(".reveal").forEach(el => {
-      if (el.getBoundingClientRect().top < window.innerHeight - 100) {
-        el.classList.add("active");
-      }
-    });
-  });
+const hamburger = document.getElementById("hamburger");
+hamburger.onclick = () => document.body.classList.toggle("nav-open");
 </script>
 
 </body>
