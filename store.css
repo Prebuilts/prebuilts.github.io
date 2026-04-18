@@ -13,27 +13,41 @@ body {
 /* ===== HEADER FIX ===== */
 #header {
   height: var(--header-height);
-  background: white;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  border-bottom: 1px solid #e5e7eb;
-  z-index: 9999;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: rgba(255,255,255,0.95);
+  backdrop-filter: blur(8px);
 }
 
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* FIXED LOGO */
 #HIcon {
-  width: 48px;   /* FIXED LOGO SIZE */
-  height: auto;
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
 }
 
+/* CLEAN TITLE */
 #HH1 {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
+  font-weight: 700;
 }
 
+/* HAMBURGER BUTTON CLEAN */
+#hamburger {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  border: 1px solid #e5e7eb;
+}
 /* ===== NAV FIX ===== */
 #nav {
   position: fixed;
@@ -124,21 +138,6 @@ body {
   cursor: pointer;
 }
 
-#clear-cart-btn {
-  background: #e5e7eb;
-}
-
-#buy-all-btn {
-  background: #16a34a;
-  color: white;
-}
-
-#my-orders-btn {
-  background: #2563eb;
-  color: white;
-  margin-top: 10px;
-}
-
 /* ===== FOOTER FIX ===== */
 #footer {
   text-align: center;
@@ -157,4 +156,67 @@ body {
   #shopgrid {
     grid-template-columns: 1fr;
   }
+}
+.hero {
+  margin-top: var(--header-height);
+  padding: 80px 20px 60px;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  color: white;
+  text-align: center;
+}
+
+.hero-content {
+  max-width: 800px;
+  margin: auto;
+}
+
+.hero h1 {
+  font-size: 2.2rem;
+  margin-bottom: 12px;
+}
+
+.hero p {
+  opacity: 0.85;
+  margin-bottom: 20px;
+  font-size: 1.1rem;
+}
+button {
+  border-radius: 999px;
+  padding: 10px 16px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+}
+
+button:active {
+  transform: scale(0.97);
+}
+.productbox .btn.view {
+  background: #2563eb;
+  color: #fff;
+}
+
+.productbox .btn.add {
+  background: #16a34a;
+  color: #fff;
+}
+
+#buy-all-btn {
+  background: #16a34a;
+  color: #fff;
+}
+
+#my-orders-btn {
+  background: #2563eb;
+  color: #fff;
+}
+
+#clear-cart-btn {
+  background: #e5e7eb;
 }
