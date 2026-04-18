@@ -45,13 +45,187 @@
 
     gtag('config', 'G-70DYN0DHBH');
   </script>
+<!-- STORE INFO POPUP -->
+
+<style>
+#storePopup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.55);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:99999;
+backdrop-filter:blur(6px);
+}
+
+.store-popup-box{
+background:#ffffff;
+padding:40px;
+border-radius:18px;
+text-align:center;
+max-width:520px;
+width:90%;
+box-shadow:0 25px 60px rgba(0,0,0,0.35);
+animation:storePopupAnim .35s ease;
+font-family:system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
+}
+
+@keyframes storePopupAnim{
+from{
+opacity:0;
+transform:translateY(25px);
+}
+to{
+opacity:1;
+transform:none;
+}
+}
+
+.store-popup-box h2{
+margin-bottom:15px;
+font-size:1.6rem;
+}
+
+.store-popup-box p{
+color:#475569;
+margin-bottom:30px;
+line-height:1.6;
+}
+
+.popup-buttons{
+display:flex;
+gap:12px;
+justify-content:center;
+flex-wrap:wrap;
+}
+
+.popup-buttons button{
+padding:12px 24px;
+border:none;
+border-radius:10px;
+font-size:1rem;
+font-weight:600;
+cursor:pointer;
+transition:.2s;
+}
+
+#storePopupButton{
+background:#2563eb;
+color:white;
+}
+
+#couponButton{
+background:#16a34a;
+color:white;
+}
+
+.popup-buttons button:hover{
+transform:scale(1.05);
+box-shadow:0 8px 20px rgba(0,0,0,0.25);
+}
+</style>
+
+
+<div id="storePopup">
+
+<div class="store-popup-box">
+
+<h2>Oluline teave</h2>
+
+<p>
+Sellel lehel on ülevaade meie toodete valikust.
+Toodete kohta saab lisainfot küsida, kui saadate meile emaili aadressile: sales@prebuilts.eu
+</p>
+
+<div class="popup-buttons">
+
+<button id="storePopupButton">Sain aru</button>
+
+<button id="couponButton">
+Meie Osta.ee E-Pood
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+
+function getSessionCookie(name){
+const cookies=document.cookie.split(";")
+for(let cookie of cookies){
+const [key,value]=cookie.trim().split("=")
+if(key===name) return value
+}
+return null
+}
+
+function setSessionCookie(name,value){
+document.cookie=name+"="+value+"; path=/"
+}
+
+if(!getSessionCookie("store_popup_seen")){
+document.getElementById("storePopup").style.display="flex"
+}
+
+document.getElementById("storePopupButton").onclick=function(){
+
+setSessionCookie("store_popup_seen","yes")
+document.getElementById("storePopup").style.display="none"
+
+}
+
+document.getElementById("couponButton").onclick=function(){
+
+setSessionCookie("store_popup_seen","yes")
+window.location.href="https://www.osta.ee/kasutaja/646963"
+
+}
+
+</script>
+
+
 
 <body>
+
+<!-- SIDE ADS (UNCHANGED) -->
+<!--<aside id="asideleft">
+  <script>
+    atOptions = {
+      'key' : '867f57fc5b6f1ec7ee6b6af33aacdf57',
+      'format' : 'iframe',
+      'height' : 600,
+      'width' : 160,
+      'params' : {}
+    };
+  </script>
+  <script src="https://www.highperformanceformat.com/867f57fc5b6f1ec7ee6b6af33aacdf57/invoke.js"></script>
+</aside>
+
+<aside id="asideright">
+  <script>
+    atOptions = {
+      'key' : '867f57fc5b6f1ec7ee6b6af33aacdf57',
+      'format' : 'iframe',
+      'height' : 600,
+      'width' : 160,
+      'params' : {}
+    };
+  </script>
+  <script src="https://www.highperformanceformat.com/867f57fc5b6f1ec7ee6b6af33aacdf57/invoke.js"></script>
+</aside>-->
 
 <!-- HEADER -->
 <header id="header">
   <div class="header-left">
-    <img src="Images/Prebuiltid.png" id="HIcon" />
+    <img src="Images/Prebuiltid.png" id="HIcon" alt="Prebuilts Logo" />
     <h2 id="HH1">Prebuilts</h2>
   </div>
 
@@ -60,70 +234,69 @@
   </div>
 </header>
 
-<section class="hero">
-  <div class="hero-content">
-    <h1>Soodsad mänguriarvutid Eestis</h1>
-    <p>Gaming PC-d, laptopid ja elektroonika hea hinnaga</p>
-    <button onclick="document.querySelector('.store-section').scrollIntoView({behavior:'smooth'})">
-      Vaata tooteid
-    </button>
-  </div>
-</section>
-
 <!-- SIDE NAV -->
 <nav id="nav">
   <button id="navClose">✕</button>
   <ul>
-    <li><a href="hhtps://prebuilts.eu/">Kodu</a></li>
-    <li><a class="active">Pood</a></li>
-    <li><a href="https://prebuilts.eu/">Blogi</a></li>
+    <li><a href="https://prebuilts.eu/">Kodu</a></li>
+    <li><a class="active" href="#">Pood</a></li>
+    <li><a href="https://prebuilts.eu/blog">Blogi</a></li>
+    <li><a href="#" id="settingsBtn">Seaded</a></li>
+    <li><a href="https://prebuilts.eu/login" id="accountLink">Logi sisse</a></li>
+    <li><a href="#" id="logoutBtn" style="display:none">Logi välja</a></li>
   </ul>
 </nav>
 
 <!-- STORE -->
 <section class="store-section reveal">
-  <h1>Prebuilts.eu elektroonika pood</h1>
+  <h1>Meie elektroonika pood</h1>
 
   <div class="category-filter">
+    <label>Filtreeri:</label>
     <select id="categorySelect">
       <option value="all">Kõik</option>
       <option value="gaming-pcs">Gaming PC-d</option>
       <option value="consoles">Konsoolid</option>
       <option value="laptops">Laptopid</option>
+      <option value="tablets">Tahvelarvutid</option>
+      <option value="keyboards">Klaviatuurid</option>
+      <option value="mice">Arvutihiired</option>
+      <option value="headphones">Kõrvaklapid</option>
+      <option value="controllers">Mängupuldid</option>
+      <option value="software">Tarkvara</option>
+      <option value="smartphones">Nutitelefonid</option>
+      <option value="monitors">Monitorid</option>
+      <option value="misc">Muu</option>
     </select>
 
     <select id="sortSelect">
       <option value="none">Sorteeri</option>
       <option value="price-asc">Hind ↑</option>
       <option value="price-desc">Hind ↓</option>
+      <option value="name-asc">A–Z</option>
+      <option value="name-desc">Z–A</option>
     </select>
 
     <input id="searchInput" placeholder="Otsi toodet">
   </div>
 
-  <div id="shopgrid"></div>
+  <div id="shopgrid" class="recommended-grid"></div>
 </section>
 
 <!-- CART -->
 <div id="cart-icon">🛒 <span id="cart-count">0</span></div>
 
-<!-- BASKET -->
+<!-- BASKET PANEL -->
 <div id="basket-panel">
   <div id="basket-header">
     <button id="close-basket">✖</button>
     <h2>Ostukorv</h2>
   </div>
-
   <div id="basket-items"></div>
-
   <div id="basket-footer">
     <h3>Kokku: <span id="basket-total">0€</span></h3>
-
-    <div class="basket-actions">
-      <button id="clear-cart-btn">Tühjenda ostukorv</button>
-      <button id="buy-all-btn">Osta kõik</button>
-    </div>
-
+    <button id="clear-cart-btn">Tühjenda ostukorv</button>
+    <button id="buy-all-btn">Osta kõik</button>
     <button id="my-orders-btn">Minu ostud</button>
   </div>
 </div>
@@ -133,17 +306,24 @@
   <p>&copy; 2026 Prebuilts</p>
 </footer>
 
-<script type="module" src="store.js"></script>
+<script type="module" src="https://prebuilts.eu/store.js"></script>
 
 <script>
-const hamburger = document.getElementById("hamburger");
-const nav = document.getElementById("nav");
-const navClose = document.getElementById("navClose");
+  const hamburger = document.getElementById("hamburger");
+  const nav = document.getElementById("nav");
+  const navClose = document.getElementById("navClose");
 
-hamburger.onclick = () => nav.classList.add("active");
-navClose.onclick = () => nav.classList.remove("active");
+  hamburger.onclick = () => nav.classList.add("active");
+  navClose.onclick = () => nav.classList.remove("active");
+
+  window.addEventListener("scroll", () => {
+    document.querySelectorAll(".reveal").forEach(el => {
+      if (el.getBoundingClientRect().top < window.innerHeight - 100) {
+        el.classList.add("active");
+      }
+    });
+  });
 </script>
 
 </body>
-</html>
 </html>
