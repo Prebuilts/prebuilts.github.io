@@ -45,52 +45,41 @@
 
     gtag('config', 'G-70DYN0DHBH');
   </script>
+
 <body>
 
 <!-- HEADER -->
 <header id="header">
   <div class="header-left">
-    <img src="Images/Prebuiltid.png" id="HIcon">
-    <h2>Prebuilts</h2>
+    <img src="Images/Prebuiltid.png" id="HIcon" />
+    <h2 id="HH1">Prebuilts</h2>
   </div>
 
   <div class="header-actions">
-    <input id="searchInput" placeholder="🔍 Otsi..." />
     <button id="hamburger">☰</button>
   </div>
 </header>
 
-<!-- SIDE NAV (RESTORED) -->
+<!-- SIDE NAV -->
 <nav id="nav">
   <button id="navClose">✕</button>
   <ul>
-    <li><a href="/">Kodu</a></li>
+    <li><a href="hhtps://prebuilts.eu/">Kodu</a></li>
     <li><a class="active">Pood</a></li>
-    <li><a href="/blog">Blogi</a></li>
+    <li><a href="https://prebuilts.eu/">Blogi</a></li>
   </ul>
 </nav>
 
-<!-- HERO (IMPROVED) -->
-<section class="hero">
-  <div class="hero-inner">
-    <h1>Soodsad Prebuilt mänguriarvutid</h1>
-    <p>Gaming PC-d, laptopid ja elektroonika Eestis</p>
-    <button onclick="document.querySelector('.store-section').scrollIntoView({behavior:'smooth'})">
-      Sirvi tooteid
-    </button>
-  </div>
-</section>
-
 <!-- STORE -->
-<section class="store-section">
+<section class="store-section reveal">
+  <h1>Prebuilts.eu elektroonika pood</h1>
 
-  <!-- FILTER BAR -->
   <div class="category-filter">
     <select id="categorySelect">
       <option value="all">Kõik</option>
-      <option value="gaming-pcs">Gaming PC</option>
-      <option value="laptops">Laptopid</option>
+      <option value="gaming-pcs">Gaming PC-d</option>
       <option value="consoles">Konsoolid</option>
+      <option value="laptops">Laptopid</option>
     </select>
 
     <select id="sortSelect">
@@ -103,13 +92,12 @@
   </div>
 
   <div id="shopgrid"></div>
-
 </section>
 
 <!-- CART -->
 <div id="cart-icon">🛒 <span id="cart-count">0</span></div>
 
-<!-- BASKET (UNCHANGED STRUCTURE) -->
+<!-- BASKET -->
 <div id="basket-panel">
   <div id="basket-header">
     <button id="close-basket">✖</button>
@@ -122,19 +110,20 @@
     <h3>Kokku: <span id="basket-total">0€</span></h3>
 
     <div class="basket-actions">
-      <button id="clear-cart-btn">Tühjenda</button>
-      <button id="buy-all-btn">Osta</button>
+      <button id="clear-cart-btn">Tühjenda ostukorv</button>
+      <button id="buy-all-btn">Osta kõik</button>
     </div>
 
     <button id="my-orders-btn">Minu ostud</button>
   </div>
 </div>
 
+<!-- FOOTER -->
 <footer id="footer">
   <p>&copy; 2026 Prebuilts</p>
 </footer>
 
-<script type="module" src="https://prebuilts.eu/store.js"></script>
+<script type="module" src="store.js"></script>
 
 <script>
 const hamburger = document.getElementById("hamburger");
@@ -146,4 +135,5 @@ navClose.onclick = () => nav.classList.remove("active");
 </script>
 
 </body>
+</html>
 </html>
