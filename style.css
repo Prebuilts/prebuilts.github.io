@@ -33,8 +33,10 @@ body {
 #header {
   position: fixed;
   top: 0;
-  width: 100%;
+  left: 0;            /* 🔥 IMPORTANT */
+  width: 100vw;       /* 🔥 FULL viewport width */
   height: var(--header-height);
+
   background: #ffffff;
   border-bottom: 1px solid var(--border);
   z-index: 9999;
@@ -44,6 +46,8 @@ body {
   justify-content: space-between;
 
   padding: 0 24px;
+
+  box-sizing: border-box; /* safety */
 }
 
 .header-left {
@@ -465,5 +469,12 @@ body.dark-mode a {
 
   .hero h1 {
     font-size: 2rem;
+  }
+}
+
+@media (min-width: 1300px) {
+  #header {
+    width: calc(100vw - 400px);
+    left: 200px;
   }
 }
