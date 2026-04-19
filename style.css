@@ -358,3 +358,104 @@ body.dark-mode #nav {
 body.dark-mode .tool-card {
   background: #1e293b;
 }
+/* =====================================================
+   FIX INDEX HEADER (ALL SCREEN SIZES)
+   ===================================================== */
+
+#header {
+  width: 100%;
+  max-width: 100vw;
+  overflow: hidden;
+}
+
+/* Prevent title from breaking layout */
+.header-left {
+  min-width: 0;
+}
+
+#HH1 {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Fix large screen alignment */
+@media (min-width: 1400px) {
+  #header {
+    padding-left: calc((100vw - 1100px) / 2);
+    padding-right: calc((100vw - 1100px) / 2);
+  }
+}
+
+/* =====================================================
+   FIX BROKEN SECTIONS (INDEX)
+   ===================================================== */
+
+/* Force proper centered layout */
+section {
+  width: 100%;
+  max-width: 1100px;
+  margin: 60px auto;
+}
+
+/* Fix hero specifically */
+.hero {
+  width: 100%;
+  max-width: 1100px;
+  margin: 40px auto;
+}
+
+/* Fix trust section grid breaking */
+.trust-section {
+  width: 100%;
+  max-width: 1100px;
+  margin: 60px auto;
+}
+
+/* Prevent overflow breaking layout */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* =====================================================
+   GRID FIX (CARDS BREAKING)
+   ===================================================== */
+
+.tools-grid {
+  width: 100%;
+}
+
+/* Prevent cards from stretching weirdly */
+.tool-card {
+  min-width: 0;
+}
+
+/* =====================================================
+   SIDE ADS FIX (INDEX)
+   ===================================================== */
+
+/* Only apply spacing if ads exist */
+@media (min-width: 1300px) {
+  body {
+    padding-left: 180px;
+    padding-right: 180px;
+  }
+}
+
+/* Prevent ads from pushing layout */
+#asideleft,
+#asideright {
+  pointer-events: none;
+}
+
+/* =====================================================
+   SAFETY FIX (FOR INVISIBLE CONTENT BUGS)
+   ===================================================== */
+
+section,
+.hero,
+.tool-card {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
