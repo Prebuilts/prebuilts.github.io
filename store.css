@@ -583,3 +583,86 @@ body {
   visibility: visible !important;
   opacity: 1 !important;
 }
+/* =====================================================
+   🔧 HARD RESET FOR BROKEN OVERRIDES
+   ===================================================== */
+
+/* Remove any forced visibility hacks */
+#shopgrid,
+.productbox,
+section {
+  visibility: unset !important;
+  opacity: unset !important;
+}
+
+/* Remove header centering hacks that broke layout */
+@media (min-width: 1400px) {
+  #header {
+    padding-left: 22px !important;
+    padding-right: 22px !important;
+  }
+}
+
+/* Remove body side padding that breaks grid */
+@media (min-width: 1300px) {
+  body {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+/* =====================================================
+   ✅ FIX HEADER (STABLE, SIMPLE)
+   ===================================================== */
+
+#header {
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+}
+
+.header-left {
+  min-width: 0;
+}
+
+#HH1 {
+  white-space: nowrap;
+}
+
+/* =====================================================
+   ✅ FIX PRODUCTS NOT SHOWING
+   ===================================================== */
+
+/* Ensure grid behaves normally */
+#shopgrid {
+  display: grid;
+  width: 100%;
+  min-height: 0; /* IMPORTANT: prevents blocking rendering */
+}
+
+/* Ensure products render */
+.productbox {
+  display: flex;
+}
+
+/* Prevent parent clipping */
+.store-section {
+  overflow: visible;
+}
+
+/* =====================================================
+   ✅ FIX NAV PANEL OFFSET
+   ===================================================== */
+
+#nav {
+  padding-top: var(--header-height);
+}
+
+/* =====================================================
+   ✅ FIX BASKET POSITION (MATCH HEADER)
+   ===================================================== */
+
+#basket-panel {
+  top: var(--header-height);
+  height: calc(100vh - var(--header-height));
+}
