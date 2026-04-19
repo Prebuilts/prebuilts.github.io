@@ -1,5 +1,5 @@
 :root {
-  --header-height: clamp(64px, 8vw, 90px);
+  --header-height: 90px;
 
   --bg: #f1f5f9;
   --text: #0f172a;
@@ -29,9 +29,7 @@ body {
   overflow-x: hidden;
 }
 
-/* ===============================
-   HEADER
-   =============================== */
+/* HEADER */
 #header {
   position: fixed;
   top: 0;
@@ -45,49 +43,40 @@ body {
   align-items: center;
   justify-content: space-between;
 
-  padding: 0 clamp(12px, 4vw, 24px);
+  padding: 0 24px;
 }
 
 .header-left {
   display: flex;
   align-items: center;
   gap: 12px;
-  min-width: 0;
 }
 
-/* LOGO */
 #HIcon {
-  width: clamp(32px, 6vw, 46px);
-  flex-shrink: 0;
+  width: 46px;
 }
 
-/* TITLE */
 #HH1 {
-  font-size: clamp(1.1rem, 3.5vw, 1.5rem);
+  font-size: 1.5rem;
   font-weight: 700;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
-/* ACTION BUTTONS */
+/* HEADER BUTTONS */
 .header-actions {
   display: flex;
   gap: 10px;
-  align-items: center;
 }
 
 #hamburger,
 #darkModeToggle {
-  width: clamp(36px, 8vw, 42px);
-  height: clamp(36px, 8vw, 42px);
+  width: 42px;
+  height: 42px;
   border-radius: 10px;
   border: 1px solid var(--border);
   background: #f8fafc;
   font-size: 1.3rem;
   cursor: pointer;
   transition: 0.2s;
-  flex-shrink: 0;
 }
 
 #hamburger:hover,
@@ -96,9 +85,7 @@ body {
   box-shadow: var(--shadow);
 }
 
-/* ===============================
-   NAV PANEL
-   =============================== */
+/* NAV PANEL */
 #nav {
   position: fixed;
   top: 0;
@@ -106,7 +93,7 @@ body {
   width: 320px;
   height: 100vh;
   background: #ffffff;
-  padding: calc(var(--header-height) + 10px) 24px;
+  padding: 90px 24px;
   transition: right 0.3s ease;
   z-index: 10000;
   box-shadow: -20px 0 40px rgba(0,0,0,0.2);
@@ -142,12 +129,13 @@ body {
 }
 
 /* ===============================
-   SECTIONS
+   SECTIONS (MODERN CLEAN)
    =============================== */
 section {
   max-width: 1100px;
   margin: 60px auto;
   padding: 10px 20px;
+  background: transparent;
 }
 
 /* TITLES */
@@ -157,14 +145,18 @@ section {
   margin-bottom: 30px;
 }
 
-/* GRID */
+/* ===============================
+   GRID (LIKE YOUR EXAMPLE)
+   =============================== */
 .tools-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.5rem;
 }
 
-/* CARD */
+/* ===============================
+   CARD STYLE (MAIN UPGRADE)
+   =============================== */
 .tool-card {
   background: var(--card);
   border-radius: 16px;
@@ -175,8 +167,6 @@ section {
   display: flex;
   flex-direction: column;
   text-align: center;
-  position: relative;
-  overflow: hidden;
 }
 
 .tool-card:hover {
@@ -191,7 +181,6 @@ section {
   object-fit: cover;
 }
 
-/* TEXT */
 .tool-card h3 {
   font-size: 1.2rem;
   margin-bottom: 6px;
@@ -216,63 +205,44 @@ section {
   border-radius: 999px;
   font-weight: 600;
   text-decoration: none;
+  transition: 0.2s;
 }
 
 .tool-btn:hover {
   background: #4338ca;
 }
 
-/* BADGE */
-.badge {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  background: #ef4444;
-  color: white;
-  padding: 5px 10px;
-  font-size: 0.7rem;
-  border-radius: 999px;
+/* ===============================
+   INTRO / TEXT
+   =============================== */
+#intro {
+  text-align: center;
+  max-width: 800px;
+}
+
+#intro p {
+  color: #475569;
 }
 
 /* ===============================
-   HERO
+   ARTICLE
    =============================== */
-.hero {
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 60px 20px;
-  text-align: center;
+.article-card {
+  background: var(--card);
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: var(--shadow);
 }
 
-.hero h1 {
-  font-size: clamp(2rem, 6vw, 2.5rem);
-}
-
-.hero p {
-  color: #64748b;
-  margin-bottom: 25px;
-}
-
-.hero-buttons {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-/* BUTTONS */
-.btn-primary {
+.see-more-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 10px 22px;
   background: var(--primary);
-  color: white;
-  padding: 12px 26px;
+  color: #ffffff;
   border-radius: 999px;
   text-decoration: none;
-}
-
-.btn-secondary {
-  border: 1px solid var(--border);
-  padding: 12px 26px;
-  border-radius: 999px;
+  font-weight: 700;
 }
 
 /* ===============================
@@ -286,7 +256,7 @@ section {
 }
 
 /* ===============================
-   ASIDE ADS
+   SIDE ADS
    =============================== */
 #asideleft,
 #asideright {
@@ -299,9 +269,6 @@ section {
 #asideleft { left: 10px; }
 #asideright { right: 10px; }
 
-/* ===============================
-   RESPONSIVE
-   =============================== */
 @media (min-width: 1300px) {
   body {
     padding-left: 200px;
@@ -314,30 +281,33 @@ section {
   #asideright {
     display: none;
   }
+
+  body {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 
-/* MOBILE */
+/* ===============================
+   ANIMATIONS
+   =============================== */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: 0.6s ease;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: none;
+}
+
+/* ===============================
+   MOBILE
+   =============================== */
 @media (max-width: 768px) {
   section {
     margin: 40px 16px;
-  }
-
-  .hero h1 {
-    font-size: 2rem;
-  }
-}
-
-@media (max-width: 500px) {
-  .header-left {
-    gap: 8px;
-  }
-
-  #HH1 {
-    font-size: 1rem;
-  }
-
-  .header-actions {
-    gap: 6px;
   }
 }
 
@@ -355,107 +325,145 @@ body.dark-mode #nav {
   border-color: #334155;
 }
 
-body.dark-mode .tool-card {
+body.dark-mode .tool-card,
+body.dark-mode .article-card {
   background: #1e293b;
 }
-/* =====================================================
-   FIX INDEX HEADER (ALL SCREEN SIZES)
-   ===================================================== */
 
-#header {
-  width: 100%;
-  max-width: 100vw;
-  overflow: hidden;
+body.dark-mode a {
+  color: #93c5fd;
 }
 
-/* Prevent title from breaking layout */
-.header-left {
-  min-width: 0;
-}
-
-#HH1 {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Fix large screen alignment */
-@media (min-width: 1400px) {
-  #header {
-    padding-left: calc((100vw - 1100px) / 2);
-    padding-right: calc((100vw - 1100px) / 2);
-  }
-}
-
-/* =====================================================
-   FIX BROKEN SECTIONS (INDEX)
-   ===================================================== */
-
-/* Force proper centered layout */
-section {
-  width: 100%;
-  max-width: 1100px;
-  margin: 60px auto;
-}
-
-/* Fix hero specifically */
+/* HERO */
 .hero {
-  width: 100%;
   max-width: 1100px;
   margin: 40px auto;
+  padding: 60px 20px;
+  text-align: center;
 }
 
-/* Fix trust section grid breaking */
+.hero h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  color: #64748b;
+  margin-bottom: 25px;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.btn-primary {
+  background: #4f46e5;
+  color: white;
+  padding: 12px 26px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.btn-secondary {
+  border: 1px solid #e5e7eb;
+  padding: 12px 26px;
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+/* TRUST BADGES */
+.trust-badges {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  font-size: 0.9rem;
+  color: #475569;
+}
+
+/* FILTER BAR */
+.filter-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.filter-bar input,
+.filter-bar select {
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid #e5e7eb;
+}
+
+/* PRODUCT CARD UPGRADE */
+.tool-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: #ef4444;
+  color: white;
+  padding: 5px 10px;
+  font-size: 0.7rem;
+  border-radius: 999px;
+}
+
+.specs {
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+.price-row {
+  margin: 10px 0;
+}
+
+.price {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #4f46e5;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: #94a3b8;
+  margin-left: 8px;
+}
+
+/* TRUST SECTION */
 .trust-section {
-  width: 100%;
   max-width: 1100px;
   margin: 60px auto;
 }
 
-/* Prevent overflow breaking layout */
-html, body {
-  overflow-x: hidden;
-  max-width: 100%;
+.trust-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 20px;
+  text-align: center;
 }
 
-/* =====================================================
-   GRID FIX (CARDS BREAKING)
-   ===================================================== */
-
-.tools-grid {
-  width: 100%;
+.trust-grid div {
+  background: white;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
 }
 
-/* Prevent cards from stretching weirdly */
-.tool-card {
-  min-width: 0;
-}
-
-/* =====================================================
-   SIDE ADS FIX (INDEX)
-   ===================================================== */
-
-/* Only apply spacing if ads exist */
-@media (min-width: 1300px) {
-  body {
-    padding-left: 180px;
-    padding-right: 180px;
+/* MOBILE */
+@media (max-width: 768px) {
+  .trust-grid {
+    grid-template-columns: 1fr;
   }
-}
 
-/* Prevent ads from pushing layout */
-#asideleft,
-#asideright {
-  pointer-events: none;
-}
-
-/* =====================================================
-   SAFETY FIX (FOR INVISIBLE CONTENT BUGS)
-   ===================================================== */
-
-section,
-.hero,
-.tool-card {
-  visibility: visible !important;
-  opacity: 1 !important;
+  .hero h1 {
+    font-size: 2rem;
+  }
 }
