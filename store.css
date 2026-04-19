@@ -524,3 +524,62 @@ body {
     margin-top: 6px;
   }
 }
+/* =====================================================
+   FIX 1: HEADER SHIFTING TOO FAR RIGHT (1080p+ BUG)
+   ===================================================== */
+
+/* Your body padding-left/right rule (1300px+) pushes layout off-center */
+@media (min-width: 1300px) {
+  body {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+/* Keep header perfectly centered and stable */
+#header {
+  left: 0;
+  right: 0;
+  transform: none;
+  max-width: 100vw;
+}
+
+/* Prevent flex overflow shift on large screens */
+.header-left {
+  flex-shrink: 0;
+}
+
+#HH1 {
+  white-space: nowrap;
+}
+
+/* =====================================================
+   FIX 2: PRODUCTS NOT SHOWING (1080p+ GRID BREAK)
+   ===================================================== */
+
+/* The issue: repeated grid declarations + conflicting overrides */
+#shopgrid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 20px;
+  width: 100%;
+}
+
+/* Prevent parent container from clipping JS-rendered products */
+.store-section {
+  overflow: visible !important;
+}
+
+/* Force product visibility if JS inserts them late */
+.productbox {
+  display: flex !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Safety for broken layout flow at large screens */
+@media (min-width: 1080px) {
+  #shopgrid {
+    min-height: 200px;
+  }
+}
